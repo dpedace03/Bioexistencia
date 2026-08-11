@@ -112,7 +112,7 @@
     padding:.2rem .45rem; border-radius:12px; font-weight:600!important; font-size:0.75rem!important;
   }
 
-  /* PANEL DE ADMINISTRACIÓN CON FONDO DE SEMINARIOS (var(--lino-2)) */
+  /* PANEL DE ADMINISTRACIÓN */
   #modal-panel-admin .modal-card {
     background: var(--lino-2);
     border: 1px solid color-mix(in srgb,var(--bosque) 25%,transparent);
@@ -122,6 +122,7 @@
     background: linear-gradient(135deg, var(--musgo), var(--bosque));
     color: var(--lino); padding: 1.4rem 1.8rem; border-radius: 14px 14px 0 0;
     margin: -2.5rem -2.5rem 1.5rem -2.5rem; border-bottom: 3px solid var(--luz);
+    position: relative;
   }
   .panel-header-banner h3 { font-family: var(--serif); font-size: 1.6rem; color: var(--lino); margin-bottom: 0.2rem; }
   .panel-header-banner p { font-size: 0.88rem; color: var(--salvia-2); }
@@ -267,7 +268,7 @@
   .video-content-box p { color: var(--tinta-2); font-size: .9rem; margin-bottom: 0.8rem; }
   .video-actions-flex { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
-  /* SEMINARIOS Y TALLERES (FONDO var(--lino-2)) */
+  /* SEMINARIOS Y TALLERES */
   .seminarios-section{ background:var(--lino-2); }
   .grid-seminarios{ display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
   .seminario-card{
@@ -369,9 +370,18 @@
   .wa-float svg{ width:32px; height:32px; fill:#fff; }
   @keyframes aparecer{ from{ transform:scale(0); } to{ transform:scale(1); } }
 
-  /* MODALES Y TABLAS */
+  /* MODALES, TABLAS Y BOTÓN BOTÓN CERRAR "X" */
   .modal{ display:none; position:fixed; inset:0; background:rgba(37,24,48,0.75); z-index:100; justify-content:center; align-items:center; padding:1.5rem; backdrop-filter:blur(6px); }
-  .modal-card{ background:var(--lino); color:var(--tinta); padding:2.5rem; border-radius:var(--radio); max-width:780px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.35); border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent); }
+  .modal-card{ position:relative; background:var(--lino); color:var(--tinta); padding:2.5rem; border-radius:var(--radio); max-width:780px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.35); border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent); }
+  .modal-close-x {
+    position: absolute; top: 1rem; right: 1.2rem; width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(0,0,0,0.08); color: var(--tinta); border: none; font-size: 1.3rem; font-weight: bold;
+    cursor: pointer; display: grid; place-items: center; z-index: 10; transition: background 0.2s, color 0.2s;
+  }
+  .modal-close-x:hover { background: var(--luz); color: var(--noche); }
+  .panel-header-banner .modal-close-x { color: var(--lino); background: rgba(255,255,255,0.2); }
+  .panel-header-banner .modal-close-x:hover { background: var(--luz); color: var(--noche); }
+
   .modal-card label{ display:block; font-size:.85rem; font-weight:600; margin:.8rem 0 .3rem; color:var(--tinta-2); text-transform:uppercase; letter-spacing:0.05em; }
   .modal-card input, .modal-card textarea, .modal-card select{ width:100%; padding:.75rem 1rem; border-radius:10px; border:1px solid color-mix(in srgb,var(--bosque) 25%,transparent); font-family:var(--sans); font-size:1rem; background:var(--lino); color:var(--tinta); }
   .modal-actions{ display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap; }
@@ -674,6 +684,7 @@
 <div id="modal-panel-admin" class="modal">
   <div class="modal-card">
     <div class="panel-header-banner">
+      <button type="button" class="modal-close-x" onclick="closeModal('modal-panel-admin')" aria-label="Cerrar">×</button>
       <h3>Panel de Administración</h3>
       <p>Gestión integral de contenidos, consultantes, agenda y métricas</p>
     </div>
@@ -740,9 +751,13 @@
         <div id="setup-videos-container"></div>
         <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="addVideoItemSetup()">+ Agregar Video</button>
 
+        <!-- ACCIONES CON EXPORTAR E IMPORTAR JSON -->
         <div class="modal-actions" style="margin-top: 1.5rem;">
           <button type="submit" class="btn btn-luz">Guardar Cambios Setup</button>
           <button type="button" class="btn btn-luz" style="background: var(--bosque); color: white;" onclick="exportarJsonData()">Exportar Configuración JSON</button>
+          
+          <button type="button" class="btn btn-luz" style="background: var(--musgo); color: white;" onclick="triggerImportJson()">Importar Configuración JSON</button>
+          <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="importarJsonData(event)">
         </div>
       </form>
     </div>
@@ -859,9 +874,10 @@
   </div>
 </div>
 
-<!-- OTROS MODALES -->
+<!-- OTROS MODALES CON BOTÓN CRUZ X -->
 <div id="modal-gmail-login" class="modal">
   <div class="modal-card" style="max-width:380px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-gmail-login')" aria-label="Cerrar">×</button>
     <h3>Ingresar con Gmail</h3>
     <form onsubmit="procesarGmailLogin(event)">
       <label>Correo de Gmail</label>
@@ -876,6 +892,7 @@
 
 <div id="modal-mis-cosas" class="modal">
   <div class="modal-card">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-mis-cosas')" aria-label="Cerrar">×</button>
     <h3>Mis Inscripciones y Turnos</h3>
     <p id="mis-cosas-usuario-txt" style="font-weight: 600; color: var(--bosque); margin-bottom: 1rem;"></p>
     <h4 style="margin-top: 1rem; color: var(--musgo);">Mis Turnos Reservados</h4>
@@ -892,6 +909,7 @@
 
 <div id="modal-puntuar-seminario" class="modal">
   <div class="modal-card" style="max-width: 460px; text-align: center;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-puntuar-seminario')" aria-label="Cerrar">×</button>
     <h3>Puntuar Seminario</h3>
     <p id="puntuar-seminario-titulo" style="font-weight: 600; color: var(--bosque); margin-bottom: 0.8rem;"></p>
     <label style="margin-bottom: 0.2rem;">Tu Puntuación</label>
@@ -911,6 +929,7 @@
 
 <div id="modal-login" class="modal">
   <div class="modal-card" style="max-width:380px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-login')" aria-label="Cerrar">×</button>
     <h3>Ingreso Administrador</h3>
     <label>Usuario</label>
     <input type="text" id="login-user" placeholder="admin">
@@ -923,6 +942,7 @@
 
 <div id="modal-inscripcion-seminario" class="modal">
   <div class="modal-card" style="max-width:420px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-inscripcion-seminario')" aria-label="Cerrar">×</button>
     <h3>Inscripción a Seminario</h3>
     <p id="sem-inscripcion-titulo" style="font-weight:600; color:var(--bosque); margin-bottom:1rem;"></p>
     <form onsubmit="confirmarInscripcionSeminario(event)">
@@ -941,6 +961,7 @@
 
 <div id="modal-reserva" class="modal">
   <div class="modal-card" style="max-width:400px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-reserva')" aria-label="Cerrar">×</button>
     <h3>Reservar Turno</h3>
     <p id="reserva-detalles" style="margin-bottom:1rem; color:var(--bosque); font-weight:600;"></p>
     <form onsubmit="confirmarReservaPublica(event)">
@@ -1912,6 +1933,7 @@ function poblarSelectsEstadosEHorarios() {
   }
 }
 
+/* EXPORTAR E IMPORTAR JSON */
 function exportarJsonData() {
   var exportObj = { setup: setupData, consultantes: consultantes, turnos: turnos, seminarios: seminarios, comentarios: comentarios, exportDate: new Date().toISOString() };
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
@@ -1922,6 +1944,54 @@ function exportarJsonData() {
   downloadAnchor.click();
   downloadAnchor.remove();
   showCustomAlert("Exportación descargada.");
+}
+
+function triggerImportJson() {
+  document.getElementById('import-json-file').click();
+}
+
+function importarJsonData(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      var data = JSON.parse(evt.target.result);
+      if (data.setup) {
+        setupData = data.setup;
+        localStorage.setItem('bio_setup', JSON.stringify(setupData));
+      }
+      if (data.consultantes) {
+        consultantes = data.consultantes;
+        localStorage.setItem('bio_consultantes', JSON.stringify(consultantes));
+      }
+      if (data.turnos) {
+        turnos = data.turnos;
+        localStorage.setItem('bio_turnos', JSON.stringify(turnos));
+      }
+      if (data.seminarios) {
+        seminarios = data.seminarios;
+        localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+      }
+      if (data.comentarios) {
+        comentarios = data.comentarios;
+        localStorage.setItem('bio_comentarios', JSON.stringify(comentarios));
+      }
+
+      applySetupDataUI();
+      renderVideosPublic();
+      renderSeminariosPublic();
+      renderComentariosPublic();
+      renderConsultantesTable();
+      renderSlots();
+
+      showCustomAlert("Configuración e información importadas con éxito.");
+    } catch (err) {
+      showCustomAlert("El archivo seleccionado no es un JSON válido.");
+    }
+  };
+  reader.readAsText(file);
 }
 
 function renderConsultantesTable() {
