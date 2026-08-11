@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Bioexistencia Consciente · Acompañamiento, charlas y escritos</title>
+<meta name="description" content="Consultora en bioexistencia consciente. Consultas individuales, charlas y pensamientos para volver a habitarte con presencia.">
+
+<!-- ============================================================
+     CONFIGURACIÓN RÁPIDA — editá estos valores
+     El número de WhatsApp va en formato internacional SIN "+",
+     sin espacios ni guiones. Ej: Argentina 11 5555-4444 -> 5491155554444
+     ============================================================ -->
+<script>
+  window.SITE_CONFIG = {
+    nombre: "Valentina Ríos",              // <-- nombre de la consultora
+    whatsapp: "5491100000000",             // <-- tu número (ver formato arriba)
+    ciudad: "Buenos Aires, Argentina",
+    email: "hola@bioexistencia.com",       // opcional, dejá "" para ocultar
+    instagram: "https://instagram.com/"    // opcional, dejá "" para ocultar
+  };
+</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    /* Paleta: atardecer malva */
+    --noche:   #251830;   /* violeta muy oscuro, casi negro vivo */
+    --musgo:   #34204A;   /* violeta profundo */
+    --bosque:  #5B3B7D;   /* violeta medio */
+    --salvia:  #B99AD4;   /* lila */
+    --salvia-2:#E4D3F0;   /* lila pálido */
+    --lino:    #F6F0F7;   /* fondo cálido claro con matiz lavanda */
+    --lino-2:  #EDE1F0;   /* lino un tono más profundo */
+    --luz:     #DE7BAE;   /* rosa: la consciencia, el acento */
+    --luz-claro:#F3B4D3;
+    --tinta:   #2B1F38;   /* texto sobre claro */
+    --tinta-2: #6C5A7E;   /* texto secundario sobre claro */
+
+    --serif: "Fraunces", Georgia, serif;
+    --sans:  "Karla", system-ui, -apple-system, sans-serif;
+
+    --ancho: 1160px;
+    --radio: 18px;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+  body{
+    font-family:var(--sans);
+    color:var(--tinta);
+    background:var(--lino);
+    line-height:1.65;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+  img{ max-width:100%; display:block; }
+  a{ color:inherit; }
+
+  .wrap{ width:min(100% - 2.5rem, var(--ancho)); margin-inline:auto; }
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:.72rem; letter-spacing:.28em; text-transform:uppercase;
+    font-weight:600; color:var(--luz);
+    display:inline-flex; align-items:center; gap:.7em;
+  }
+  .eyebrow::before{
+    content:""; width:2.2em; height:1px; background:currentColor; opacity:.6;
+  }
+
+  h1,h2,h3{ font-family:var(--serif); font-weight:400; line-height:1.08; letter-spacing:-.01em; }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position:sticky; top:0; z-index:50;
+    background:color-mix(in srgb, var(--lino) 82%, transparent);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid color-mix(in srgb, var(--bosque) 15%, transparent);
+  }
+  nav .wrap{ display:flex; align-items:center; justify-content:space-between; height:70px; }
+  .logo{ font-family:var(--serif); font-size:1.28rem; letter-spacing:-.01em; }
+  .logo b{ font-weight:500; }
+  .logo span{ color:var(--luz); }
+  .nav-links{ display:flex; gap:2rem; align-items:center; }
+  .nav-links a{ text-decoration:none; font-size:.92rem; font-weight:500; color:var(--tinta-2); transition:color .2s; }
+  .nav-links a:hover{ color:var(--tinta); }
+  .nav-cta{
+    background:var(--bosque); color:var(--lino)!important; padding:.55rem 1.1rem;
+    border-radius:100px; font-weight:600; transition:background .2s, transform .2s;
+  }
+  .nav-cta:hover{ background:var(--musgo); transform:translateY(-1px); }
+  .nav-toggle{ display:none; background:none; border:0; cursor:pointer; padding:.4rem; }
+  .nav-toggle span{ display:block; width:24px; height:2px; background:var(--tinta); margin:5px 0; transition:.3s; }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative; background:var(--noche); color:var(--lino);
+    padding:clamp(4rem,10vw,8rem) 0 clamp(5rem,11vw,9rem);
+    overflow:hidden;
+  }
+  .hero .wrap{ position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center; }
+  .hero-copy h1{
+    font-size:clamp(2.6rem,6vw,4.6rem); color:var(--lino); margin:1.4rem 0 1.3rem;
+  }
+  .hero-copy h1 em{ font-style:italic; color:var(--luz-claro); font-weight:300; }
+  .hero-copy p.lead{ font-size:1.14rem; color:var(--salvia-2); max-width:34ch; margin-bottom:2.2rem; }
+  .hero-actions{ display:flex; gap:1rem; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:.6em; text-decoration:none;
+    padding:.9rem 1.6rem; border-radius:100px; font-weight:600; font-size:.98rem;
+    cursor:pointer; border:1px solid transparent; transition:transform .2s, background .2s, border-color .2s;
+  }
+  .btn:hover{ transform:translateY(-2px); }
+  .btn-luz{ background:var(--luz); color:var(--noche); }
+  .btn-luz:hover{ background:var(--luz-claro); }
+  .btn-ghost{ background:transparent; color:var(--lino); border-color:color-mix(in srgb,var(--salvia) 45%,transparent); }
+  .btn-ghost:hover{ border-color:var(--salvia); }
+
+  /* Firma: el "respiro" */
+  .respiro{ position:relative; width:100%; aspect-ratio:1; display:grid; place-items:center; }
+  .respiro .ring{
+    position:absolute; border-radius:50%;
+    border:1px solid color-mix(in srgb,var(--luz) 55%,transparent);
+    animation:respirar 9s ease-in-out infinite;
+  }
+  .respiro .ring:nth-child(1){ inset:6%;  animation-delay:0s;    opacity:.35; }
+  .respiro .ring:nth-child(2){ inset:20%; animation-delay:.35s;  opacity:.55; }
+  .respiro .ring:nth-child(3){ inset:34%; animation-delay:.7s;   opacity:.8;  border-color:var(--luz-claro); }
+  .respiro .nucleo{
+    width:38%; aspect-ratio:1; border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, var(--luz-claro), var(--luz) 55%, var(--bosque));
+    box-shadow:0 0 60px color-mix(in srgb,var(--luz) 45%,transparent);
+    animation:respirarNucleo 9s ease-in-out infinite;
+  }
+  .respiro .palabra{
+    position:absolute; font-family:var(--serif); font-style:italic;
+    font-size:1.05rem; color:var(--noche); z-index:2; letter-spacing:.02em;
+  }
+  @keyframes respirar{
+    0%,100%{ transform:scale(1); }
+    45%{ transform:scale(1.14); }
+  }
+  @keyframes respirarNucleo{
+    0%,100%{ transform:scale(1); opacity:.92; }
+    45%{ transform:scale(1.1); opacity:1; }
+  }
+
+  /* ---------- SECCIONES ---------- */
+  section{ padding:clamp(4rem,8vw,7rem) 0; }
+  .section-head{ max-width:52ch; margin-bottom:3rem; }
+  .section-head h2{ font-size:clamp(2rem,4.5vw,3.1rem); margin:1.1rem 0 1rem; }
+  .section-head p{ color:var(--tinta-2); font-size:1.08rem; }
+
+  /* Presencia / sobre ella */
+  .presencia .wrap{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(2rem,5vw,4.5rem); align-items:center; }
+  .presencia .retrato{
+    aspect-ratio:4/5; border-radius:var(--radio); overflow:hidden; position:relative;
+    background:linear-gradient(150deg, var(--bosque), var(--musgo));
+    box-shadow:0 24px 60px -30px rgba(35,46,39,.55);
+  }
+  /* Reemplazá el div .retrato-ph por: <img src="foto.jpg" alt="..."> */
+  .retrato-ph{
+    position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+    color:var(--salvia-2); font-family:var(--serif); font-style:italic; padding:2rem;
+  }
+  .retrato-ph small{ display:block; font-family:var(--sans); font-style:normal; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; margin-top:.8rem; opacity:.7; }
+  .presencia h2{ font-size:clamp(1.9rem,4vw,2.8rem); margin:1rem 0 1.2rem; }
+  .presencia p{ color:var(--tinta-2); margin-bottom:1.1rem; font-size:1.06rem; }
+  .presencia .firma-nombre{ font-family:var(--serif); font-style:italic; font-size:1.3rem; color:var(--bosque); margin-top:1.4rem; }
+
+  /* Servicios */
+  .servicios{ background:var(--lino-2); }
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
+  .card{
+    background:var(--lino); border-radius:var(--radio); padding:2.2rem 2rem;
+    border:1px solid color-mix(in srgb,var(--bosque) 12%,transparent);
+    display:flex; flex-direction:column; transition:transform .25s, box-shadow .25s;
+  }
+  .card:hover{ transform:translateY(-4px); box-shadow:0 26px 50px -34px rgba(35,46,39,.4); }
+  .card .num{ font-family:var(--serif); font-size:.95rem; color:var(--luz); letter-spacing:.05em; }
+  .card h3{ font-size:1.55rem; margin:.7rem 0 .8rem; }
+  .card p{ color:var(--tinta-2); font-size:1rem; flex:1; }
+  .card .link{
+    margin-top:1.4rem; text-decoration:none; font-weight:600; color:var(--bosque);
+    display:inline-flex; align-items:center; gap:.4em; transition:gap .2s;
+  }
+  .card .link:hover{ gap:.7em; }
+
+  /* Frases / galería */
+  .frases{ background:var(--noche); color:var(--lino); }
+  .frases .section-head h2{ color:var(--lino); }
+  .frases .section-head p{ color:var(--salvia-2); }
+  .grid-frases{ display:grid; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); gap:1.2rem; }
+  .frase{
+    border-radius:var(--radio); padding:2.4rem 2rem; min-height:210px;
+    display:flex; flex-direction:column; justify-content:space-between;
+    position:relative; overflow:hidden; isolation:isolate;
+  }
+  .frase::after{ content:"”"; position:absolute; right:1rem; bottom:-1.2rem; font-family:var(--serif); font-size:9rem; opacity:.12; line-height:1; }
+  .frase p{ font-family:var(--serif); font-size:1.35rem; line-height:1.28; font-style:italic; position:relative; z-index:1; }
+  .frase span{ font-size:.72rem; letter-spacing:.2em; text-transform:uppercase; font-weight:600; opacity:.75; }
+  .frase.a{ background:linear-gradient(155deg,#5B3B7D,#34204A); color:var(--lino); }
+  .frase.b{ background:linear-gradient(155deg,var(--luz),#C05A93); color:var(--noche); }
+  .frase.c{ background:linear-gradient(155deg,#6B4A8F,#452C6B); color:var(--salvia-2); }
+  .frase.d{ background:linear-gradient(155deg,#E4D3F0,#B99AD4); color:var(--musgo); }
+  .frase.e{ background:linear-gradient(155deg,#34204A,#251830); color:var(--salvia-2); border:1px solid color-mix(in srgb,var(--luz) 30%,transparent); }
+  .frase.f{ background:linear-gradient(155deg,#F3B4D3,var(--luz)); color:var(--noche); }
+
+  /* Pensamientos */
+  .pensamientos .lista{ display:grid; gap:1px; background:color-mix(in srgb,var(--bosque) 14%,transparent); border-radius:var(--radio); overflow:hidden; border:1px solid color-mix(in srgb,var(--bosque) 14%,transparent); }
+  .pensamiento{
+    background:var(--lino); padding:2rem clamp(1.5rem,3vw,2.6rem);
+    display:grid; grid-template-columns:auto 1fr auto; gap:1.6rem; align-items:center;
+    text-decoration:none; color:inherit; transition:background .2s;
+  }
+  .pensamiento:hover{ background:var(--lino-2); }
+  .pensamiento .fecha{ font-family:var(--serif); font-style:italic; color:var(--luz); font-size:.95rem; white-space:nowrap; }
+  .pensamiento h3{ font-size:1.35rem; margin-bottom:.3rem; }
+  .pensamiento p{ color:var(--tinta-2); font-size:.98rem; }
+  .pensamiento .flecha{ color:var(--bosque); font-size:1.3rem; transition:transform .2s; }
+  .pensamiento:hover .flecha{ transform:translateX(4px); }
+
+  /* Testimonios */
+  .testimonios{ background:var(--lino-2); }
+  .grid-testi{ display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.4rem; }
+  .testi{
+    background:var(--lino); border-radius:var(--radio); padding:2.2rem 2rem;
+    border:1px solid color-mix(in srgb,var(--bosque) 12%,transparent);
+  }
+  .testi .estrellas{ color:var(--luz); letter-spacing:.2em; font-size:.95rem; margin-bottom:1rem; }
+  .testi blockquote{ font-family:var(--serif); font-size:1.12rem; line-height:1.45; color:var(--tinta); font-style:italic; }
+  .testi .autor{ margin-top:1.4rem; display:flex; align-items:center; gap:.8rem; }
+  .testi .avatar{ width:42px; height:42px; border-radius:50%; background:var(--bosque); color:var(--lino); display:grid; place-items:center; font-family:var(--serif); font-size:1.1rem; }
+  .testi .autor b{ display:block; font-family:var(--sans); font-weight:600; font-size:.95rem; color:var(--tinta); }
+  .testi .autor small{ color:var(--tinta-2); font-size:.85rem; }
+
+  /* Contacto */
+  .contacto{ background:var(--noche); color:var(--lino); }
+  .contacto .wrap{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,4rem); align-items:center; }
+  .contacto h2{ font-size:clamp(2rem,4.5vw,3rem); color:var(--lino); margin:1rem 0 1.1rem; }
+  .contacto .lead{ color:var(--salvia-2); font-size:1.08rem; margin-bottom:1.8rem; max-width:38ch; }
+  .contacto .datos{ display:flex; flex-direction:column; gap:.7rem; margin-top:1.6rem; }
+  .contacto .datos a, .contacto .datos span{ color:var(--salvia-2); text-decoration:none; font-size:.98rem; display:inline-flex; gap:.6em; align-items:center; }
+  .contacto .datos a:hover{ color:var(--luz-claro); }
+  .form-card{
+    background:color-mix(in srgb,var(--musgo) 92%,#000); border-radius:var(--radio);
+    padding:2.4rem; border:1px solid color-mix(in srgb,var(--salvia) 20%,transparent);
+  }
+  .form-card label{ display:block; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--salvia); margin:0 0 .5rem; }
+  .form-card .campo{ margin-bottom:1.3rem; }
+  .form-card input, .form-card textarea{
+    width:100%; background:var(--noche); border:1px solid color-mix(in srgb,var(--salvia) 22%,transparent);
+    border-radius:12px; padding:.85rem 1rem; color:var(--lino); font-family:var(--sans); font-size:1rem;
+    transition:border-color .2s;
+  }
+  .form-card input:focus, .form-card textarea:focus{ outline:none; border-color:var(--luz); }
+  .form-card textarea{ resize:vertical; min-height:110px; }
+  .form-card .btn{ width:100%; justify-content:center; }
+  .form-hint{ font-size:.82rem; color:var(--salvia); margin-top:1rem; text-align:center; opacity:.8; }
+
+  /* Footer */
+  footer{ background:var(--musgo); color:var(--salvia-2); padding:3rem 0 2.5rem; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:space-between; align-items:center; }
+  footer .logo{ color:var(--lino); }
+  footer .logo span{ color:var(--luz); }
+  footer small{ font-size:.85rem; opacity:.8; }
+  footer .foot-links{ display:flex; gap:1.5rem; }
+  footer .foot-links a{ color:var(--salvia-2); text-decoration:none; font-size:.9rem; }
+  footer .foot-links a:hover{ color:var(--lino); }
+
+  /* Botón flotante WhatsApp */
+  .wa-float{
+    position:fixed; right:1.4rem; bottom:1.4rem; z-index:60;
+    width:60px; height:60px; border-radius:50%; background:#25D366;
+    display:grid; place-items:center; box-shadow:0 12px 30px -8px rgba(37,211,102,.6);
+    text-decoration:none; transition:transform .2s;
+    animation:aparecer .4s .6s both;
+  }
+  .wa-float:hover{ transform:scale(1.08); }
+  .wa-float svg{ width:32px; height:32px; fill:#fff; }
+  @keyframes aparecer{ from{ transform:scale(0); } to{ transform:scale(1); } }
+
+  /* Reveal on scroll */
+  .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
+  .reveal.visible{ opacity:1; transform:none; }
+
+  /* ---------- Responsive ---------- */
+  @media (max-width:900px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .respiro{ max-width:340px; margin:0 auto; order:-1; }
+    .presencia .wrap{ grid-template-columns:1fr; }
+    .presencia .retrato{ max-width:380px; }
+    .cards{ grid-template-columns:1fr; }
+    .contacto .wrap{ grid-template-columns:1fr; }
+    .nav-links{
+      position:fixed; inset:70px 0 auto 0; background:var(--lino);
+      flex-direction:column; gap:0; padding:1rem 1.25rem 1.5rem;
+      border-bottom:1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+      transform:translateY(-120%); transition:transform .3s; align-items:stretch;
+    }
+    .nav-links.open{ transform:none; }
+    .nav-links a{ padding:.9rem 0; border-bottom:1px solid color-mix(in srgb,var(--bosque) 10%,transparent); }
+    .nav-cta{ text-align:center; margin-top:.8rem; }
+    .nav-toggle{ display:block; }
+    .pensamiento{ grid-template-columns:1fr; gap:.5rem; }
+    .pensamiento .flecha{ display:none; }
+  }
+
+  @media (prefers-reduced-motion:reduce){
+    *{ animation:none!important; scroll-behavior:auto; }
+    .reveal{ opacity:1; transform:none; transition:none; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ============ NAV ============ -->
+<nav>
+  <div class="wrap">
+    <a href="#inicio" class="logo"><b>Valentina</b> <span>Ríos</span></a>
+    <div class="nav-links" id="navLinks">
+      <a href="#presencia">Quién soy</a>
+      <a href="#servicios">Acompañamiento</a>
+      <a href="#frases">Bioexistencia</a>
+      <a href="#pensamientos">Pensamientos</a>
+      <a href="#testimonios">Testimonios</a>
+      <a href="#contacto" class="nav-cta">Escribime</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ============ HERO ============ -->
+<header class="hero" id="inicio">
+  <div class="wrap">
+    <div class="hero-copy reveal">
+      <span class="eyebrow">Bioexistencia consciente</span>
+      <h1>Volver a <em>habitarte</em> con presencia.</h1>
+      <p class="lead">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.</p>
+      <div class="hero-actions">
+        <a href="#contacto" class="btn btn-luz">Reservar una consulta</a>
+        <a href="#frases" class="btn btn-ghost">Conocer la bioexistencia</a>
+      </div>
+    </div>
+    <div class="respiro" aria-hidden="true">
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="nucleo"></div>
+      <span class="palabra">respirá</span>
+    </div>
+  </div>
+</header>
+
+<!-- ============ PRESENCIA ============ -->
+<section class="presencia" id="presencia">
+  <div class="wrap">
+    <div class="retrato reveal">
+      <!-- Reemplazá este bloque por: <img src="tu-foto.jpg" alt="Valentina Ríos"> -->
+      <div class="retrato-ph">
+        Tu foto acá
+        <small>reemplazá el bloque .retrato-ph por una &lt;img&gt;</small>
+      </div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Quién soy</span>
+      <h2>Consultora en bioexistencia consciente.</h2>
+      <p>Hace más de diez años acompaño a personas que sienten que la vida se les pasa en piloto automático. La bioexistencia consciente es una forma de volver a lo esencial: el cuerpo que habitás, las emociones que te atraviesan y las decisiones que te construyen.</p>
+      <p>No trabajo desde el "hay que estar bien". Trabajo desde la presencia: mirar lo que hay, con honestidad y ternura, para que puedas elegir desde otro lugar. En consulta individual, en charlas y en lo que escribo, la invitación es siempre la misma: volver a vos.</p>
+      <p class="firma-nombre">— Valentina</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SERVICIOS ============ -->
+<section class="servicios" id="servicios">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Formas de acompañarte</span>
+      <h2>Tres caminos, una misma intención.</h2>
+      <p>Cada espacio propone un ritmo distinto para el mismo trabajo: registrar, sostener y transformar tu manera de existir.</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <span class="num">01 — Individual</span>
+        <h3>Consultas</h3>
+        <p>Encuentros uno a uno, presenciales u online, para acompañar tu proceso personal. Un espacio propio para poner en palabras, registrar el cuerpo y abrir claridad donde había ruido.</p>
+        <a href="#contacto" class="link" data-servicio="una consulta individual">Reservar &rarr;</a>
+      </article>
+      <article class="card reveal">
+        <span class="num">02 — Grupal</span>
+        <h3>Charlas y talleres</h3>
+        <p>Encuentros grupales para instituciones, empresas y comunidades. Llevo la bioexistencia consciente a espacios donde muchas personas necesitan frenar, respirar y volver a habitarse juntas.</p>
+        <a href="#contacto" class="link" data-servicio="una charla o taller">Consultar fechas &rarr;</a>
+      </article>
+      <article class="card reveal">
+        <span class="num">03 — Lectura</span>
+        <h3>Pensamientos</h3>
+        <p>Escritos breves sobre presencia, cuerpo y consciencia. Ideas para acompañarte entre encuentro y encuentro, o para empezar a caminar este sendero a tu propio ritmo.</p>
+        <a href="#pensamientos" class="link">Leer &rarr;</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FRASES / BIOEXISTENCIA ============ -->
+<section class="frases" id="frases">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">La bioexistencia en pocas palabras</span>
+      <h2>Frases para volver a vos.</h2>
+      <p>Las imágenes que comparto nacen de lo que trabajo cada día. Guardalas, compartilas, dejá que te acompañen.</p>
+    </div>
+    <div class="grid-frases">
+      <figure class="frase a reveal"><p>“Existir no es sobrevivir: es habitarte con presencia.”</p><span>Bioexistencia</span></figure>
+      <figure class="frase b reveal"><p>“Tu cuerpo recuerda lo que tu mente aprendió a olvidar.”</p><span>Presencia</span></figure>
+      <figure class="frase c reveal"><p>“La consciencia empieza donde termina el automático.”</p><span>Consciencia</span></figure>
+      <figure class="frase d reveal"><p>“Volver a vos es el viaje más corto y el más profundo.”</p><span>Camino</span></figure>
+      <figure class="frase e reveal"><p>“Cada respiración es una oportunidad de empezar de nuevo.”</p><span>Respiro</span></figure>
+      <figure class="frase f reveal"><p>“No estás rota. Estás despertando.”</p><span>Despertar</span></figure>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PENSAMIENTOS ============ -->
+<section class="pensamientos" id="pensamientos">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Escritos</span>
+      <h2>Pensamientos en voz baja.</h2>
+      <p>Textos breves que voy dejando por el camino. Tocá cada uno para leerlo completo.</p>
+    </div>
+    <div class="lista reveal">
+      <a href="#contacto" class="pensamiento">
+        <span class="fecha">Marzo</span>
+        <div>
+          <h3>El automático también es una decisión</h3>
+          <p>Sobre esos días en que hacés todo sin estar en nada, y cómo la presencia empieza por notarlo.</p>
+        </div>
+        <span class="flecha">&rarr;</span>
+      </a>
+      <a href="#contacto" class="pensamiento">
+        <span class="fecha">Febrero</span>
+        <div>
+          <h3>Respirar no es solo respirar</h3>
+          <p>La respiración como puente entre el cuerpo que sos y la vida que estás eligiendo, incluso sin darte cuenta.</p>
+        </div>
+        <span class="flecha">&rarr;</span>
+      </a>
+      <a href="#contacto" class="pensamiento">
+        <span class="fecha">Enero</span>
+        <div>
+          <h3>Sanar no es volver a como estabas antes</h3>
+          <p>Por qué la bioexistencia no busca la versión anterior de vos, sino la que recién empieza a asomar.</p>
+        </div>
+        <span class="flecha">&rarr;</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TESTIMONIOS ============ -->
+<section class="testimonios" id="testimonios">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Quienes caminaron conmigo</span>
+      <h2>Lo que cuentan.</h2>
+      <p>Palabras de personas que hicieron su propio proceso de bioexistencia consciente.</p>
+    </div>
+    <div class="grid-testi">
+      <article class="testi reveal">
+        <div class="estrellas" aria-label="5 de 5">★★★★★</div>
+        <blockquote>“Llegué agotada y sin saber por qué. Valentina me ayudó a frenar y a escucharme de verdad. Nunca había sentido algo así de simple y transformador.”</blockquote>
+        <div class="autor"><span class="avatar">M</span><div><b>María L.</b><small>Consultas individuales</small></div></div>
+      </article>
+      <article class="testi reveal">
+        <div class="estrellas" aria-label="5 de 5">★★★★★</div>
+        <blockquote>“Trajo una charla a nuestro equipo y cambió el clima de toda la semana. Habla desde un lugar muy humano, sin recetas, y eso llega.”</blockquote>
+        <div class="autor"><span class="avatar">D</span><div><b>Diego R.</b><small>Charla para empresa</small></div></div>
+      </article>
+      <article class="testi reveal">
+        <div class="estrellas" aria-label="5 de 5">★★★★★</div>
+        <blockquote>“Sus escritos me acompañan cada mañana. Son cortos pero se quedan dando vueltas todo el día. Gracias por poner en palabras lo que muchas sentimos.”</blockquote>
+        <div class="autor"><span class="avatar">A</span><div><b>Ana P.</b><small>Lectora de pensamientos</small></div></div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CONTACTO ============ -->
+<section class="contacto" id="contacto">
+  <div class="wrap">
+    <div class="reveal">
+      <span class="eyebrow">Escribime</span>
+      <h2>Demos el primer paso juntas.</h2>
+      <p class="lead">Contame en qué momento estás. Te respondo personalmente por WhatsApp para encontrar la forma de acompañarte que mejor te sirva.</p>
+      <div class="datos">
+        <a id="waLink" href="#" target="_blank" rel="noopener">💬 <span id="waDisplay">WhatsApp directo</span></a>
+        <a id="mailLink" href="#">✉️ <span id="mailDisplay"></span></a>
+        <a id="igLink" href="#" target="_blank" rel="noopener">◎ Instagram</a>
+        <span id="ciudad">📍 Buenos Aires, Argentina</span>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <div class="campo">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" placeholder="¿Cómo te llamás?">
+      </div>
+      <div class="campo">
+        <label for="mensaje">Tu mensaje</label>
+        <textarea id="mensaje" placeholder="Contame un poco en qué andás y qué estás buscando..."></textarea>
+      </div>
+      <button class="btn btn-luz" id="enviarWa">Enviar por WhatsApp</button>
+      <p class="form-hint">Se abre WhatsApp con tu mensaje listo para enviar.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER ============ -->
+<footer>
+  <div class="wrap">
+    <div>
+      <div class="logo"><b>Valentina</b> <span>Ríos</span></div>
+      <small>Consultora en bioexistencia consciente</small>
+    </div>
+    <div class="foot-links">
+      <a href="#presencia">Quién soy</a>
+      <a href="#servicios">Acompañamiento</a>
+      <a href="#pensamientos">Pensamientos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
+    <small id="footYear">© 2025 · Hecho con presencia.</small>
+  </div>
+</footer>
+
+<!-- Botón flotante WhatsApp -->
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.9 5-1.3A10 10 0 1 0 12 2z"/></svg>
+</a>
+
+<script>
+(function(){
+  "use strict";
+
+  var cfg = window.SITE_CONFIG || {};
+  var wa  = (cfg.whatsapp || "").replace(/[^0-9]/g, "");
+
+  // Aplica el nombre configurado en logos y textos con data-nombre
+  if (cfg.nombre) {
+    document.querySelectorAll("[data-nombre]").forEach(function(el){ el.textContent = cfg.nombre; });
+  }
+
+  // Arma un link de WhatsApp con mensaje opcional
+  function waUrl(texto){
+    var base = "https://wa.me/" + wa;
+    return texto ? base + "?text=" + encodeURIComponent(texto) : base;
+  }
+
+  // Links de WhatsApp base
+  var saludo = "Hola" + (cfg.nombre ? " " + cfg.nombre : "") + ", me gustaría hacerte una consulta.";
+  var waFloat = document.getElementById("waFloat");
+  var waLink  = document.getElementById("waLink");
+  if (waFloat) waFloat.href = waUrl(saludo);
+  if (waLink)  waLink.href  = waUrl(saludo);
+
+  // Botones de servicio que apuntan al contacto y precargan el textarea
+  document.querySelectorAll("[data-servicio]").forEach(function(el){
+    el.addEventListener("click", function(){
+      var msj = document.getElementById("mensaje");
+      if (msj && !msj.value) {
+        msj.value = "Hola, me interesa " + el.getAttribute("data-servicio") + ".";
+      }
+    });
+  });
+
+  // Formulario -> WhatsApp
+  var enviar = document.getElementById("enviarWa");
+  if (enviar) {
+    enviar.addEventListener("click", function(){
+      var nombre  = (document.getElementById("nombre").value || "").trim();
+      var mensaje = (document.getElementById("mensaje").value || "").trim();
+      var texto = "Hola" + (cfg.nombre ? " " + cfg.nombre : "") + ", soy " +
+                  (nombre || "una persona interesada") + ". " +
+                  (mensaje || "Me gustaría saber más sobre tus consultas.");
+      window.open(waUrl(texto), "_blank", "noopener");
+    });
+  }
+
+  // Datos de contacto dinámicos
+  var mailWrap = document.getElementById("mailLink");
+  if (cfg.email) {
+    document.getElementById("mailDisplay").textContent = cfg.email;
+    mailWrap.href = "mailto:" + cfg.email;
+  } else if (mailWrap) {
+    mailWrap.style.display = "none";
+  }
+
+  var igWrap = document.getElementById("igLink");
+  if (cfg.instagram) { igWrap.href = cfg.instagram; }
+  else if (igWrap) { igWrap.style.display = "none"; }
+
+  if (cfg.ciudad) { document.getElementById("ciudad").textContent = "📍 " + cfg.ciudad; }
+  var waDisplay = document.getElementById("waDisplay");
+  if (waDisplay && wa) { waDisplay.textContent = "WhatsApp directo"; }
+
+  // Año del footer
+  var y = new Date().getFullYear();
+  var foot = document.getElementById("footYear");
+  if (foot) foot.textContent = "© " + y + " · Hecho con presencia.";
+
+  // Menú mobile
+  var toggle = document.getElementById("navToggle");
+  var links  = document.getElementById("navLinks");
+  if (toggle && links) {
+    toggle.addEventListener("click", function(){
+      var open = links.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    links.querySelectorAll("a").forEach(function(a){
+      a.addEventListener("click", function(){ links.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); });
+    });
+  }
+
+  // Reveal on scroll
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+      });
+    }, { threshold:0.12, rootMargin:"0px 0px -40px 0px" });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("visible"); });
+  }
+})();
+</script>
+</body>
+</html>
