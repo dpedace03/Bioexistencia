@@ -222,6 +222,45 @@
   .social-icon-btn-only:hover { background:var(--bosque); color:var(--lino); transform:scale(1.08); }
   .social-icon-btn-only svg { width:22px; height:22px; fill:currentColor; }
 
+  /* SECCIÓN QUE HAGO EN UNA CONSULTA (CARRUSEL ADAPTADO AL 100% DE LA IMAGEN) */
+  .que-hago-section { background: var(--lino); }
+  .carrousel-container {
+    position: relative; max-width: 950px; margin: 0 auto; overflow: hidden;
+    border-radius: var(--radio); box-shadow: 0 15px 35px rgba(0,0,0,0.08);
+    background: transparent; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+  }
+  .carrousel-slide-wrapper { display: flex; transition: transform 0.4s ease-in-out; }
+  .carrousel-slide {
+    min-width: 100%; position: relative; max-height: 580px;
+    background: transparent; display: flex; align-items: center; justify-content: center;
+  }
+  .carrousel-slide img {
+    width: 100%; height: auto; max-height: 580px;
+    object-fit: cover; display: block;
+  }
+  .carrousel-slide-caption {
+    position: absolute; bottom: 0; inset-inline: 0; padding: 1.5rem;
+    background: linear-gradient(transparent, rgba(37,24,48,0.85)); color: var(--lino);
+    font-size: 1.1rem; font-family: var(--serif); text-align: center;
+  }
+  .carrousel-btn {
+    position: absolute; top: 50%; transform: translateY(-50%);
+    width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.8);
+    color: var(--tinta); border: none; font-size: 1.3rem; font-weight: bold;
+    cursor: pointer; z-index: 10; display: grid; place-items: center; transition: all 0.2s;
+  }
+  .carrousel-btn:hover { background: var(--luz); color: var(--noche); }
+  .carrousel-btn.prev { left: 1rem; }
+  .carrousel-btn.next { right: 1rem; }
+  .carrousel-dots {
+    display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem;
+  }
+  .carrousel-dot {
+    width: 12px; height: 12px; border-radius: 50%; background: color-mix(in srgb,var(--bosque) 30%,transparent);
+    cursor: pointer; transition: all 0.2s;
+  }
+  .carrousel-dot.active { background: var(--luz); transform: scale(1.2); }
+
   .servicios{ background:var(--lino-2); }
   .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
   .card{
@@ -370,7 +409,7 @@
   .wa-float svg{ width:32px; height:32px; fill:#fff; }
   @keyframes aparecer{ from{ transform:scale(0); } to{ transform:scale(1); } }
 
-  /* MODALES, TABLAS Y BOTÓN BOTÓN CERRAR "X" */
+  /* MODALES, TABLAS Y BOTÓN CERRAR "X" */
   .modal{ display:none; position:fixed; inset:0; background:rgba(37,24,48,0.75); z-index:100; justify-content:center; align-items:center; padding:1.5rem; backdrop-filter:blur(6px); }
   .modal-card{ position:relative; background:var(--lino); color:var(--tinta); padding:2.5rem; border-radius:var(--radio); max-width:780px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.35); border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent); }
   .modal-close-x {
@@ -454,6 +493,7 @@
     <div class="nav-links" id="navLinks">
       <div class="nav-menu-public">
         <a href="#presencia">Quién soy</a>
+        <a href="#que-hago">Qué hago en una consulta</a>
         <a href="#servicios">Acompañamiento</a>
         <a href="#videos">Videos</a>
         <a href="#seminarios">Seminarios</a>
@@ -521,6 +561,24 @@
         </a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- SECCIÓN: QUE HAGO EN UNA CONSULTA -->
+<section class="que-hago-section" id="que-hago">
+  <div class="wrap">
+    <div class="section-head reveal" style="text-align: center; margin-inline: auto;">
+      <span class="eyebrow">El Proceso de Encuentro</span>
+      <h2>¿Qué hago en una consulta?</h2>
+      <p id="txt-que-hago-desc">Un recorrido visual por el espacio de indagación, escucha profunda y registro corporal en cada sesión.</p>
+    </div>
+
+    <div class="carrousel-container reveal">
+      <button type="button" class="carrousel-btn prev" onclick="moveCarrousel(-1)">❮</button>
+      <div class="carrousel-slide-wrapper" id="carrousel-slide-wrapper"></div>
+      <button type="button" class="carrousel-btn next" onclick="moveCarrousel(1)">❯</button>
+    </div>
+    <div class="carrousel-dots" id="carrousel-dots"></div>
   </div>
 </section>
 
@@ -718,6 +776,19 @@
         <label>Quién soy (Párrafo 1)</label>
         <textarea id="setup-presencia-p1" rows="2"></textarea>
 
+        <!-- CONFIGURACIÓN CARRUSEL QUE HAGO EN UNA CONSULTA -->
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Sección "¿Qué hago en una consulta?" (Carrusel de Imágenes)</label>
+        <p style="font-size:0.85rem; color:var(--tinta-2); margin-bottom:0.5rem;">Podés agregar fotos públicas de GitHub o cargar archivos directamente.</p>
+        <div id="setup-carrousel-container"></div>
+
+        <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; align-items: center; flex-wrap: wrap;">
+          <input type="text" id="setup-carr-url-input" placeholder="Pegar URL pública de GitHub (raw.githubusercontent.com...)" style="flex: 1; min-width: 240px;">
+          <button type="button" class="btn btn-luz" style="padding: 0.55rem 1rem; font-size: 0.85rem;" onclick="addCarrouselImageFromUrl()">+ Agregar por URL</button>
+        </div>
+
+        <input type="file" id="setup-carrousel-add-file" accept="image/*" style="display:none;" onchange="addCarrouselImageFromFile(event)">
+        <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="document.getElementById('setup-carrousel-add-file').click()">+ Subir Archivo desde tu Equipo</button>
+
         <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Tipos de Modalidad para Seminarios (Separados por coma)</label>
         <input type="text" id="setup-modalidades" placeholder="Online por Zoom, Presencial CABA, Híbrido">
 
@@ -874,7 +945,7 @@
   </div>
 </div>
 
-<!-- OTROS MODALES CON BOTÓN CRUZ X -->
+<!-- OTROS MODALES -->
 <div id="modal-gmail-login" class="modal">
   <div class="modal-card" style="max-width:380px;">
     <button type="button" class="modal-close-x" onclick="closeModal('modal-gmail-login')" aria-label="Cerrar">×</button>
@@ -1078,6 +1149,7 @@ function closeCustomAlert() {
 var isAdmin = false;
 var userGmail = localStorage.getItem('bio_user_gmail') || "";
 var chartInstance = null;
+var currentCarrouselIdx = 0;
 
 var setupData = JSON.parse(localStorage.getItem('bio_setup')) || {
   nombreConsultora: "Valentina Ríos",
@@ -1095,6 +1167,10 @@ var setupData = JSON.parse(localStorage.getItem('bio_setup')) || {
     "Confirmado": { bg: "#e8f5e9", txt: "#1b5e20" },
     "Cancelado": { bg: "#ffebee", txt: "#b71c1c" }
   },
+  carrouselFotos: [
+    { src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80", titulo: "Espacio de Escucha y Bienvenida" },
+    { src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80", titulo: "Registro Corporal y Respiración Consciente" }
+  ],
   videos: [
     { titulo: "Introducción a la Bioexistencia", descripcion: "Descubrí qué es y cómo empezar a habitarte con presencia.", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
   ]
@@ -1130,6 +1206,7 @@ var comentarios = JSON.parse(localStorage.getItem('bio_comentarios')) || [
 
 document.addEventListener("DOMContentLoaded", function(){
   applySetupDataUI();
+  renderCarrouselPublic();
   renderVideosPublic();
   renderSeminariosPublic();
   renderComentariosPublic();
@@ -1174,6 +1251,122 @@ function switchPanelTab(secId) {
   if(secId === 'sec-estadisticas') {
     document.getElementById('tab-btn-estadisticas').classList.add('active');
     calcularEstadisticas();
+  }
+}
+
+/* CARRUSEL DE IMÁGENES */
+function renderCarrouselPublic() {
+  var wrapper = document.getElementById('carrousel-slide-wrapper');
+  var dotsContainer = document.getElementById('carrousel-dots');
+  if (!wrapper || !dotsContainer) return;
+
+  wrapper.innerHTML = '';
+  dotsContainer.innerHTML = '';
+
+  var fotos = setupData.carrouselFotos || [];
+  if (fotos.length === 0) {
+    wrapper.innerHTML = '<div class="carrousel-slide"><div class="carrousel-slide-caption">Agregá imágenes desde el Panel de Administración.</div></div>';
+    return;
+  }
+
+  fotos.forEach(function(f, idx) {
+    var slide = document.createElement('div');
+    slide.className = 'carrousel-slide';
+    slide.innerHTML = '<img src="' + f.src + '" alt="' + (f.titulo || 'Consulta') + '">' +
+                       (f.titulo ? '<div class="carrousel-slide-caption">' + f.titulo + '</div>' : '');
+    wrapper.appendChild(slide);
+
+    var dot = document.createElement('div');
+    dot.className = 'carrousel-dot' + (idx === 0 ? ' active' : '');
+    dot.onclick = function() { setCarrouselSlide(idx); };
+    dotsContainer.appendChild(dot);
+  });
+
+  currentCarrouselIdx = 0;
+  setCarrouselSlide(0);
+}
+
+function moveCarrousel(direction) {
+  var fotos = setupData.carrouselFotos || [];
+  if (fotos.length === 0) return;
+  currentCarrouselIdx = (currentCarrouselIdx + direction + fotos.length) % fotos.length;
+  setCarrouselSlide(currentCarrouselIdx);
+}
+
+function setCarrouselSlide(idx) {
+  currentCarrouselIdx = idx;
+  var wrapper = document.getElementById('carrousel-slide-wrapper');
+  if (wrapper) {
+    wrapper.style.transform = 'translateX(-' + (idx * 100) + '%)';
+  }
+  var dots = document.querySelectorAll('.carrousel-dot');
+  dots.forEach(function(d, i) {
+    if (i === idx) d.classList.add('active');
+    else d.classList.remove('active');
+  });
+}
+
+function renderCarrouselSetupUI() {
+  var container = document.getElementById('setup-carrousel-container');
+  if (!container) return;
+  container.innerHTML = '';
+
+  var fotos = setupData.carrouselFotos || [];
+  fotos.forEach(function(f, idx) {
+    var div = document.createElement('div');
+    div.className = 'carrousel-setup-row';
+    div.style.cssText = 'display:flex; gap:0.8rem; align-items:center; background:var(--lino); padding:0.6rem; border-radius:10px; margin-bottom:0.5rem;';
+    div.innerHTML = '<div style="width:60px; height:45px; border-radius:6px; overflow:hidden; flex-shrink:0;"><img src="' + f.src + '" style="width:100%; height:100%; object-fit:cover;"></div>' +
+                    '<input type="text" class="carr-title-input" value="' + (f.titulo || '') + '" placeholder="Título de la imagen (Opcional)" style="flex:1;">' +
+                    '<button type="button" onclick="moveCarrouselItemSetup(' + idx + ', -1)" title="Subir" style="padding:0.2rem 0.5rem;">⬆️</button>' +
+                    '<button type="button" onclick="moveCarrouselItemSetup(' + idx + ', 1)" title="Bajar" style="padding:0.2rem 0.5rem;">⬇️</button>' +
+                    '<button type="button" onclick="removeCarrouselItemSetup(' + idx + ')" style="background:none; border:none; cursor:pointer;">❌</button>';
+    container.appendChild(div);
+  });
+}
+
+function addCarrouselImageFromUrl() {
+  var urlInput = document.getElementById('setup-carr-url-input');
+  var url = urlInput ? urlInput.value.trim() : '';
+
+  if (!url) {
+    showCustomAlert("Ingresa la URL de la imagen primero.");
+    return;
+  }
+
+  if (!setupData.carrouselFotos) setupData.carrouselFotos = [];
+  setupData.carrouselFotos.push({ src: url, titulo: "" });
+  renderCarrouselSetupUI();
+  urlInput.value = '';
+}
+
+function addCarrouselImageFromFile(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    if (!setupData.carrouselFotos) setupData.carrouselFotos = [];
+    setupData.carrouselFotos.push({ src: evt.target.result, titulo: "" });
+    renderCarrouselSetupUI();
+  };
+  reader.readAsDataURL(file);
+}
+
+function moveCarrouselItemSetup(idx, dir) {
+  var fotos = setupData.carrouselFotos || [];
+  var targetIdx = idx + dir;
+  if (targetIdx < 0 || targetIdx >= fotos.length) return;
+  var temp = fotos[idx];
+  fotos[idx] = fotos[targetIdx];
+  fotos[targetIdx] = temp;
+  renderCarrouselSetupUI();
+}
+
+function removeCarrouselItemSetup(idx) {
+  if (setupData.carrouselFotos) {
+    setupData.carrouselFotos.splice(idx, 1);
+    renderCarrouselSetupUI();
   }
 }
 
@@ -1529,6 +1722,7 @@ function applySetupDataUI() {
     document.getElementById('setup-foto-base64').value = setupData.fotoPerfil;
   }
 
+  renderCarrouselSetupUI();
   renderEstadosSetupUI();
 
   [0, 1, 2, 3, 4, 5, 6].forEach(function(d){
@@ -1552,6 +1746,15 @@ function saveSetup(e) {
 
     var ft = document.getElementById('setup-foto-base64').value;
     if(ft) setupData.fotoPerfil = ft;
+
+    // Actualizar títulos de fotos del carrusel
+    var carrRows = document.querySelectorAll('#setup-carrousel-container .carrousel-setup-row');
+    carrRows.forEach(function(row, idx) {
+      var titleVal = row.querySelector('.carr-title-input').value.trim();
+      if (setupData.carrouselFotos[idx]) {
+        setupData.carrouselFotos[idx].titulo = titleVal;
+      }
+    });
 
     var modTxt = document.getElementById('setup-modalidades').value;
     setupData.modalidades = modTxt.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
@@ -1586,6 +1789,7 @@ function saveSetup(e) {
 
     localStorage.setItem('bio_setup', JSON.stringify(setupData));
     applySetupDataUI();
+    renderCarrouselPublic();
     renderVideosPublic();
     renderSlots();
     closeModal('modal-panel-admin');
@@ -1980,6 +2184,7 @@ function importarJsonData(e) {
       }
 
       applySetupDataUI();
+      renderCarrouselPublic();
       renderVideosPublic();
       renderSeminariosPublic();
       renderComentariosPublic();
