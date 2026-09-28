@@ -18,7 +18,7 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Karla:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Karla:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;600&family=Lora:ital,wght@0,400..600;1,400..600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
 <!-- Chart.js para Renderizado de Gráficos de Estadísticas -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
@@ -146,15 +146,21 @@
   .nav-toggle{ display:none; background:none; border:0; cursor:pointer; padding:.4rem; }
   .nav-toggle span{ display:block; width:24px; height:2px; background:var(--tinta); margin:5px 0; transition:.3s; }
 
-  /* HERO */
+  /* HERO DINÁMICO */
   .hero{
-    position:relative; background:var(--noche); color:var(--lino);
+    position:relative; background-color:var(--noche); color:var(--lino);
     padding:clamp(4rem,10vw,8rem) 0 clamp(5rem,11vw,9rem);
     overflow:hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 1; pointer-events: none; display: none;
   }
   .hero .wrap{ position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center; }
   .hero-copy h1{ font-size:clamp(2.6rem,6vw,4.6rem); color:var(--lino); margin:1.4rem 0 1.3rem; }
-  .hero-copy h1 em{ font-style:italic; color:var(--luz-claro); font-weight:300; }
+  .hero-copy h1 em{ font-style:italic; font-weight:300; }
   .hero-copy p.lead{ font-size:1.14rem; color:var(--salvia-2); max-width:34ch; margin-bottom:2.2rem; }
   .hero-actions{ display:flex; gap:1rem; flex-wrap:wrap; }
   .btn{
@@ -222,44 +228,52 @@
   .social-icon-btn-only:hover { background:var(--bosque); color:var(--lino); transform:scale(1.08); }
   .social-icon-btn-only svg { width:22px; height:22px; fill:currentColor; }
 
-  /* SECCIÓN QUE HAGO EN UNA CONSULTA (CARRUSEL ADAPTADO AL 100% DE LA IMAGEN) */
+  /* SECCIÓN QUE HAGO EN UNA CONSULTA */
   .que-hago-section { background: var(--lino); }
-  .carrousel-container {
-    position: relative; max-width: 950px; margin: 0 auto; overflow: hidden;
-    border-radius: var(--radio); box-shadow: 0 15px 35px rgba(0,0,0,0.08);
-    background: transparent; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+  
+  .galeria-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: start;
   }
-  .carrousel-slide-wrapper { display: flex; transition: transform 0.4s ease-in-out; }
-  .carrousel-slide {
-    min-width: 100%; position: relative; max-height: 580px;
-    background: transparent; display: flex; align-items: center; justify-content: center;
+
+  .galeria-card-item {
+    background: var(--lino-2);
+    border-radius: var(--radio);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
   }
-  .carrousel-slide img {
-    width: 100%; height: auto; max-height: 580px;
-    object-fit: cover; display: block;
+
+  .galeria-card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.08);
   }
-  .carrousel-slide-caption {
-    position: absolute; bottom: 0; inset-inline: 0; padding: 1.5rem;
-    background: linear-gradient(transparent, rgba(37,24,48,0.85)); color: var(--lino);
-    font-size: 1.1rem; font-family: var(--serif); text-align: center;
+
+  .galeria-card-img-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
   }
-  .carrousel-btn {
-    position: absolute; top: 50%; transform: translateY(-50%);
-    width: 44px; height: 44px; border-radius: 50%; background: rgba(255,255,255,0.8);
-    color: var(--tinta); border: none; font-size: 1.3rem; font-weight: bold;
-    cursor: pointer; z-index: 10; display: grid; place-items: center; transition: all 0.2s;
+
+  .galeria-card-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
   }
-  .carrousel-btn:hover { background: var(--luz); color: var(--noche); }
-  .carrousel-btn.prev { left: 1rem; }
-  .carrousel-btn.next { right: 1rem; }
-  .carrousel-dots {
-    display: flex; justify-content: center; gap: 0.5rem; margin-top: 1rem;
+
+  .galeria-card-caption {
+    padding: 1.2rem 1.4rem;
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--tinta);
+    text-align: center;
+    background: var(--lino-2);
   }
-  .carrousel-dot {
-    width: 12px; height: 12px; border-radius: 50%; background: color-mix(in srgb,var(--bosque) 30%,transparent);
-    cursor: pointer; transition: all 0.2s;
-  }
-  .carrousel-dot.active { background: var(--luz); transform: scale(1.2); }
 
   .servicios{ background:var(--lino-2); }
   .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
@@ -429,6 +443,14 @@
   .table-custom tr.clickable-row{ cursor:pointer; transition:background .2s; }
   .table-custom tr.clickable-row:hover{ background:var(--lino); }
 
+  /* ESTILOS PARA FORMULARIO DE PARAMETRIZACIÓN HERO */
+  .hero-param-box {
+    background: var(--lino); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.2rem;
+    border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
+  }
+  .hero-param-box h4 { font-family: var(--sans); font-weight: 700; color: var(--musgo); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.4rem; }
+  .grid-param-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+
   /* NOTIFICACIONES */
   .custom-alert-overlay { display: none; position: fixed; inset: 0; background: rgba(37,24,48,0.75); z-index: 999; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px); }
   .custom-alert-box { background: var(--lino); border-radius: var(--radio); padding: 2.2rem; max-width: 420px; width: 100%; text-align: center; border: 2px solid var(--bosque); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
@@ -505,7 +527,7 @@
         <button class="btn-nav user-btn-badge" id="btn-mis-cosas" style="display:none;" onclick="openModal('modal-mis-cosas')">Mis Cosas</button>
         <button class="btn-nav" id="btn-gmail-login" onclick="toggleGmailLogin()">Login Gmail</button>
         
-        <button class="btn-nav admin-only admin-btn-badge" onclick="openPanelAdminModal('sec-setup')">Panel</button>
+        <button class="btn-nav admin-only admin-btn-badge" onclick="openPanelAdminModal('sec-hero')">Panel</button>
         <button class="btn-nav" id="btn-login-toggle" onclick="toggleAdminLogin()">Admin</button>
       </div>
 
@@ -517,12 +539,13 @@
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- HERO PRINCIPAL -->
 <header class="hero" id="inicio">
+  <div class="hero-overlay" id="hero-overlay"></div>
   <div class="wrap">
     <div class="hero-copy reveal">
-      <span class="eyebrow">Bioexistencia consciente</span>
-      <h1 id="txt-hero-h1">Volver a <em>habitarte</em> con presencia.</h1>
+      <span class="eyebrow" id="txt-hero-eyebrow">Bioexistencia consciente</span>
+      <h1 id="txt-hero-h1">Volver a habitarte con presencia.</h1>
       <p class="lead" id="txt-hero-lead">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.</p>
       <div class="hero-actions">
         <a href="#sesiones" class="btn btn-luz">Reservar una consulta</a>
@@ -573,12 +596,7 @@
       <p id="txt-que-hago-desc">Un recorrido visual por el espacio de indagación, escucha profunda y registro corporal en cada sesión.</p>
     </div>
 
-    <div class="carrousel-container reveal">
-      <button type="button" class="carrousel-btn prev" onclick="moveCarrousel(-1)">❮</button>
-      <div class="carrousel-slide-wrapper" id="carrousel-slide-wrapper"></div>
-      <button type="button" class="carrousel-btn next" onclick="moveCarrousel(1)">❯</button>
-    </div>
-    <div class="carrousel-dots" id="carrousel-dots"></div>
+    <div class="galeria-grid-container reveal" id="galeria-grid-container"></div>
   </div>
 </section>
 
@@ -749,15 +767,138 @@
 
     <!-- Pestañas interactivas -->
     <div class="panel-nav-tabs">
-      <button class="panel-tab-btn active" id="tab-btn-setup" onclick="switchPanelTab('sec-setup')">⚙️ Setup</button>
+      <button class="panel-tab-btn active" id="tab-btn-hero" onclick="switchPanelTab('sec-hero')">🎯 Sección Hero / Inicio</button>
+      <button class="panel-tab-btn" id="tab-btn-setup" onclick="switchPanelTab('sec-setup')">⚙️ Setup General</button>
       <button class="panel-tab-btn" id="tab-btn-consultantes" onclick="switchPanelTab('sec-consultantes')">👥 Consultantes</button>
       <button class="panel-tab-btn" id="tab-btn-turnos" onclick="switchPanelTab('sec-turnos')">📅 Turnos</button>
       <button class="panel-tab-btn" id="tab-btn-seminarios" onclick="switchPanelTab('sec-seminarios')">🎓 Seminarios</button>
       <button class="panel-tab-btn" id="tab-btn-estadisticas" onclick="switchPanelTab('sec-estadisticas')">📊 Estadísticas</button>
     </div>
 
-    <!-- SECCIÓN 1: SETUP -->
-    <div id="sec-setup" class="panel-section-content">
+    <!-- SECCIÓN PRIMERA PRINCIPAL: PARAMETRIZACIÓN HERO -->
+    <div id="sec-hero" class="panel-section-content">
+      <form id="form-hero-admin" onsubmit="saveHeroSetup(event)">
+        
+        <!-- 1. FONDO DE PANTALLA -->
+        <div class="hero-param-box">
+          <h4>🖼️ Imagen o Color de Fondo del Hero</h4>
+          <div class="grid-param-3">
+            <div>
+              <label>Tipo de Fondo</label>
+              <select id="hero-bg-type" onchange="toggleHeroBgInputs()">
+                <option value="color">Color Sólido</option>
+                <option value="image">Imagen de Fondo</option>
+              </select>
+            </div>
+            <div id="box-hero-bg-color">
+              <label>Color de Fondo</label>
+              <input type="color" id="hero-bg-color" value="#251830" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+
+          <div id="box-hero-bg-image" style="display: none; margin-top: 0.8rem;">
+            <label>Subir Imagen desde tu Equipo</label>
+            <input type="file" id="hero-bg-file" accept="image/*" onchange="previewHeroBgFile(event)">
+            <input type="hidden" id="hero-bg-base64">
+            
+            <label style="margin-top: 0.5rem;">O Pegar URL Pública de Imagen (GitHub, Unsplash, etc.)</label>
+            <input type="text" id="hero-bg-url" placeholder="https://raw.githubusercontent.com/...">
+            
+            <div id="hero-bg-preview" style="margin-top: 0.6rem; max-height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid #ccc;"></div>
+          </div>
+        </div>
+
+        <!-- 2. EYEBROW -->
+        <div class="hero-param-box">
+          <h4>📌 Eyebrow / Etiqueta Superior</h4>
+          <label>Contenido del Texto</label>
+          <input type="text" id="hero-eyebrow-text" value="Bioexistencia consciente">
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-eyebrow-font">
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-eyebrow-size" placeholder="Ej: 0.72rem o 14px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-eyebrow-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TÍTULO H1 -->
+        <div class="hero-param-box">
+          <h4>✍️ Título Principal (H1)</h4>
+          <label>Contenido del Texto</label>
+          <input type="text" id="hero-h1-text" value="Volver a habitarte con presencia.">
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-h1-font">
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-h1-size" placeholder="Ej: clamp(2.6rem,6vw,4.6rem) o 50px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-h1-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. BAJADA / LEAD -->
+        <div class="hero-param-box">
+          <h4>📜 Texto Explicativo (Bajada / Lead)</h4>
+          <label>Contenido del Texto</label>
+          <textarea id="hero-lead-text" rows="3">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.</textarea>
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-lead-font">
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-lead-size" placeholder="Ej: 1.14rem o 18px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-lead-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 1.5rem;">
+          <button type="submit" class="btn btn-luz">Guardar Parámetros de Hero</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- SECCIÓN 2: SETUP GENERAL -->
+    <div id="sec-setup" class="panel-section-content" style="display:none;">
       <form id="form-setup-admin" onsubmit="saveSetup(event)">
         <label>Nombre de la Consultora</label>
         <input type="text" id="setup-nombre-consultora" placeholder="Ej: Valentina Ríos" required>
@@ -776,8 +917,8 @@
         <label>Quién soy (Párrafo 1)</label>
         <textarea id="setup-presencia-p1" rows="2"></textarea>
 
-        <!-- CONFIGURACIÓN CARRUSEL QUE HAGO EN UNA CONSULTA -->
-        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Sección "¿Qué hago en una consulta?" (Carrusel de Imágenes)</label>
+        <!-- CONFIGURACIÓN GALERÍA QUE HAGO EN UNA CONSULTA -->
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Sección "¿Qué hago en una consulta?" (Imágenes de la Galería)</label>
         <p style="font-size:0.85rem; color:var(--tinta-2); margin-bottom:0.5rem;">Podés agregar fotos públicas de GitHub o cargar archivos directamente.</p>
         <div id="setup-carrousel-container"></div>
 
@@ -833,7 +974,7 @@
       </form>
     </div>
 
-    <!-- SECCIÓN 2: CONSULTANTES -->
+    <!-- SECCIÓN 3: CONSULTANTES -->
     <div id="sec-consultantes" class="panel-section-content" style="display:none;">
       <form onsubmit="saveConsultante(event)">
         <input type="hidden" id="consultante-id">
@@ -857,7 +998,7 @@
       </table>
     </div>
 
-    <!-- SECCIÓN 3: TURNOS -->
+    <!-- SECCIÓN 4: TURNOS -->
     <div id="sec-turnos" class="panel-section-content" style="display:none;">
       <h4 id="modal-turno-titulo">Asignar / Editar Turno</h4>
       <form onsubmit="saveTurnoAdmin(event)">
@@ -882,7 +1023,7 @@
       </table>
     </div>
 
-    <!-- SECCIÓN 4: SEMINARIOS -->
+    <!-- SECCIÓN 5: SEMINARIOS -->
     <div id="sec-seminarios" class="panel-section-content" style="display:none;">
       <form onsubmit="saveSeminarioAdmin(event)">
         <input type="hidden" id="sem-id">
@@ -916,7 +1057,7 @@
       <div id="lista-seminarios-admin-manage" style="margin-top:1rem;"></div>
     </div>
 
-    <!-- SECCIÓN 5: ESTADÍSTICAS -->
+    <!-- SECCIÓN 6: ESTADÍSTICAS -->
     <div id="sec-estadisticas" class="panel-section-content" style="display:none;">
       <div style="display: flex; gap: 1rem; align-items: center; background: var(--lino); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; flex-wrap: wrap;">
         <div><label style="margin: 0 0 0.2rem 0;">Fecha Desde:</label><input type="date" id="st-fecha-desde" onchange="calcularEstadisticas()"></div>
@@ -1149,7 +1290,28 @@ function closeCustomAlert() {
 var isAdmin = false;
 var userGmail = localStorage.getItem('bio_user_gmail') || "";
 var chartInstance = null;
-var currentCarrouselIdx = 0;
+
+/* CONFIGURACIÓN Y PARAMETRIZACIÓN DEL HERO CON VALORES POR DEFECTO */
+var heroData = JSON.parse(localStorage.getItem('bio_hero')) || {
+  bgType: "color",
+  bgColor: "#251830",
+  bgImage: "",
+  
+  eyebrowText: "Bioexistencia consciente",
+  eyebrowFont: "'Karla', sans-serif",
+  eyebrowSize: "0.72rem",
+  eyebrowColor: "#DE7BAE",
+  
+  h1Text: "Volver a habitarte con presencia.",
+  h1Font: "'Fraunces', serif",
+  h1Size: "clamp(2.6rem,6vw,4.6rem)",
+  h1Color: "#F6F0F7",
+  
+  leadText: "Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.",
+  leadFont: "'Karla', sans-serif",
+  leadSize: "1.14rem",
+  leadColor: "#E4D3F0"
+};
 
 var setupData = JSON.parse(localStorage.getItem('bio_setup')) || {
   nombreConsultora: "Valentina Ríos",
@@ -1205,8 +1367,9 @@ var comentarios = JSON.parse(localStorage.getItem('bio_comentarios')) || [
 ];
 
 document.addEventListener("DOMContentLoaded", function(){
+  applyHeroDataUI();
   applySetupDataUI();
-  renderCarrouselPublic();
+  renderGaleriaPublic();
   renderVideosPublic();
   renderSeminariosPublic();
   renderComentariosPublic();
@@ -1221,10 +1384,167 @@ document.addEventListener("DOMContentLoaded", function(){
   }
 });
 
+/* APLICAR ESTILOS Y TEXTOS DEL HERO AL FRONTEND */
+function applyHeroDataUI() {
+  var heroSec = document.getElementById('inicio');
+  var overlay = document.getElementById('hero-overlay');
+  
+  if (heroData.bgType === 'image' && heroData.bgImage) {
+    heroSec.style.backgroundImage = 'url("' + heroData.bgImage + '")';
+    overlay.style.display = 'block';
+  } else {
+    heroSec.style.backgroundImage = 'none';
+    heroSec.style.backgroundColor = heroData.bgColor || '#251830';
+    overlay.style.display = 'none';
+  }
+
+  // Eyebrow
+  var eyebrowEl = document.getElementById('txt-hero-eyebrow');
+  if(eyebrowEl) {
+    eyebrowEl.textContent = heroData.eyebrowText || "Bioexistencia consciente";
+    eyebrowEl.style.fontFamily = heroData.eyebrowFont || "'Karla', sans-serif";
+    if(heroData.eyebrowSize) eyebrowEl.style.fontSize = heroData.eyebrowSize;
+    if(heroData.eyebrowColor) eyebrowEl.style.color = heroData.eyebrowColor;
+  }
+
+  // H1
+  var h1El = document.getElementById('txt-hero-h1');
+  if(h1El) {
+    h1El.textContent = heroData.h1Text || "Volver a habitarte con presencia.";
+    h1El.style.fontFamily = heroData.h1Font || "'Fraunces', serif";
+    if(heroData.h1Size) h1El.style.fontSize = heroData.h1Size;
+    if(heroData.h1Color) h1El.style.color = heroData.h1Color;
+  }
+
+  // Lead
+  var leadEl = document.getElementById('txt-hero-lead');
+  if(leadEl) {
+    leadEl.textContent = heroData.leadText || "";
+    leadEl.style.fontFamily = heroData.leadFont || "'Karla', sans-serif";
+    if(heroData.leadSize) leadEl.style.fontSize = heroData.leadSize;
+    if(heroData.leadColor) leadEl.style.color = heroData.leadColor;
+  }
+
+  // Cargar formulario del admin con datos guardados
+  document.getElementById('hero-bg-type').value = heroData.bgType || "color";
+  document.getElementById('hero-bg-color').value = heroData.bgColor || "#251830";
+  document.getElementById('hero-bg-url').value = (heroData.bgImage && heroData.bgImage.startsWith("http")) ? heroData.bgImage : "";
+  document.getElementById('hero-bg-base64').value = heroData.bgImage || "";
+
+  document.getElementById('hero-eyebrow-text').value = heroData.eyebrowText || "";
+  document.getElementById('hero-eyebrow-font').value = heroData.eyebrowFont || "'Karla', sans-serif";
+  document.getElementById('hero-eyebrow-size').value = heroData.eyebrowSize || "0.72rem";
+  document.getElementById('hero-eyebrow-color').value = heroData.eyebrowColor || "#DE7BAE";
+
+  document.getElementById('hero-h1-text').value = heroData.h1Text || "";
+  document.getElementById('hero-h1-font').value = heroData.h1Font || "'Fraunces', serif";
+  document.getElementById('hero-h1-size').value = heroData.h1Size || "clamp(2.6rem,6vw,4.6rem)";
+  document.getElementById('hero-h1-color').value = heroData.h1Color || "#F6F0F7";
+
+  document.getElementById('hero-lead-text').value = heroData.leadText || "";
+  document.getElementById('hero-lead-font').value = heroData.leadFont || "'Karla', sans-serif";
+  document.getElementById('hero-lead-size').value = heroData.leadSize || "1.14rem";
+  document.getElementById('hero-lead-color').value = heroData.leadColor || "#E4D3F0";
+
+  toggleHeroBgInputs();
+}
+
+function toggleHeroBgInputs() {
+  var type = document.getElementById('hero-bg-type').value;
+  if(type === 'color') {
+    document.getElementById('box-hero-bg-color').style.display = 'block';
+    document.getElementById('box-hero-bg-image').style.display = 'none';
+  } else {
+    document.getElementById('box-hero-bg-color').style.display = 'none';
+    document.getElementById('box-hero-bg-image').style.display = 'block';
+  }
+}
+
+function previewHeroBgFile(e) {
+  var file = e.target.files[0];
+  if (file) {
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var maxDim = 1280; // Calidad HD suficiente para el fondo del Hero
+        var width = img.width;
+        var height = img.height;
+
+        if (width > height) {
+          if (width > maxDim) {
+            height *= maxDim / width;
+            width = maxDim;
+          }
+        } else {
+          if (height > maxDim) {
+            width *= maxDim / height;
+            height = maxDim;
+          }
+        }
+
+        canvas.width = width;
+        canvas.height = height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+
+        // Compresión a JPEG con calidad 0.75
+        var compressedBase64 = canvas.toDataURL('image/jpeg', 0.75);
+        
+        document.getElementById('hero-bg-base64').value = compressedBase64;
+        document.getElementById('hero-bg-preview').innerHTML = 
+          '<img src="' + compressedBase64 + '" style="width:100%; height:100%; object-fit:cover;">';
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function saveHeroSetup(e) {
+  e.preventDefault();
+  
+  heroData.bgType = document.getElementById('hero-bg-type').value;
+  heroData.bgColor = document.getElementById('hero-bg-color').value;
+
+  var urlImg = document.getElementById('hero-bg-url').value.trim();
+  var base64Img = document.getElementById('hero-bg-base64').value;
+  heroData.bgImage = urlImg || base64Img || "";
+
+  heroData.eyebrowText = document.getElementById('hero-eyebrow-text').value.trim();
+  heroData.eyebrowFont = document.getElementById('hero-eyebrow-font').value;
+  heroData.eyebrowSize = document.getElementById('hero-eyebrow-size').value.trim();
+  heroData.eyebrowColor = document.getElementById('hero-eyebrow-color').value;
+
+  heroData.h1Text = document.getElementById('hero-h1-text').value.trim();
+  heroData.h1Font = document.getElementById('hero-h1-font').value;
+  heroData.h1Size = document.getElementById('hero-h1-size').value.trim();
+  heroData.h1Color = document.getElementById('hero-h1-color').value;
+
+  heroData.leadText = document.getElementById('hero-lead-text').value.trim();
+  heroData.leadFont = document.getElementById('hero-lead-font').value;
+  heroData.leadSize = document.getElementById('hero-lead-size').value.trim();
+  heroData.leadColor = document.getElementById('hero-lead-color').value;
+
+  try {
+    localStorage.setItem('bio_hero', JSON.stringify(heroData));
+    applyHeroDataUI();
+    closeModal('modal-panel-admin');
+    showCustomAlert("Parámetros de la Sección Hero guardados exitosamente.");
+  } catch (err) {
+    if (err.name === 'QuotaExceededError' || err.code === 22) {
+      showCustomAlert("Error: La imagen seleccionada es demasiado pesada para el almacenamiento local. Te sugerimos ingresar una URL pública de imagen o usar una foto de menor tamaño.");
+    } else {
+      showCustomAlert("Ocurrió un error al guardar la configuración.");
+    }
+  }
+}
+
 /* PESTAÑAS DEL PANEL ADMIN */
 function openPanelAdminModal(tabTarget) {
   openModal('modal-panel-admin');
-  switchPanelTab(tabTarget || 'sec-setup');
+  switchPanelTab(tabTarget || 'sec-hero');
 }
 
 function switchPanelTab(secId) {
@@ -1234,6 +1554,7 @@ function switchPanelTab(secId) {
   var targetSec = document.getElementById(secId);
   if(targetSec) targetSec.style.display = 'block';
 
+  if(secId === 'sec-hero') document.getElementById('tab-btn-hero').classList.add('active');
   if(secId === 'sec-setup') document.getElementById('tab-btn-setup').classList.add('active');
   if(secId === 'sec-consultantes') {
     document.getElementById('tab-btn-consultantes').classList.add('active');
@@ -1254,55 +1575,27 @@ function switchPanelTab(secId) {
   }
 }
 
-/* CARRUSEL DE IMÁGENES */
-function renderCarrouselPublic() {
-  var wrapper = document.getElementById('carrousel-slide-wrapper');
-  var dotsContainer = document.getElementById('carrousel-dots');
-  if (!wrapper || !dotsContainer) return;
+/* GALERÍA DE IMÁGENES LADO A LADO */
+function renderGaleriaPublic() {
+  var container = document.getElementById('galeria-grid-container');
+  if (!container) return;
 
-  wrapper.innerHTML = '';
-  dotsContainer.innerHTML = '';
+  container.innerHTML = '';
 
   var fotos = setupData.carrouselFotos || [];
   if (fotos.length === 0) {
-    wrapper.innerHTML = '<div class="carrousel-slide"><div class="carrousel-slide-caption">Agregá imágenes desde el Panel de Administración.</div></div>';
+    container.innerHTML = '<p style="color:var(--tinta-2); text-align:center; grid-column:1/-1;">Agregá imágenes desde el Panel de Administración.</p>';
     return;
   }
 
-  fotos.forEach(function(f, idx) {
-    var slide = document.createElement('div');
-    slide.className = 'carrousel-slide';
-    slide.innerHTML = '<img src="' + f.src + '" alt="' + (f.titulo || 'Consulta') + '">' +
-                       (f.titulo ? '<div class="carrousel-slide-caption">' + f.titulo + '</div>' : '');
-    wrapper.appendChild(slide);
-
-    var dot = document.createElement('div');
-    dot.className = 'carrousel-dot' + (idx === 0 ? ' active' : '');
-    dot.onclick = function() { setCarrouselSlide(idx); };
-    dotsContainer.appendChild(dot);
-  });
-
-  currentCarrouselIdx = 0;
-  setCarrouselSlide(0);
-}
-
-function moveCarrousel(direction) {
-  var fotos = setupData.carrouselFotos || [];
-  if (fotos.length === 0) return;
-  currentCarrouselIdx = (currentCarrouselIdx + direction + fotos.length) % fotos.length;
-  setCarrouselSlide(currentCarrouselIdx);
-}
-
-function setCarrouselSlide(idx) {
-  currentCarrouselIdx = idx;
-  var wrapper = document.getElementById('carrousel-slide-wrapper');
-  if (wrapper) {
-    wrapper.style.transform = 'translateX(-' + (idx * 100) + '%)';
-  }
-  var dots = document.querySelectorAll('.carrousel-dot');
-  dots.forEach(function(d, i) {
-    if (i === idx) d.classList.add('active');
-    else d.classList.remove('active');
+  fotos.forEach(function(f) {
+    var card = document.createElement('div');
+    card.className = 'galeria-card-item';
+    card.innerHTML = '<div class="galeria-card-img-wrap">' +
+                        '<img src="' + f.src + '" alt="' + (f.titulo || 'Consulta') + '">' +
+                     '</div>' +
+                     (f.titulo ? '<div class="galeria-card-caption">' + f.titulo + '</div>' : '');
+    container.appendChild(card);
   });
 }
 
@@ -1747,7 +2040,7 @@ function saveSetup(e) {
     var ft = document.getElementById('setup-foto-base64').value;
     if(ft) setupData.fotoPerfil = ft;
 
-    // Actualizar títulos de fotos del carrusel
+    // Actualizar títulos de fotos de la galería
     var carrRows = document.querySelectorAll('#setup-carrousel-container .carrousel-setup-row');
     carrRows.forEach(function(row, idx) {
       var titleVal = row.querySelector('.carr-title-input').value.trim();
@@ -1789,7 +2082,7 @@ function saveSetup(e) {
 
     localStorage.setItem('bio_setup', JSON.stringify(setupData));
     applySetupDataUI();
-    renderCarrouselPublic();
+    renderGaleriaPublic();
     renderVideosPublic();
     renderSlots();
     closeModal('modal-panel-admin');
@@ -2139,7 +2432,7 @@ function poblarSelectsEstadosEHorarios() {
 
 /* EXPORTAR E IMPORTAR JSON */
 function exportarJsonData() {
-  var exportObj = { setup: setupData, consultantes: consultantes, turnos: turnos, seminarios: seminarios, comentarios: comentarios, exportDate: new Date().toISOString() };
+  var exportObj = { hero: heroData, setup: setupData, consultantes: consultantes, turnos: turnos, seminarios: seminarios, comentarios: comentarios, exportDate: new Date().toISOString() };
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
   var downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute("href", dataStr);
@@ -2162,6 +2455,10 @@ function importarJsonData(e) {
   reader.onload = function(evt) {
     try {
       var data = JSON.parse(evt.target.result);
+      if (data.hero) {
+        heroData = data.hero;
+        localStorage.setItem('bio_hero', JSON.stringify(heroData));
+      }
       if (data.setup) {
         setupData = data.setup;
         localStorage.setItem('bio_setup', JSON.stringify(setupData));
@@ -2183,8 +2480,9 @@ function importarJsonData(e) {
         localStorage.setItem('bio_comentarios', JSON.stringify(comentarios));
       }
 
+      applyHeroDataUI();
       applySetupDataUI();
-      renderCarrouselPublic();
+      renderGaleriaPublic();
       renderVideosPublic();
       renderSeminariosPublic();
       renderComentariosPublic();
