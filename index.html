@@ -19,6 +19,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..600;1,9..144,300..500&family=Karla:wght@300;400;500;600&family=Playfair+Display:ital,wght@0,400..700;1,400..700&family=Montserrat:wght@300;400;600&family=Lora:ital,wght@0,400..600;1,400..600&family=Cormorant+Garamond:ital,wght@0,400;1,400&display=swap" rel="stylesheet">
+<!-- Chart.js para Renderizado de Gráficos de Estadísticas -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
@@ -95,6 +96,7 @@
   }
   .nav-cta:hover{ background:var(--musgo); transform:translateY(-1px); }
   
+  /* BARRA ADMIN COMPACTA */
   .admin-toolbar {
     display: inline-flex; align-items: center; gap: 0.3rem; background: var(--lino-2);
     padding: 0.2rem 0.4rem; border-radius: 20px; border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
@@ -104,6 +106,10 @@
     background:var(--salvia-2); color:var(--musgo)!important;
     padding:.2rem .55rem; border-radius:12px; font-weight:600!important; font-size:0.78rem!important;
     border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent)!important;
+  }
+  .user-btn-badge{
+    background:var(--luz-claro); color:var(--musgo)!important;
+    padding:.2rem .45rem; border-radius:12px; font-weight:600!important; font-size:0.75rem!important;
   }
 
   /* PANEL DE ADMINISTRACIÓN */
@@ -137,17 +143,26 @@
     background: var(--bosque); color: var(--lino);
   }
 
+  .nav-toggle{ display:none; background:none; border:0; cursor:pointer; padding:.4rem; }
+  .nav-toggle span{ display:block; width:24px; height:2px; background:var(--tinta); margin:5px 0; transition:.3s; }
+
   /* HERO DINÁMICO */
   .hero{
     position:relative; background-color:var(--noche); color:var(--lino);
     padding:clamp(4rem,10vw,8rem) 0 clamp(5rem,11vw,9rem);
-    overflow:hidden; background-size: cover; background-position: center; background-repeat: no-repeat;
+    overflow:hidden;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
   }
-  .hero-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 1; pointer-events: none; display: none; }
+  .hero-overlay {
+    position: absolute; inset: 0; background: rgba(0,0,0,0.35); z-index: 1; pointer-events: none; display: none;
+  }
   .hero .wrap{ position:relative; z-index:2; display:grid; grid-template-columns:1.15fr .85fr; gap:3rem; align-items:center; }
   .hero-copy h1{ font-size:clamp(2.6rem,6vw,4.6rem); color:var(--lino); margin:1.4rem 0 1.3rem; }
   .hero-copy h1 em{ font-style:italic; font-weight:300; }
   .hero-copy p.lead{ font-size:1.14rem; color:var(--salvia-2); max-width:34ch; margin-bottom:2.2rem; }
+  .hero-actions{ display:flex; gap:1rem; flex-wrap:wrap; }
   .btn{
     display:inline-flex; align-items:center; gap:.6em; text-decoration:none;
     padding:.85rem 1.5rem; border-radius:100px; font-weight:600; font-size:.95rem;
@@ -157,110 +172,330 @@
   .btn-luz{ background:var(--luz); color:var(--noche); }
   .btn-luz:hover{ background:var(--luz-claro); }
   .btn-ghost{ background:transparent; color:var(--lino); border-color:color-mix(in srgb,var(--salvia) 45%,transparent); }
+  .btn-ghost:hover{ border-color:var(--salvia); }
 
   .respiro{ position:relative; width:100%; aspect-ratio:1; display:grid; place-items:center; }
-  .respiro .ring{ position:absolute; border-radius:50%; border:1px solid color-mix(in srgb,var(--luz) 55%,transparent); animation:respirar 9s ease-in-out infinite; }
-  .respiro .ring:nth-child(1){ inset:6%; animation-delay:0s; opacity:.35; }
-  .respiro .ring:nth-child(2){ inset:20%; animation-delay:.35s; opacity:.55; }
-  .respiro .ring:nth-child(3){ inset:34%; animation-delay:.7s; opacity:.8; border-color:var(--luz-claro); }
-  .respiro .nucleo{ width:38%; aspect-ratio:1; border-radius:50%; background:radial-gradient(circle at 40% 35%, var(--luz-claro), var(--luz) 55%, var(--bosque)); box-shadow:0 0 60px color-mix(in srgb,var(--luz) 45%,transparent); animation:respirarNucleo 9s ease-in-out infinite; }
-  .respiro .palabra{ position:absolute; font-family:var(--serif); font-style:italic; font-size:1.05rem; color:var(--noche); z-index:2; }
+  .respiro .ring{
+    position:absolute; border-radius:50%;
+    border:1px solid color-mix(in srgb,var(--luz) 55%,transparent);
+    animation:respirar 9s ease-in-out infinite;
+  }
+  .respiro .ring:nth-child(1){ inset:6%;  animation-delay:0s;    opacity:.35; }
+  .respiro .ring:nth-child(2){ inset:20%; animation-delay:.35s;  opacity:.55; }
+  .respiro .ring:nth-child(3){ inset:34%; animation-delay:.7s;   opacity:.8;  border-color:var(--luz-claro); }
+  .respiro .nucleo{
+    width:38%; aspect-ratio:1; border-radius:50%;
+    background:radial-gradient(circle at 40% 35%, var(--luz-claro), var(--luz) 55%, var(--bosque));
+    box-shadow:0 0 60px color-mix(in srgb,var(--luz) 45%,transparent);
+    animation:respirarNucleo 9s ease-in-out infinite;
+  }
+  .respiro .palabra{
+    position:absolute; font-family:var(--serif); font-style:italic;
+    font-size:1.05rem; color:var(--noche); z-index:2; letter-spacing:.02em;
+  }
   @keyframes respirar{ 0%,100%{ transform:scale(1); } 45%{ transform:scale(1.14); } }
   @keyframes respirarNucleo{ 0%,100%{ transform:scale(1); opacity:.92; } 45%{ transform:scale(1); opacity:1; } }
 
-  /* SECCIONES GENERALES */
+  /* SECCIONES */
   section{ padding:clamp(4rem,8vw,7rem) 0; }
   .section-head{ max-width:52ch; margin-bottom:3rem; }
   .section-head h2{ font-size:clamp(2rem,4.5vw,3.1rem); margin:1.1rem 0 1rem; }
   .section-head p{ color:var(--tinta-2); font-size:1.08rem; }
 
-  /* CARROUSEL QUE HAGO EN UNA CONSULTA */
-  .que-hago-section { background: var(--lino); }
-  .carrousel-container-public {
-    position: relative; max-width: 850px; margin: 0 auto; overflow: hidden; border-radius: var(--radio);
-    border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent); background: var(--lino-2);
+  .presencia .wrap{ display:grid; grid-template-columns:.9fr 1.1fr; gap:clamp(2rem,5vw,4.5rem); align-items:center; }
+  .presencia .retrato{
+    aspect-ratio:4/5; border-radius:var(--radio); overflow:hidden; position:relative;
+    background:linear-gradient(150deg, var(--bosque), var(--musgo));
+    box-shadow:0 24px 60px -30px rgba(35,46,39,.55);
   }
-  .carrousel-track { display: flex; transition: transform 0.4s ease-in-out; }
-  .carrousel-slide { min-width: 100%; box-sizing: border-box; text-align: center; }
-  .carrousel-slide img { width: 100%; max-height: 480px; object-fit: cover; display: block; }
-  .carrousel-caption { padding: 1.2rem; font-family: var(--serif); font-size: 1.15rem; color: var(--musgo); background: var(--lino-2); }
-  .carrousel-nav-btn {
-    position: absolute; top: 40%; transform: translateY(-50%); background: rgba(37,24,48,0.7); color: #fff;
-    border: none; width: 44px; height: 44px; border-radius: 50%; cursor: pointer; font-size: 1.2rem;
-    display: grid; place-items: center; z-index: 5; transition: background .2s;
+  .presencia .retrato img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .retrato-ph{
+    position:absolute; inset:0; display:grid; place-items:center; text-align:center;
+    color:var(--salvia-2); font-family:var(--serif); font-style:italic; padding:2rem;
   }
-  .carrousel-nav-btn:hover { background: var(--bosque); }
-  .carrousel-prev { left: 15px; }
-  .carrousel-next { right: 15px; }
+  .retrato-ph small{ display:block; font-family:var(--sans); font-style:normal; font-size:.75rem; letter-spacing:.15em; text-transform:uppercase; margin-top:.8rem; opacity:.7; }
+  .presencia h2{ font-size:clamp(1.9rem,4vw,2.8rem); margin:1rem 0 1.2rem; }
+  .presencia p{ color:var(--tinta-2); margin-bottom:1.1rem; font-size:1.06rem; }
+  .presencia .firma-nombre{ font-family:var(--serif); font-style:italic; font-size:1.3rem; color:var(--bosque); margin-top:1.4rem; }
+  
+  .social-links-quiensoy { display:flex; gap:1rem; margin-top:1.2rem; align-items:center; }
+  .social-icon-btn-only {
+    display:inline-flex; align-items:center; justify-content:center;
+    width:42px; height:42px; border-radius:50%; background:var(--lino-2); color:var(--bosque);
+    border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
+    transition:all .2s;
+  }
+  .social-icon-btn-only:hover { background:var(--bosque); color:var(--lino); transform:scale(1.08); }
+  .social-icon-btn-only svg { width:22px; height:22px; fill:currentColor; }
 
-  /* SERVICIOS DINÁMICOS Y SUBSECCIONES */
+  /* SECCIÓN QUE HAGO EN UNA CONSULTA */
+  .que-hago-section { background: var(--lino); }
+  
+  .galeria-grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    align-items: start;
+  }
+
+  .galeria-card-item {
+    background: var(--lino-2);
+    border-radius: var(--radio);
+    overflow: hidden;
+    border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.04);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
+
+  .galeria-card-item:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.08);
+  }
+
+  .galeria-card-img-wrap {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: transparent;
+  }
+
+  .galeria-card-img-wrap img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+
+  .galeria-card-caption {
+    padding: 1.2rem 1.4rem;
+    font-family: var(--serif);
+    font-size: 1.1rem;
+    color: var(--tinta);
+    text-align: center;
+    background: var(--lino-2);
+  }
+
   .servicios{ background:var(--lino-2); }
-  .cards{ display:grid; grid-template-columns:repeat(auto-fit, minmax(260px, 1fr)); gap:1.4rem; }
+  .cards{ display:grid; grid-template-columns:repeat(3,1fr); gap:1.4rem; }
   .card{
     background:var(--lino); border-radius:var(--radio); padding:2.2rem 2rem;
     border:1px solid color-mix(in srgb,var(--bosque) 12%,transparent);
-    display:flex; flex-direction:column; transition:transform .25s, box-shadow .25s; overflow: hidden;
+    display:flex; flex-direction:column; transition:transform .25s, box-shadow .25s;
   }
   .card:hover{ transform:translateY(-4px); box-shadow:0 26px 50px -34px rgba(35,46,39,.4); }
   .card .num{ font-family:var(--serif); font-size:.95rem; color:var(--luz); letter-spacing:.05em; }
   .card h3{ font-size:1.55rem; margin:.7rem 0 .8rem; }
   .card p{ color:var(--tinta-2); font-size:1rem; flex:1; }
-  .card .card-media-box { margin: 1rem 0; border-radius: 12px; overflow: hidden; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent); }
-  .card .card-media-box img { width: 100%; height: auto; display: block; }
-  .card .card-media-box iframe { width: 100%; aspect-ratio: 16/9; border: 0; }
   .card .link{
     margin-top:1.4rem; text-decoration:none; font-weight:600; color:var(--bosque);
-    display:inline-flex; align-items:center; gap:.4em; transition:gap .2s; cursor: pointer;
+    display:inline-flex; align-items:center; gap:.4em; transition:gap .2s;
   }
   .card .link:hover{ gap:.7em; }
 
-  .subseccion-card-block {
-    margin-top: 3rem; background: var(--lino); border-radius: var(--radio); padding: 2.5rem;
-    border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
+  /* VIDEOS */
+  .videos-section { background: var(--lino); }
+  .videos-wrapper-compact { max-width: 820px; margin: 0 auto; }
+  .grid-videos-compact { display: flex; flex-direction: column; gap: 1.5rem; }
+  .video-card-compact {
+    background: var(--lino-2); border-radius: 14px; overflow: hidden;
+    border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+    display: grid; grid-template-columns: 260px 1fr; box-shadow: 0 4px 15px rgba(0,0,0,0.03);
   }
-  .subseccion-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; align-items: center; }
+  .video-media-box {
+    position: relative; width: 100%; height: 100%; min-height: 160px; background: #000;
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .video-thumb-preview {
+    width: 100%; height: 100%; object-fit: cover; opacity: 0.85; transition: transform .3s; cursor: pointer;
+  }
+  .video-media-box:hover .video-thumb-preview { transform: scale(1.05); opacity: 1; }
+  .video-play-icon-btn {
+    position: absolute; width: 48px; height: 48px; background: rgba(91,59,125,0.9);
+    border-radius: 50%; color: #fff; display: grid; place-items: center; font-size: 1.1rem;
+    pointer-events: none; transition: transform .2s, background .2s; box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+  }
+  .video-media-box:hover .video-play-icon-btn { transform: scale(1.15); background: var(--luz); }
+  
+  .video-content-box { padding: 1.2rem; display: flex; flex-direction: column; justify-content: space-between; }
+  .video-content-box h3 { font-size: 1.15rem; margin-bottom: .4rem; color: var(--musgo); }
+  .video-content-box p { color: var(--tinta-2); font-size: .9rem; margin-bottom: 0.8rem; }
+  .video-actions-flex { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
 
-  /* TABLAS Y ESTADÍSTICAS */
+  /* SEMINARIOS Y TALLERES */
+  .seminarios-section{ background:var(--lino-2); }
+  .grid-seminarios{ display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:1.5rem; }
+  .seminario-card{
+    background:var(--lino); border-radius:var(--radio); padding:2rem;
+    border:1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
+    display:flex; flex-direction:column; justify-content:space-between; align-items:flex-start;
+  }
+  .seminario-card .badge-fecha{
+    display:inline-block; font-size:.8rem; font-weight:700; text-transform:uppercase;
+    color:var(--luz); letter-spacing:.08em; margin-bottom:.5rem;
+  }
+  .seminario-card h3{ font-size:1.5rem; color:var(--tinta); margin-bottom:.4rem; }
+  .seminario-card .stars-avg { color: #f39c12; font-size: 1.1rem; margin-bottom: 0.8rem; display: flex; align-items: center; gap: 0.3rem; }
+  .seminario-card p{ color:var(--tinta-2); font-size:.98rem; margin-bottom:1.2rem; }
+  .seminario-card .info-meta{ font-size:.88rem; color:var(--musgo); font-weight:600; margin-bottom:1.2rem; display:flex; flex-direction:column; gap:0.4rem; width:100%; }
+  
+  .seminario-reviews-box {
+    background: var(--lino-2); border-radius: 10px; padding: 0.8rem; margin-top: 0.8rem; margin-bottom: 1.2rem; width: 100%;
+    font-size: 0.85rem; border: 1px dashed color-mix(in srgb,var(--bosque) 20%,transparent);
+  }
+  .seminario-reviews-box strong { color: var(--musgo); display: block; margin-bottom: 0.3rem; }
+  .seminario-review-item { font-style: italic; color: var(--tinta-2); border-bottom: 1px dotted #ccc; padding: 0.3rem 0; }
+  .seminario-review-item:last-child { border-bottom: none; }
+
+  .btn-sm-seminario {
+    padding: 0.55rem 1.2rem !important;
+    font-size: 0.85rem !important;
+    width: auto !important;
+    align-self: flex-start;
+  }
+
+  /* CALENDARIO DE SESIONES */
+  .sesiones{ background:var(--lino); }
+  .cal-card{
+    background:var(--lino-2); border-radius:var(--radio); padding:2.5rem;
+    border:1px solid color-mix(in srgb,var(--bosque) 15%,transparent); max-width:850px; margin:0 auto;
+  }
+  .fecha-selector-container { display: flex; align-items: center; gap: 1rem; margin-bottom: 2rem; }
+  .fecha-selector-container label { font-weight: 600; font-size: 1.05rem; color: var(--tinta); }
+  .fecha-selector-container input[type="date"] {
+    padding: .6rem 1rem; border-radius: 10px; border: 1px solid var(--bosque);
+    font-family: var(--sans); font-size: 1rem; background: var(--lino); color: var(--tinta);
+  }
+
+  .slots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 1.2rem; margin-top: 1.5rem; }
+  .slot-btn {
+    height: 110px; padding: 0.8rem; border: 1px solid var(--bosque); background: var(--lino);
+    border-radius: 14px; cursor: pointer; display: flex; flex-direction: column; align-items: center;
+    justify-content: center; text-align: center; font-family: var(--sans); transition: all .2s; box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+  }
+  .slot-btn .slot-hora { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.2rem; }
+  .slot-btn .slot-estado-badge { font-size: 0.75rem; font-weight: 600; text-transform: uppercase; padding: 0.2rem 0.6rem; border-radius: 12px; margin-top: 0.3rem; }
+  .slot-btn .slot-nombre { font-size: 0.85rem; font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 100%; }
+  .slot-btn:hover:not(.booked) { background: var(--bosque); color: var(--lino); }
+
+  /* COMENTARIOS */
+  .comentarios-section { background: var(--lino-2); }
+  .comentarios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 2.5rem; }
+  .comentario-card { background: var(--lino); border-radius: 14px; padding: 1.5rem; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent); }
+  .comentario-card .autor { font-weight: 700; color: var(--bosque); margin-bottom: 0.2rem; }
+  .comentario-card .fecha-com { font-size: 0.75rem; color: var(--tinta-2); margin-bottom: 0.8rem; }
+  .comentario-card p { font-size: 0.95rem; color: var(--tinta); }
+
+  /* CONTACTO */
+  .contacto{ background:var(--noche); color:var(--lino); }
+  .contacto .wrap{ display:grid; grid-template-columns:1fr 1fr; gap:clamp(2rem,5vw,4rem); align-items:center; }
+  .contacto h2{ font-size:clamp(2rem,4.5vw,3rem); color:var(--lino); margin:1rem 0 1.1rem; }
+  .contacto .lead{ color:var(--salvia-2); font-size:1.08rem; margin-bottom:1.8rem; max-width:38ch; }
+  .contacto .datos{ display:flex; flex-direction:column; gap:.7rem; margin-top:1.6rem; }
+  .contacto .datos a, .contacto .datos span{ color:var(--salvia-2); text-decoration:none; font-size:.98rem; display:inline-flex; gap:.6em; align-items:center; }
+  .contacto .datos a:hover{ color:var(--luz-claro); }
+  .form-card{ background:color-mix(in srgb,var(--musgo) 92%,#000); border-radius:var(--radio); padding:2.4rem; border:1px solid color-mix(in srgb,var(--salvia) 20%,transparent); }
+  .form-card label{ display:block; font-size:.82rem; letter-spacing:.06em; text-transform:uppercase; font-weight:600; color:var(--salvia); margin:0 0 .5rem; }
+  .form-card .campo{ margin-bottom:1.3rem; }
+  .form-card input, .form-card textarea, .form-card select{
+    width:100%; background:var(--noche); border:1px solid color-mix(in srgb,var(--salvia) 22%,transparent);
+    border-radius:12px; padding:.85rem 1rem; color:var(--lino); font-family:var(--sans); font-size:1rem; transition:border-color .2s;
+  }
+  .form-card input:focus, .form-card textarea:focus, .form-card select:focus{ outline:none; border-color:var(--luz); }
+  .form-card textarea{ resize:vertical; min-height:110px; }
+  .form-card .btn{ width:100%; justify-content:center; }
+  .form-hint{ font-size:.82rem; color:var(--salvia); margin-top:1rem; text-align:center; opacity:.8; }
+
+  /* FOOTER */
+  footer{ background:var(--musgo); color:var(--salvia-2); padding:3rem 0 2.5rem; }
+  footer .wrap{ display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:space-between; align-items:center; }
+  footer .logo{ color:var(--lino); }
+  footer .logo span{ color:var(--luz); }
+  footer small{ font-size:.85rem; opacity:.8; }
+  footer .foot-links{ display:flex; gap:1.5rem; }
+  footer .foot-links a{ color:var(--salvia-2); text-decoration:none; font-size:.9rem; }
+  footer .foot-links a:hover{ color:var(--lino); }
+
+  .wa-float{
+    position:fixed; right:1.4rem; bottom:1.4rem; z-index:60; width:60px; height:60px; border-radius:50%; background:#25D366;
+    display:grid; place-items:center; box-shadow:0 12px 30px -8px rgba(37,211,102,.6); text-decoration:none; transition:transform .2s; animation:aparecer .4s .6s both;
+  }
+  .wa-float:hover{ transform:scale(1.08); }
+  .wa-float svg{ width:32px; height:32px; fill:#fff; }
+  @keyframes aparecer{ from{ transform:scale(0); } to{ transform:scale(1); } }
+
+  /* MODALES, TABLAS Y BOTÓN CERRAR "X" */
+  .modal{ display:none; position:fixed; inset:0; background:rgba(37,24,48,0.75); z-index:100; justify-content:center; align-items:center; padding:1.5rem; backdrop-filter:blur(6px); }
+  .modal-card{ position:relative; background:var(--lino); color:var(--tinta); padding:2.5rem; border-radius:var(--radio); max-width:780px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.35); border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent); }
+  .modal-close-x {
+    position: absolute; top: 1rem; right: 1.2rem; width: 34px; height: 34px; border-radius: 50%;
+    background: rgba(0,0,0,0.08); color: var(--tinta); border: none; font-size: 1.3rem; font-weight: bold;
+    cursor: pointer; display: grid; place-items: center; z-index: 10; transition: background 0.2s, color 0.2s;
+  }
+  .modal-close-x:hover { background: var(--luz); color: var(--noche); }
+  .panel-header-banner .modal-close-x { color: var(--lino); background: rgba(255,255,255,0.2); }
+  .panel-header-banner .modal-close-x:hover { background: var(--luz); color: var(--noche); }
+
+  .modal-card label{ display:block; font-size:.85rem; font-weight:600; margin:.8rem 0 .3rem; color:var(--tinta-2); text-transform:uppercase; letter-spacing:0.05em; }
+  .modal-card input, .modal-card textarea, .modal-card select{ width:100%; padding:.75rem 1rem; border-radius:10px; border:1px solid color-mix(in srgb,var(--bosque) 25%,transparent); font-family:var(--sans); font-size:1rem; background:var(--lino); color:var(--tinta); }
+  .modal-actions{ display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap; }
   .table-custom{ width:100%; border-collapse:collapse; margin-top:1rem; }
   .table-custom th, .table-custom td{ padding:.7rem; border-bottom:1px solid color-mix(in srgb,var(--bosque) 15%,transparent); text-align:left; font-size:.9rem; }
-  .table-custom tr.clickable-row{ cursor:pointer; }
+  .table-custom tr.clickable-row{ cursor:pointer; transition:background .2s; }
   .table-custom tr.clickable-row:hover{ background:var(--lino); }
 
+  /* ESTILOS PARA FORMULARIO DE PARAMETRIZACIÓN HERO */
+  .hero-param-box {
+    background: var(--lino); padding: 1.2rem; border-radius: 12px; margin-bottom: 1.2rem;
+    border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
+  }
+  .hero-param-box h4 { font-family: var(--sans); font-weight: 700; color: var(--musgo); margin-bottom: 0.8rem; font-size: 1rem; border-bottom: 1px solid #ddd; padding-bottom: 0.4rem; }
+  .grid-param-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 0.8rem; }
+
+  /* NOTIFICACIONES */
+  .custom-alert-overlay { display: none; position: fixed; inset: 0; background: rgba(37,24,48,0.75); z-index: 999; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px); }
+  .custom-alert-box { background: var(--lino); border-radius: var(--radio); padding: 2.2rem; max-width: 420px; width: 100%; text-align: center; border: 2px solid var(--bosque); box-shadow: 0 20px 50px rgba(0,0,0,0.35); }
+  .custom-alert-msg { font-size: 1.15rem; margin-bottom: 1.5rem; color: var(--tinta); font-family: var(--sans); font-weight: 500; }
+
+  .dias-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 0.5rem; margin-top: 0.4rem; }
+  .dia-checkbox-item { display: flex; align-items: center; gap: 0.4rem; background: var(--lino); padding: 0.5rem; border-radius: 8px; font-size: 0.85rem; }
+  .dia-checkbox-item input { width: auto; }
+
+  /* MÉTRICAS */
   .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 1rem; margin-top: 1rem; }
   .stat-card { background: var(--lino); padding: 1.2rem; border-radius: 12px; text-align: center; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent); }
   .stat-card .num { font-size: 2.2rem; font-weight: 700; color: var(--bosque); font-family: var(--serif); }
   .stat-card .label { font-size: 0.8rem; font-weight: 600; text-transform: uppercase; color: var(--tinta-2); }
   .chart-container { margin-top: 2rem; background: var(--lino); padding: 1.5rem; border-radius: 14px; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent); }
 
-  /* CONTACTO Y FOOTER */
-  .contacto{ background:var(--noche); color:var(--lino); }
-  footer{ background:var(--musgo); color:var(--salvia-2); padding:3rem 0 2.5rem; }
-  footer .wrap{ display:flex; flex-wrap:wrap; gap:1.5rem; justify-content:space-between; align-items:center; }
-
-  /* MODALES Y ADMIN SETUP */
-  .modal{ display:none; position:fixed; inset:0; background:rgba(37,24,48,0.75); z-index:100; justify-content:center; align-items:center; padding:1.5rem; backdrop-filter:blur(6px); }
-  .modal-card{ position:relative; background:var(--lino); color:var(--tinta); padding:2.5rem; border-radius:var(--radio); max-width:780px; width:100%; max-height:88vh; overflow-y:auto; box-shadow:0 20px 50px rgba(0,0,0,0.35); border:1px solid color-mix(in srgb,var(--bosque) 20%,transparent); }
-  .modal-close-x { position: absolute; top: 1rem; right: 1.2rem; width: 34px; height: 34px; border-radius: 50%; background: rgba(0,0,0,0.08); color: var(--tinta); border: none; font-size: 1.3rem; font-weight: bold; cursor: pointer; display: grid; place-items: center; z-index: 10; }
-  .modal-card label{ display:block; font-size:.85rem; font-weight:600; margin:.8rem 0 .3rem; color:var(--tinta-2); text-transform:uppercase; letter-spacing:0.05em; }
-  .modal-card input, .modal-card textarea, .modal-card select{ width:100%; padding:.75rem 1rem; border-radius:10px; border:1px solid color-mix(in srgb,var(--bosque) 25%,transparent); font-family:var(--sans); font-size:1rem; background:var(--lino); color:var(--tinta); }
-  .modal-actions{ display:flex; gap:1rem; margin-top:1.5rem; flex-wrap:wrap; }
-
-  .serv-card-setup-box {
-    background: var(--lino); border: 1px solid color-mix(in srgb,var(--bosque) 20%,transparent);
-    border-radius: 12px; padding: 1.2rem; margin-bottom: 1.2rem; position: relative;
-  }
-  .serv-card-setup-box h4 { color: var(--musgo); font-size: 1.05rem; margin-bottom: 0.8rem; border-bottom: 1px dashed #ccc; padding-bottom: 0.4rem; }
-
-  .subseccion-toggle-details {
-    margin-top: 1rem; padding: 1rem; background: var(--lino-2); border-radius: 10px; border: 1px solid color-mix(in srgb,var(--bosque) 15%,transparent);
-  }
-
-  /* NOTIFICACIONES */
-  .custom-alert-overlay { display: none; position: fixed; inset: 0; background: rgba(37,24,48,0.75); z-index: 999; justify-content: center; align-items: center; padding: 1rem; backdrop-filter: blur(5px); }
-  .custom-alert-box { background: var(--lino); border-radius: var(--radio); padding: 2.2rem; max-width: 420px; width: 100%; text-align: center; border: 2px solid var(--bosque); }
+  .star-rating { display: flex; gap: 0.4rem; font-size: 2rem; cursor: pointer; color: #ccc; margin: 0.5rem 0; justify-content: center; }
+  .star-rating .star.selected, .star-rating .star:hover, .star-rating .star:hover ~ .star { color: #f39c12; }
 
   .reveal{ opacity:0; transform:translateY(24px); transition:opacity .7s ease, transform .7s ease; }
   .reveal.visible{ opacity:1; transform:none; }
+
+  @media (max-width:1100px){
+    .nav-links{
+      position:fixed; inset:65px 0 auto 0; background:var(--lino); flex-direction:column; gap:0; padding:1rem 1.25rem 1.5rem;
+      border-bottom:1px solid color-mix(in srgb,var(--bosque) 15%,transparent); transform:translateY(-120%); transition:transform .3s; align-items:stretch;
+      max-height: calc(100vh - 65px); overflow-y: auto;
+    }
+    .nav-links.open{ transform:none; }
+    .nav-menu-public { flex-direction:column; align-items:stretch; }
+    .nav-links a, .nav-links button.btn-nav{ padding:.8rem 0; border-bottom:1px solid color-mix(in srgb,var(--bosque) 10%,transparent); text-align:left; font-size:0.95rem; }
+    .admin-toolbar { flex-wrap:wrap; justify-content:flex-start; padding:0.5rem; margin:0.5rem 0; }
+    .nav-cta{ text-align:center; margin-top:.8rem; }
+    .nav-toggle{ display:block; }
+  }
+
+  @media (max-width:900px){
+    .hero .wrap{ grid-template-columns:1fr; }
+    .respiro{ max-width:340px; margin:0 auto; order:-1; }
+    .presencia .wrap{ grid-template-columns:1fr; }
+    .presencia .retrato{ max-width:380px; }
+    .cards{ grid-template-columns:1fr; }
+    .contacto .wrap{ grid-template-columns:1fr; }
+    .video-card-compact { grid-template-columns: 1fr; }
+  }
 </style>
 </head>
 <body>
@@ -279,18 +514,28 @@
     <a href="#inicio" class="logo"><b id="nav-nombre-p1">Valentina</b> <span id="nav-nombre-p2">Ríos</span></a>
     <div class="nav-links" id="navLinks">
       <div class="nav-menu-public">
+        <a href="#presencia">Quién soy</a>
         <a href="#que-hago">Qué hago en una consulta</a>
         <a href="#servicios">Acompañamiento</a>
-        <a href="#contacto">Contacto</a>
+        <a href="#videos">Videos</a>
+        <a href="#seminarios">Seminarios</a>
+        <a href="#sesiones">Sesiones</a>
+        <a href="#comentarios">Comentarios</a>
       </div>
 
       <div class="admin-toolbar">
+        <button class="btn-nav user-btn-badge" id="btn-mis-cosas" style="display:none;" onclick="openModal('modal-mis-cosas')">Mis Cosas</button>
+        <button class="btn-nav" id="btn-gmail-login" onclick="toggleGmailLogin()">Login Gmail</button>
+        
         <button class="btn-nav admin-only admin-btn-badge" onclick="openPanelAdminModal('sec-hero')">Panel</button>
         <button class="btn-nav" id="btn-login-toggle" onclick="toggleAdminLogin()">Admin</button>
       </div>
 
       <a href="#contacto" class="nav-cta">Escribime</a>
     </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
@@ -301,67 +546,217 @@
     <div class="hero-copy reveal">
       <span class="eyebrow" id="txt-hero-eyebrow">Bioexistencia consciente</span>
       <h1 id="txt-hero-h1">Volver a habitarte con presencia.</h1>
-      <p class="lead" id="txt-hero-lead">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia.</p>
+      <p class="lead" id="txt-hero-lead">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.</p>
+      <div class="hero-actions">
+        <a href="#sesiones" class="btn btn-luz">Reservar una consulta</a>
+        <a href="#seminarios" class="btn btn-ghost">Próximos Seminarios</a>
+      </div>
     </div>
     <div class="respiro" aria-hidden="true">
-      <div class="ring"></div><div class="ring"></div><div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
+      <div class="ring"></div>
       <div class="nucleo"></div>
       <span class="palabra">respirá</span>
     </div>
   </div>
 </header>
 
-<!-- SECCIÓN: QUE HAGO EN UNA CONSULTA (CARRUSEL CON ORDEN Y TILDE) -->
+<!-- PRESENCIA (QUIÉN SOY) -->
+<section class="presencia" id="presencia">
+  <div class="wrap">
+    <div class="retrato reveal" id="retrato-container">
+      <div class="retrato-ph" id="retrato-ph">
+        Tu foto acá
+        <small>Carga tu imagen desde el Panel Admin</small>
+      </div>
+    </div>
+    <div class="reveal">
+      <span class="eyebrow">Quién soy</span>
+      <h2 id="txt-presencia-titulo">Consultora en bioexistencia consciente.</h2>
+      <p id="txt-presencia-p1">Hace más de diez años acompaño a personas que sienten que la vida se les pasa en piloto automático. La bioexistencia consciente es una forma de volver a lo esencial: el cuerpo que habitás, las emociones que te atraviesan y las decisiones que te construyen.</p>
+      <p id="txt-presencia-p2">No trabajo desde el "hay que estar bien". Trabajo desde la presencia: mirar lo que hay, con honestidad y ternura, para que puedas elegir desde otro lugar. En consulta individual, en charlas y en lo que escribo, la invitación es siempre la misma: volver a vos.</p>
+      <p class="firma-nombre" id="txt-presencia-firma">— Valentina</p>
+
+      <div class="social-links-quiensoy">
+        <a href="https://instagram.com/" id="quiensoy-ig-link" target="_blank" rel="noopener" class="social-icon-btn-only" title="Seguime en Instagram">
+          <svg viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN: QUE HAGO EN UNA CONSULTA -->
 <section class="que-hago-section" id="que-hago">
   <div class="wrap">
     <div class="section-head reveal" style="text-align: center; margin-inline: auto;">
       <span class="eyebrow">El Proceso de Encuentro</span>
       <h2>¿Qué hago en una consulta?</h2>
-      <p>Un recorrido visual por el espacio de indagación, escucha profunda y registro corporal.</p>
+      <p id="txt-que-hago-desc">Un recorrido visual por el espacio de indagación, escucha profunda y registro corporal en cada sesión.</p>
     </div>
 
-    <div class="carrousel-container-public reveal" id="quehago-carrousel-box">
-      <button class="carrousel-nav-btn carrousel-prev" onclick="moveQueHagoSlide(-1)">❮</button>
-      <div class="carrousel-track" id="quehago-carrousel-track"></div>
-      <button class="carrousel-nav-btn carrousel-next" onclick="moveQueHagoSlide(1)">❯</button>
-    </div>
+    <div class="galeria-grid-container reveal" id="galeria-grid-container"></div>
   </div>
 </section>
 
-<!-- SECCIÓN SERVICIOS / FORMAS DE ACOMPAÑARTE DINÁMICA -->
+<!-- SERVICIOS -->
 <section class="servicios" id="servicios">
   <div class="wrap">
     <div class="section-head reveal">
       <span class="eyebrow">Formas de acompañarte</span>
-      <h2 id="txt-servicios-titulo">Tres caminos, una misma intención.</h2>
-      <p id="txt-servicios-bajada">Cada espacio propone un ritmo distinto para el mismo trabajo: registrar, sostener y transformar tu manera de existir.</p>
+      <h2>Tres caminos, una misma intención.</h2>
+      <p>Cada espacio propone un ritmo distinto para el mismo trabajo: registrar, sostener y transformar tu manera de existir.</p>
+    </div>
+    <div class="cards">
+      <article class="card reveal">
+        <span class="num">01 — Individual</span>
+        <h3>Consultas</h3>
+        <p id="txt-serv-consultas">Encuentros uno a uno, presenciales u online, para acompañar tu proceso personal. Un espacio propio para poner en palabras, registrar el cuerpo y abrir claridad donde había ruido.</p>
+        <a href="#sesiones" class="link">Reservar &rarr;</a>
+      </article>
+      <article class="card reveal">
+        <span class="num">02 — Grupal</span>
+        <h3>Seminarios y Talleres</h3>
+        <p>Encuentros grupales intensivos para profundizar sobre temas clave de la bioexistencia. Espacios de aprendizaje colectivo y reflexión.</p>
+        <a href="#seminarios" class="link">Ver Seminarios &rarr;</a>
+      </article>
+      <article class="card reveal">
+        <span class="num">03 — Audiovisual</span>
+        <h3>Videos y Charlas</h3>
+        <p>Grabaciones, conferencias y reflexiones en formato video para ver a tu propio ritmo.</p>
+        <a href="#videos" class="link">Ver Videos &rarr;</a>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN VIDEOS -->
+<section class="videos-section" id="videos">
+  <div class="wrap">
+    <div class="section-head reveal" style="text-align: center; margin-inline: auto;">
+      <span class="eyebrow">Contenido Audiovisual</span>
+      <h2>Videos y Charlas</h2>
+      <p>Espacios de reflexión grabados para acompañar tu proceso.</p>
     </div>
     
-    <div class="cards" id="container-servicios-cards"></div>
-    <div id="container-subsecciones-cards" style="margin-top: 2rem;"></div>
+    <div class="videos-wrapper-compact reveal">
+      <div id="grid-videos-container" class="grid-videos-compact"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN SEMINARIOS -->
+<section class="seminarios-section" id="seminarios">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Encuentros Especiales</span>
+      <h2>Seminarios y Talleres</h2>
+      <p>Inscribite a las próximas actividades en vivo, presenciales y virtuales.</p>
+    </div>
+    <div id="grid-seminarios-container" class="grid-seminarios reveal"></div>
+  </div>
+</section>
+
+<!-- SESIONES -->
+<section class="sesiones" id="sesiones">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Reserva de turnos</span>
+      <h2>Calendario de Sesiones</h2>
+      <p>Seleccioná un día y horario disponible para agendar tu consulta.</p>
+    </div>
+    <div class="cal-card reveal">
+      <div class="fecha-selector-container">
+        <label for="calendar-date">Seleccionar Fecha:</label>
+        <input type="date" id="calendar-date" onchange="renderSlots()">
+      </div>
+      <h3 style="font-size: 1.3rem;">Horarios disponibles</h3>
+      <div id="slots-container" class="slots-grid"></div>
+    </div>
+  </div>
+</section>
+
+<!-- SECCIÓN COMENTARIOS -->
+<section class="comentarios-section" id="comentarios">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <span class="eyebrow">Experiencias y Testimonios</span>
+      <h2>Comentarios de Consultantes</h2>
+      <p>Espacio abierto para compartir reflexiones y vivencias de los procesos acompañados.</p>
+    </div>
+    <div id="grid-comentarios-container" class="comentarios-grid reveal"></div>
+
+    <div class="form-card reveal" style="max-width: 600px; margin: 0 auto;">
+      <h3 style="color: var(--salvia-2); font-size: 1.4rem; margin-bottom: 1rem;">Deja tu comentario</h3>
+      <form onsubmit="guardarComentario(event)">
+        <div class="campo">
+          <label>Tu Nombre</label>
+          <input type="text" id="com-nombre" placeholder="Nombre completo o iniciales" required>
+        </div>
+        <div class="campo">
+          <label>Tu Mensaje / Experiencia</label>
+          <textarea id="com-texto" placeholder="¿Cómo fue tu experiencia en las consultas o seminarios?..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-luz" style="width: 100%;">Publicar Comentario</button>
+      </form>
+    </div>
   </div>
 </section>
 
 <!-- CONTACTO -->
 <section class="contacto" id="contacto">
   <div class="wrap">
-    <div>
+    <div class="reveal">
       <span class="eyebrow">Escribime</span>
       <h2>Demos el primer paso juntas.</h2>
-      <p>Contame en qué momento estás para coordinar tu espacio.</p>
+      <p class="lead">Contame en qué momento estás. Te respondo personalmente por WhatsApp para encontrar la forma de acompañarte que mejor te sirva.</p>
+      <div class="datos">
+        <a id="waLink" href="#" target="_blank" rel="noopener">💬 <span id="waDisplay">WhatsApp directo</span></a>
+        <a id="mailLink" href="#">✉️ <span id="mailDisplay"></span></a>
+        <a id="igLink" href="#" target="_blank" rel="noopener">◎ Instagram</a>
+        <span id="ciudad">📍 Buenos Aires, Argentina</span>
+      </div>
+    </div>
+    <div class="form-card reveal">
+      <div class="campo">
+        <label for="nombre">Tu nombre</label>
+        <input type="text" id="nombre" placeholder="¿Cómo te llamás?">
+      </div>
+      <div class="campo">
+        <label for="mensaje">Tu mensaje</label>
+        <textarea id="mensaje" placeholder="Contame un poco en qué andás y qué estás buscando..."></textarea>
+      </div>
+      <button class="btn btn-luz" id="enviarWa">Enviar por WhatsApp</button>
+      <p class="form-hint">Se abre WhatsApp con tu mensaje listo para enviar.</p>
     </div>
   </div>
 </section>
 
+<!-- FOOTER -->
 <footer>
   <div class="wrap">
+    <div>
+      <div class="logo"><b id="foot-nombre-p1">Valentina</b> <span id="foot-nombre-p2">Ríos</span></div>
+      <small>Consultora en bioexistencia consciente</small>
+    </div>
+    <div class="foot-links">
+      <a href="#presencia">Quién soy</a>
+      <a href="#servicios">Acompañamiento</a>
+      <a href="#videos">Videos</a>
+      <a href="#contacto">Contacto</a>
+    </div>
     <small id="footYear">© 2026 · Hecho con presencia.</small>
   </div>
 </footer>
 
+<a class="wa-float" id="waFloat" href="#" target="_blank" rel="noopener" aria-label="Escribir por WhatsApp">
+  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M17.5 14.4c-.3-.2-1.8-.9-2-1-.3-.1-.5-.2-.7.1-.2.3-.8 1-.9 1.1-.2.2-.3.2-.6.1-.3-.2-1.3-.5-2.5-1.5-.9-.8-1.5-1.8-1.7-2.1-.2-.3 0-.5.1-.6.1-.1.3-.3.4-.5.1-.2.2-.3.3-.5.1-.2 0-.4 0-.5-.1-.1-.7-1.6-.9-2.2-.2-.6-.5-.5-.7-.5h-.6c-.2 0-.5.1-.8.4-.3.3-1 1-1 2.5s1.1 2.9 1.2 3.1c.2.2 2.1 3.2 5.1 4.5.7.3 1.3.5 1.7.6.7.2 1.4.2 1.9.1.6-.1 1.8-.7 2-1.4.3-.7.3-1.3.2-1.4-.1-.1-.3-.2-.5-.3zM12 2a10 10 0 0 0-8.6 15l-1.3 4.9 5-1.3A10 10 0 1 0 12 2z"/></svg>
+</a>
+
 <datalist id="dl-global-consultantes"></datalist>
 
-<!-- MODAL INTEGRADO DE PANEL ADMINISTRADOR CON TODAS LAS PESTAÑAS -->
+<!-- MODAL INTEGRADO DE PANEL ADMINISTRADOR -->
 <div id="modal-panel-admin" class="modal">
   <div class="modal-card">
     <div class="panel-header-banner">
@@ -370,10 +765,9 @@
       <p>Gestión integral de contenidos, consultantes, agenda y métricas</p>
     </div>
 
-    <!-- PESTAÑAS COMPLETAS -->
+    <!-- Pestañas interactivas -->
     <div class="panel-nav-tabs">
-      <button class="panel-tab-btn active" id="tab-btn-hero" onclick="switchPanelTab('sec-hero')">🎯 Hero / Inicio</button>
-      <button class="panel-tab-btn" id="tab-btn-servicios" onclick="switchPanelTab('sec-servicios')">💖 Servicios / Acompañamiento</button>
+      <button class="panel-tab-btn active" id="tab-btn-hero" onclick="switchPanelTab('sec-hero')">🎯 Sección Hero / Inicio</button>
       <button class="panel-tab-btn" id="tab-btn-setup" onclick="switchPanelTab('sec-setup')">⚙️ Setup General</button>
       <button class="panel-tab-btn" id="tab-btn-consultantes" onclick="switchPanelTab('sec-consultantes')">👥 Consultantes</button>
       <button class="panel-tab-btn" id="tab-btn-turnos" onclick="switchPanelTab('sec-turnos')">📅 Turnos</button>
@@ -381,67 +775,206 @@
       <button class="panel-tab-btn" id="tab-btn-estadisticas" onclick="switchPanelTab('sec-estadisticas')">📊 Estadísticas</button>
     </div>
 
-    <!-- PESTAÑA 1: HERO -->
+    <!-- SECCIÓN PRIMERA PRINCIPAL: PARAMETRIZACIÓN HERO -->
     <div id="sec-hero" class="panel-section-content">
-      <form onsubmit="saveHeroSetup(event)">
-        <label>Eyebrow</label>
-        <input type="text" id="hero-eyebrow-text">
-        <label>Título H1</label>
-        <input type="text" id="hero-h1-text">
-        <label>Lead / Bajada</label>
-        <textarea id="hero-lead-text" rows="2"></textarea>
-        <div class="modal-actions" style="margin-top: 1rem;">
+      <form id="form-hero-admin" onsubmit="saveHeroSetup(event)">
+        
+        <!-- 1. FONDO DE PANTALLA -->
+        <div class="hero-param-box">
+          <h4>🖼️ Imagen o Color de Fondo del Hero</h4>
+          <div class="grid-param-3">
+            <div>
+              <label>Tipo de Fondo</label>
+              <select id="hero-bg-type" onchange="toggleHeroBgInputs()">
+                <option value="color">Color Sólido</option>
+                <option value="image">Imagen de Fondo</option>
+              </select>
+            </div>
+            <div id="box-hero-bg-color">
+              <label>Color de Fondo</label>
+              <input type="color" id="hero-bg-color" value="#251830" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+
+          <div id="box-hero-bg-image" style="display: none; margin-top: 0.8rem;">
+            <label>Subir Imagen desde tu Equipo</label>
+            <input type="file" id="hero-bg-file" accept="image/*" onchange="previewHeroBgFile(event)">
+            <input type="hidden" id="hero-bg-base64">
+            
+            <label style="margin-top: 0.5rem;">O Pegar URL Pública de Imagen (GitHub, Unsplash, etc.)</label>
+            <input type="text" id="hero-bg-url" placeholder="https://raw.githubusercontent.com/...">
+            
+            <div id="hero-bg-preview" style="margin-top: 0.6rem; max-height: 120px; border-radius: 8px; overflow: hidden; border: 1px solid #ccc;"></div>
+          </div>
+        </div>
+
+        <!-- 2. EYEBROW -->
+        <div class="hero-param-box">
+          <h4>📌 Eyebrow / Etiqueta Superior</h4>
+          <label>Contenido del Texto</label>
+          <input type="text" id="hero-eyebrow-text" value="Bioexistencia consciente">
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-eyebrow-font">
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-eyebrow-size" placeholder="Ej: 0.72rem o 14px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-eyebrow-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 3. TÍTULO H1 -->
+        <div class="hero-param-box">
+          <h4>✍️ Título Principal (H1)</h4>
+          <label>Contenido del Texto</label>
+          <input type="text" id="hero-h1-text" value="Volver a habitarte con presencia.">
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-h1-font">
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Playfair Display', serif">Playfair Display</option>
+                <option value="'Cormorant Garamond', serif">Cormorant Garamond</option>
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-h1-size" placeholder="Ej: clamp(2.6rem,6vw,4.6rem) o 50px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-h1-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <!-- 4. BAJADA / LEAD -->
+        <div class="hero-param-box">
+          <h4>📜 Texto Explicativo (Bajada / Lead)</h4>
+          <label>Contenido del Texto</label>
+          <textarea id="hero-lead-text" rows="3">Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.</textarea>
+          
+          <div class="grid-param-3" style="margin-top: 0.5rem;">
+            <div>
+              <label>Tipo de Letra</label>
+              <select id="hero-lead-font">
+                <option value="'Karla', sans-serif">Karla (Sans-serif)</option>
+                <option value="'Fraunces', serif">Fraunces (Serif)</option>
+                <option value="'Montserrat', sans-serif">Montserrat</option>
+                <option value="'Lora', serif">Lora</option>
+              </select>
+            </div>
+            <div>
+              <label>Tamaño de Letra</label>
+              <input type="text" id="hero-lead-size" placeholder="Ej: 1.14rem o 18px">
+            </div>
+            <div>
+              <label>Color de Texto</label>
+              <input type="color" id="hero-lead-color" style="height: 42px; cursor: pointer;">
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-actions" style="margin-top: 1.5rem;">
           <button type="submit" class="btn btn-luz">Guardar Parámetros de Hero</button>
         </div>
       </form>
     </div>
 
-    <!-- PESTAÑA 2: SERVICIOS CON SUBSECCIONES INDIVIDUALES -->
-    <div id="sec-servicios" class="panel-section-content" style="display:none;">
-      <form onsubmit="saveServiciosAdmin(event)">
-        <div class="serv-card-setup-box">
-          <h4>📌 Encabezado de la Sección General</h4>
-          <label>Título Principal</label>
-          <input type="text" id="serv-titulo-main" placeholder="Tres caminos, una misma intención.">
-          
-          <label style="margin-top: 0.5rem;">Bajada Explicativa</label>
-          <textarea id="serv-bajada-main" rows="2"></textarea>
-        </div>
-
-        <h4 style="margin: 1rem 0 0.5rem 0; color: var(--musgo);">Tarjetas y sus Sub-secciones Dedicadas</h4>
-        <div id="setup-cards-servicios-container"></div>
-
-        <button type="button" class="btn btn-ghost" style="color:var(--bosque); border-color:var(--bosque); margin-bottom: 1.5rem;" onclick="addCardServicioSetup()">+ Agregar Nueva Tarjeta</button>
-
-        <div class="modal-actions">
-          <button type="submit" class="btn btn-luz">Guardar Cambios en Servicios</button>
-        </div>
-      </form>
-    </div>
-
-    <!-- PESTAÑA 3: SETUP GENERAL CON ORDEN Y TILDE DE CARRUSEL -->
+    <!-- SECCIÓN 2: SETUP GENERAL -->
     <div id="sec-setup" class="panel-section-content" style="display:none;">
-      <form onsubmit="saveSetup(event)">
-        <h4 style="margin-bottom: 0.8rem; color: var(--musgo);">Sección "¿Qué hago en una consulta?" (Imágenes, Orden y Carrusel)</h4>
-        <p style="font-size: 0.85rem; color: var(--tinta-2); margin-bottom: 1rem;">Definí el orden numérico de aparición y marcá el tilde para incluir la imagen en el carrusel público.</p>
+      <form id="form-setup-admin" onsubmit="saveSetup(event)">
+        <label>Nombre de la Consultora</label>
+        <input type="text" id="setup-nombre-consultora" placeholder="Ej: Valentina Ríos" required>
+
+        <label>Link de Instagram</label>
+        <input type="url" id="setup-instagram" placeholder="https://instagram.com/tu_usuario">
+
+        <label style="margin-top: 1rem;">Foto de Perfil (Subir imagen desde tu equipo)</label>
+        <input type="file" id="setup-foto-file" accept="image/*" onchange="previewFotoPerfil(event)">
+        <input type="hidden" id="setup-foto-base64">
+        <div id="setup-foto-preview" style="margin-top: 0.5rem; max-width: 140px; max-height: 140px; border-radius: 12px; overflow: hidden; border: 1px solid #ccc;"></div>
+
+        <label style="margin-top: 1rem;">Quién soy (Título)</label>
+        <input type="text" id="setup-presencia-titulo">
         
+        <label>Quién soy (Párrafo 1)</label>
+        <textarea id="setup-presencia-p1" rows="2"></textarea>
+
+        <!-- CONFIGURACIÓN GALERÍA QUE HAGO EN UNA CONSULTA -->
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Sección "¿Qué hago en una consulta?" (Imágenes de la Galería)</label>
+        <p style="font-size:0.85rem; color:var(--tinta-2); margin-bottom:0.5rem;">Podés agregar fotos públicas de GitHub o cargar archivos directamente.</p>
         <div id="setup-carrousel-container"></div>
 
         <div style="display: flex; gap: 0.5rem; margin-top: 0.8rem; align-items: center; flex-wrap: wrap;">
-          <input type="text" id="setup-carr-url-input" placeholder="URL pública de imagen (https://...)" style="flex: 1; min-width: 240px;">
-          <button type="button" class="btn btn-luz" style="padding: 0.55rem 1rem; font-size: 0.85rem;" onclick="addCarrouselImageFromUrl()">+ Agregar URL</button>
+          <input type="text" id="setup-carr-url-input" placeholder="Pegar URL pública de GitHub (raw.githubusercontent.com...)" style="flex: 1; min-width: 240px;">
+          <button type="button" class="btn btn-luz" style="padding: 0.55rem 1rem; font-size: 0.85rem;" onclick="addCarrouselImageFromUrl()">+ Agregar por URL</button>
         </div>
 
         <input type="file" id="setup-carrousel-add-file" accept="image/*" style="display:none;" onchange="addCarrouselImageFromFile(event)">
-        <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="document.getElementById('setup-carrousel-add-file').click()">+ Subir Archivo Local</button>
+        <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="document.getElementById('setup-carrousel-add-file').click()">+ Subir Archivo desde tu Equipo</button>
 
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Tipos de Modalidad para Seminarios (Separados por coma)</label>
+        <input type="text" id="setup-modalidades" placeholder="Online por Zoom, Presencial CABA, Híbrido">
+
+        <label style="margin-top: 1rem;">Tipo de Gráfico para Estadísticas</label>
+        <select id="setup-chart-type">
+          <option value="bar">Barras (Bar Chart)</option>
+          <option value="doughnut">Dona (Doughnut Chart)</option>
+          <option value="pie">Torta / Pie (Pie Chart)</option>
+          <option value="polarArea">Área Polar (Polar Area Chart)</option>
+        </select>
+
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Estados de Turnos y Colores Personalizados</label>
+        <div id="setup-estados-container"></div>
+        <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="addEstadoItemSetup()">+ Agregar Nuevo Estado</button>
+
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Días de Atención Permitidos</label>
+        <div class="dias-grid">
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-1" value="1"> Lunes</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-2" value="2"> Martes</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-3" value="3"> Miércoles</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-4" value="4"> Jueves</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-5" value="5"> Viernes</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-6" value="6"> Sábado</label>
+          <label class="dia-checkbox-item"><input type="checkbox" id="dia-0" value="0"> Domingo</label>
+        </div>
+
+        <label>Horarios Disponibles de Turnos (Separados por coma)</label>
+        <input type="text" id="setup-horarios" placeholder="09:00, 10:00, 11:00, 15:00, 16:00, 17:00">
+
+        <label style="margin-top: 1.5rem; border-top: 1px solid #ccc; padding-top: 1rem;">Sección Videos y Charlas</label>
+        <div id="setup-videos-container"></div>
+        <button type="button" class="btn btn-ghost" style="color:var(--musgo); margin-top:0.5rem; font-size:0.85rem;" onclick="addVideoItemSetup()">+ Agregar Video</button>
+
+        <!-- ACCIONES CON EXPORTAR E IMPORTAR JSON -->
         <div class="modal-actions" style="margin-top: 1.5rem;">
-          <button type="submit" class="btn btn-luz">Guardar Galería y Setup</button>
+          <button type="submit" class="btn btn-luz">Guardar Cambios Setup</button>
+          <button type="button" class="btn btn-luz" style="background: var(--bosque); color: white;" onclick="exportarJsonData()">Exportar Configuración JSON</button>
+          
+          <button type="button" class="btn btn-luz" style="background: var(--musgo); color: white;" onclick="triggerImportJson()">Importar Configuración JSON</button>
+          <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="importarJsonData(event)">
         </div>
       </form>
     </div>
 
-    <!-- PESTAÑA 4: CONSULTANTES -->
+    <!-- SECCIÓN 3: CONSULTANTES -->
     <div id="sec-consultantes" class="panel-section-content" style="display:none;">
       <form onsubmit="saveConsultante(event)">
         <input type="hidden" id="consultante-id">
@@ -465,41 +998,32 @@
       </table>
     </div>
 
-    <!-- PESTAÑA 5: TURNOS -->
+    <!-- SECCIÓN 4: TURNOS -->
     <div id="sec-turnos" class="panel-section-content" style="display:none;">
+      <h4 id="modal-turno-titulo">Asignar / Editar Turno</h4>
       <form onsubmit="saveTurnoAdmin(event)">
         <input type="hidden" id="admin-turno-edit-idx" value="-1">
         <label>Nombre del Consultante</label>
-        <input type="text" id="admin-turno-nombre-input" list="dl-global-consultantes" placeholder="Buscar consultante..." required>
+        <input type="text" id="admin-turno-nombre-input" list="dl-global-consultantes" oninput="filtrarTurnosPorConsultanteOnType()" placeholder="Tipeá para buscar..." required>
         <label>Fecha</label>
         <input type="date" id="admin-turno-fecha" required>
         <label>Horario</label>
-        <select id="admin-turno-hora">
-          <option value="09:00">09:00</option>
-          <option value="10:00">10:00</option>
-          <option value="11:00">11:00</option>
-          <option value="15:00">15:00</option>
-          <option value="16:00">16:00</option>
-        </select>
+        <select id="admin-turno-hora"></select>
         <label>Estado del Turno</label>
-        <select id="admin-turno-estado">
-          <option value="Nuevo">Nuevo</option>
-          <option value="Confirmado">Confirmado</option>
-          <option value="Cancelado">Cancelado</option>
-        </select>
+        <select id="admin-turno-estado"></select>
         <div class="modal-actions">
-          <button type="submit" class="btn btn-luz">Asignar Turno</button>
-          <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="cancelarEdicionTurnoAdmin()">Limpiar</button>
+          <button type="submit" class="btn btn-luz" id="btn-save-turno-admin">Asignar Turno</button>
+          <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="cancelarEdicionTurnoAdmin()">Limpiar / Cancelar</button>
         </div>
       </form>
-      <h4 style="margin-top:2rem;">Turnos Registrados</h4>
+      <h4 style="margin-top:2rem;">Turnos Registrados <small id="lbl-filtro-turnos" style="font-weight:normal; font-size:0.8rem; color: var(--bosque);">(Todos los turnos)</small></h4>
       <table class="table-custom">
         <thead><tr><th>Fecha</th><th>Hora</th><th>Consultante</th><th>Estado</th></tr></thead>
         <tbody id="tbl-turnos-agendados"></tbody>
       </table>
     </div>
 
-    <!-- PESTAÑA 6: SEMINARIOS -->
+    <!-- SECCIÓN 5: SEMINARIOS -->
     <div id="sec-seminarios" class="panel-section-content" style="display:none;">
       <form onsubmit="saveSeminarioAdmin(event)">
         <input type="hidden" id="sem-id">
@@ -507,10 +1031,21 @@
         <input type="text" id="sem-titulo" required>
         <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
           <div style="flex: 1; min-width: 140px;"><label>Fecha</label><input type="date" id="sem-fecha-date" required></div>
-          <div style="flex: 1; min-width: 120px;"><label>Hora</label><input type="time" id="sem-hora-time" required></div>
+          <div style="flex: 1; min-width: 120px;"><label>Hora Inicio</label><input type="time" id="sem-hora-time" required></div>
+          <div style="flex: 1; min-width: 120px;"><label>Duración</label><input type="text" id="sem-duracion" placeholder="Ej: 2 hs" required></div>
         </div>
-        <label>Costo</label>
-        <input type="text" id="sem-costo" placeholder="$15.000" required>
+        <div style="display: flex; gap: 1rem; flex-wrap: wrap;">
+          <div style="flex: 1; min-width: 160px;"><label>Modalidad</label><select id="sem-modalidad-select" required></select></div>
+          <div style="flex: 1; min-width: 200px;">
+            <label>Dirección / Lugar (Google Maps)</label>
+            <div style="display:flex; gap:0.5rem; align-items:center;">
+              <input type="text" id="sem-lugar-maps" placeholder="Ej: Av. Santa Fe 1234, CABA" required>
+              <button type="button" class="btn btn-ghost" style="padding:0.6rem; color:var(--bosque);" onclick="abrirGoogleMapsManualInput()" title="Probar Maps">🗺️</button>
+            </div>
+          </div>
+        </div>
+        <label>Costo ($ / Moneda)</label>
+        <input type="text" id="sem-costo" placeholder="Ej: $15.000 / Gratuito" required>
         <label>Descripción</label>
         <textarea id="sem-descripcion" rows="3" required></textarea>
         <div class="modal-actions">
@@ -518,21 +1053,30 @@
           <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="resetFormSeminario()">Limpiar</button>
         </div>
       </form>
-      <h4 style="margin-top:2rem;">Seminarios Registrados</h4>
+      <h4 style="margin-top:2rem;">Seminarios Creados e Inscriptos</h4>
       <div id="lista-seminarios-admin-manage" style="margin-top:1rem;"></div>
     </div>
 
-    <!-- PESTAÑA 7: ESTADÍSTICAS -->
+    <!-- SECCIÓN 6: ESTADÍSTICAS -->
     <div id="sec-estadisticas" class="panel-section-content" style="display:none;">
+      <div style="display: flex; gap: 1rem; align-items: center; background: var(--lino); padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; flex-wrap: wrap;">
+        <div><label style="margin: 0 0 0.2rem 0;">Fecha Desde:</label><input type="date" id="st-fecha-desde" onchange="calcularEstadisticas()"></div>
+        <div><label style="margin: 0 0 0.2rem 0;">Fecha Hasta:</label><input type="date" id="st-fecha-hasta" onchange="calcularEstadisticas()"></div>
+        <button class="btn btn-ghost" style="color: var(--bosque); border-color: var(--bosque); margin-top: auto;" onclick="limpiarFiltrosEstadisticas()">Limpiar Filtros</button>
+      </div>
+
       <div class="stats-grid">
         <div class="stat-card"><div class="num" id="st-consultantes">0</div><div class="label">Consultantes</div></div>
         <div class="stat-card"><div class="num" id="st-turnos-totales">0</div><div class="label">Total Turnos</div></div>
+        <div class="stat-card"><div class="num" id="st-turnos-nuevos">0</div><div class="label">Turnos Nuevos</div></div>
+        <div class="stat-card"><div class="num" id="st-turnos-confirmados">0</div><div class="label">Confirmados</div></div>
         <div class="stat-card"><div class="num" id="st-seminarios">0</div><div class="label">Seminarios</div></div>
+        <div class="stat-card"><div class="num" id="st-inscriptos-sem">0</div><div class="label">Inscriptos Sem.</div></div>
       </div>
 
       <div class="chart-container">
-        <h4 style="margin-bottom: 1rem; color: var(--musgo);">Resumen Operativo</h4>
-        <canvas id="myStatsChart" style="max-height: 280px; width: 100%;"></canvas>
+        <h4 style="margin-bottom: 1rem; color: var(--musgo);">Distribución de Métricas</h4>
+        <canvas id="myStatsChart" style="max-height: 320px; width: 100%;"></canvas>
       </div>
     </div>
 
@@ -542,69 +1086,256 @@
   </div>
 </div>
 
+<!-- OTROS MODALES -->
+<div id="modal-gmail-login" class="modal">
+  <div class="modal-card" style="max-width:380px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-gmail-login')" aria-label="Cerrar">×</button>
+    <h3>Ingresar con Gmail</h3>
+    <form onsubmit="procesarGmailLogin(event)">
+      <label>Correo de Gmail</label>
+      <input type="email" id="gmail-email-input" placeholder="usuario@gmail.com" required>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-luz">Iniciar Sesión</button>
+        <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-gmail-login')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modal-mis-cosas" class="modal">
+  <div class="modal-card">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-mis-cosas')" aria-label="Cerrar">×</button>
+    <h3>Mis Inscripciones y Turnos</h3>
+    <p id="mis-cosas-usuario-txt" style="font-weight: 600; color: var(--bosque); margin-bottom: 1rem;"></p>
+    <h4 style="margin-top: 1rem; color: var(--musgo);">Mis Turnos Reservados</h4>
+    <div id="mis-turnos-container" style="margin-bottom: 1.5rem;"></div>
+    <h4 style="color: var(--musgo);">Mis Seminarios Inscriptos</h4>
+    <div id="mis-seminarios-container" style="margin-bottom: 1.5rem;"></div>
+    <div class="modal-actions" style="justify-content: space-between; gap: 0.5rem;">
+      <button type="button" class="btn btn-luz" onclick="closeModal('modal-mis-cosas'); location.href='#seminarios';">Ver Seminarios</button>
+      <button type="button" class="btn btn-luz" style="background:var(--bosque); color:#fff;" onclick="closeModal('modal-mis-cosas'); location.href='#sesiones';">Agendar Turno</button>
+      <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-mis-cosas')">Cerrar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-puntuar-seminario" class="modal">
+  <div class="modal-card" style="max-width: 460px; text-align: center;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-puntuar-seminario')" aria-label="Cerrar">×</button>
+    <h3>Puntuar Seminario</h3>
+    <p id="puntuar-seminario-titulo" style="font-weight: 600; color: var(--bosque); margin-bottom: 0.8rem;"></p>
+    <label style="margin-bottom: 0.2rem;">Tu Puntuación</label>
+    <div class="star-rating" id="star-rating-box">
+      <span class="star" data-val="1">★</span><span class="star" data-val="2">★</span><span class="star" data-val="3">★</span><span class="star" data-val="4">★</span><span class="star" data-val="5">★</span>
+    </div>
+    <label style="margin-top: 1rem; text-align: left;">Breve Reseña / Opinión (Opcional)</label>
+    <textarea id="puntuar-seminario-resena" rows="3" placeholder="Opinión..." style="text-align: left;"></textarea>
+    <input type="hidden" id="selected-star-val" value="0">
+    <input type="hidden" id="puntuar-sem-id" value="">
+    <div class="modal-actions" style="justify-content: center; margin-top: 1.5rem;">
+      <button type="button" class="btn btn-luz" onclick="guardarPuntuacionSeminario()">Enviar Puntuación</button>
+      <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-puntuar-seminario')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-login" class="modal">
+  <div class="modal-card" style="max-width:380px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-login')" aria-label="Cerrar">×</button>
+    <h3>Ingreso Administrador</h3>
+    <label>Usuario</label>
+    <input type="text" id="login-user" placeholder="admin">
+    <div class="modal-actions">
+      <button class="btn btn-luz" onclick="processAdminLogin()">Ingresar</button>
+      <button class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-login')">Cancelar</button>
+    </div>
+  </div>
+</div>
+
+<div id="modal-inscripcion-seminario" class="modal">
+  <div class="modal-card" style="max-width:420px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-inscripcion-seminario')" aria-label="Cerrar">×</button>
+    <h3>Inscripción a Seminario</h3>
+    <p id="sem-inscripcion-titulo" style="font-weight:600; color:var(--bosque); margin-bottom:1rem;"></p>
+    <form onsubmit="confirmarInscripcionSeminario(event)">
+      <input type="hidden" id="sem-inscripcion-id">
+      <label>Nombre Completo</label>
+      <input type="text" id="sem-ins-nombre" list="dl-global-consultantes" oninput="autocompletarTelefonoEnSeminario()" placeholder="Escribe tu nombre..." required>
+      <label>Teléfono / WhatsApp</label>
+      <input type="text" id="sem-ins-telefono" placeholder="Tu teléfono registrado" required>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-luz">Inscribirme</button>
+        <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-inscripcion-seminario')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div id="modal-reserva" class="modal">
+  <div class="modal-card" style="max-width:400px;">
+    <button type="button" class="modal-close-x" onclick="closeModal('modal-reserva')" aria-label="Cerrar">×</button>
+    <h3>Reservar Turno</h3>
+    <p id="reserva-detalles" style="margin-bottom:1rem; color:var(--bosque); font-weight:600;"></p>
+    <form onsubmit="confirmarReservaPublica(event)">
+      <input type="hidden" id="reserva-hora">
+      <label>Nombre Completo</label>
+      <input type="text" id="reserva-nombre" list="dl-global-consultantes" oninput="autocompletarTelefonoEnReserva()" placeholder="Escribe un nombre..." required>
+      <label>Teléfono</label>
+      <input type="text" id="reserva-telefono" placeholder="Tu teléfono registrado" required>
+      <div class="modal-actions">
+        <button type="submit" class="btn btn-luz">Confirmar Reserva</button>
+        <button type="button" class="btn btn-ghost" style="color:var(--tinta);" onclick="closeModal('modal-reserva')">Cancelar</button>
+      </div>
+    </form>
+  </div>
+</div>
+
 <script>
 function showCustomAlert(msg) {
   var alertBox = document.getElementById('custom-alert');
   var alertText = document.getElementById('custom-alert-text');
-  if(alertBox && alertText) { alertText.textContent = msg; alertBox.style.display = 'flex'; }
-  else { alert(msg); }
+  if(alertBox && alertText) {
+    alertText.textContent = msg;
+    alertBox.style.display = 'flex';
+  } else {
+    alert(msg);
+  }
 }
 function closeCustomAlert() {
   var alertBox = document.getElementById('custom-alert');
   if(alertBox) alertBox.style.display = 'none';
 }
 
+(function(){
+  "use strict";
+  var cfg = window.SITE_CONFIG || {};
+  var wa  = (cfg.whatsapp || "").replace(/[^0-9]/g, "");
+
+  function actualizarNombresEnPagina(nombreCompleto) {
+    if(!nombreCompleto) return;
+    document.querySelectorAll("[data-nombre]").forEach(function(el){ el.textContent = nombreCompleto; });
+    var partes = nombreCompleto.split(" ");
+    if(partes[0]) {
+      document.getElementById("nav-nombre-p1").textContent = partes[0];
+      document.getElementById("foot-nombre-p1").textContent = partes[0];
+      document.getElementById("txt-presencia-firma").textContent = "— " + partes[0];
+    }
+    if(partes.slice(1).join(" ")) {
+      document.getElementById("nav-nombre-p2").textContent = partes.slice(1).join(" ");
+      document.getElementById("foot-nombre-p2").textContent = partes.slice(1).join(" ");
+    }
+  }
+  window.actualizarNombresEnPagina = actualizarNombresEnPagina;
+
+  if (cfg.nombre) { actualizarNombresEnPagina(cfg.nombre); }
+
+  function waUrl(texto){
+    var base = "https://wa.me/" + wa;
+    return texto ? base + "?text=" + encodeURIComponent(texto) : base;
+  }
+
+  var saludo = "Hola" + (cfg.nombre ? " " + cfg.nombre : "") + ", me gustaría hacerte una consulta.";
+  var waFloat = document.getElementById("waFloat");
+  var waLink  = document.getElementById("waLink");
+  if (waFloat) waFloat.href = waUrl(saludo);
+  if (waLink)  waLink.href  = waUrl(saludo);
+
+  var enviar = document.getElementById("enviarWa");
+  if (enviar) {
+    enviar.addEventListener("click", function(){
+      var nombre  = (document.getElementById("nombre").value || "").trim();
+      var mensaje = (document.getElementById("mensaje").value || "").trim();
+      var texto = "Hola" + (cfg.nombre ? " " + cfg.nombre : "") + ", soy " +
+                  (nombre || "una persona interesada") + ". " +
+                  (mensaje || "Me gustaría saber más sobre tus consultas.");
+      window.open(waUrl(texto), "_blank", "noopener");
+    });
+  }
+
+  var mailWrap = document.getElementById("mailLink");
+  if (cfg.email) {
+    document.getElementById("mailDisplay").textContent = cfg.email;
+    mailWrap.href = "mailto:" + cfg.email;
+  }
+  var y = new Date().getFullYear();
+  var foot = document.getElementById("footYear");
+  if (foot) foot.textContent = "© " + y + " · Hecho con presencia.";
+
+  var toggle = document.getElementById("navToggle");
+  var links  = document.getElementById("navLinks");
+  if (toggle && links) {
+    toggle.addEventListener("click", function(){
+      var open = links.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+    links.querySelectorAll("a, button").forEach(function(a){
+      a.addEventListener("click", function(){ links.classList.remove("open"); toggle.setAttribute("aria-expanded","false"); });
+    });
+  }
+
+  var els = document.querySelectorAll(".reveal");
+  if ("IntersectionObserver" in window) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if (e.isIntersecting) { e.target.classList.add("visible"); io.unobserve(e.target); }
+      });
+    }, { threshold:0.12, rootMargin:"0px 0px -40px 0px" });
+    els.forEach(function(el){ io.observe(el); });
+  } else {
+    els.forEach(function(el){ el.classList.add("visible"); });
+  }
+})();
+
+/* PERSISTENCIA EN LOCALSTORAGE */
 var isAdmin = false;
-var currentSlide = 0;
+var userGmail = localStorage.getItem('bio_user_gmail') || "";
 var chartInstance = null;
 
-/* LOCALSTORAGE Y VALORES INICIALES */
-var serviciosData = JSON.parse(localStorage.getItem('bio_servicios')) || {
-  tituloMain: "Tres caminos, una misma intención.",
-  bajadaMain: "Cada espacio propone un ritmo distinto para el mismo trabajo: registrar, sostener y transformar tu manera de existir.",
-  cards: [
-    {
-      id: "card-individual",
-      num: "01 — Individual",
-      titulo: "Consultas",
-      texto: "Encuentros uno a uno, presenciales u online, para acompañar tu proceso personal.",
-      linkTexto: "Conocer más →",
-      linkUrl: "#sec-card-individual",
-      subseccion: {
-        tituloSub: "Consultas Individuales en Profundidad",
-        descSub: "Un espacio a medida para poner en palabras y registrar el cuerpo.",
-        imagenes: [{ src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=800&q=80" }],
-        textoExtra: "Las sesiones duran 60 minutos y se realizan de manera presencial u online."
-      }
-    },
-    {
-      id: "card-seminarios",
-      num: "02 — Grupal",
-      titulo: "Seminarios y Talleres",
-      texto: "Encuentros grupales intensivos para profundizar sobre temas clave de la bioexistencia.",
-      linkTexto: "Conocer más →",
-      linkUrl: "#sec-card-seminarios",
-      subseccion: {
-        tituloSub: "Encuentros y Talleres Grupales",
-        descSub: "Espacios de aprendizaje colectivo y reflexión profunda.",
-        imagenes: [{ src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=800&q=80" }],
-        textoExtra: "Consultá las fechas de los próximos encuentros grupales."
-      }
-    }
-  ]
+/* CONFIGURACIÓN Y PARAMETRIZACIÓN DEL HERO CON VALORES POR DEFECTO */
+var heroData = JSON.parse(localStorage.getItem('bio_hero')) || {
+  bgType: "color",
+  bgColor: "#251830",
+  bgImage: "",
+  
+  eyebrowText: "Bioexistencia consciente",
+  eyebrowFont: "'Karla', sans-serif",
+  eyebrowSize: "0.72rem",
+  eyebrowColor: "#DE7BAE",
+  
+  h1Text: "Volver a habitarte con presencia.",
+  h1Font: "'Fraunces', serif",
+  h1Size: "clamp(2.6rem,6vw,4.6rem)",
+  h1Color: "#F6F0F7",
+  
+  leadText: "Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.",
+  leadFont: "'Karla', sans-serif",
+  leadSize: "1.14rem",
+  leadColor: "#E4D3F0"
 };
 
 var setupData = JSON.parse(localStorage.getItem('bio_setup')) || {
+  nombreConsultora: "Valentina Ríos",
+  instagram: "https://instagram.com/",
+  fotoPerfil: "",
+  presenciaTitulo: "Consultora en bioexistencia consciente.",
+  presenciaP1: "Hace más de diez años acompaño a personas que sienten que la vida se les pasa en piloto automático.",
+  servConsultas: "Encuentros uno a uno, presenciales u online, para acompañar tu proceso personal.",
+  tipoGrafico: "bar",
+  modalidades: ["Online por Zoom", "Presencial CABA", "Híbrido"],
+  diasPermitidos: [1, 2, 3, 4, 5],
+  horariosEstandar: ["09:00", "10:00", "11:00", "15:00", "16:00", "17:00"],
+  coloresEstados: {
+    "Nuevo": { bg: "#fce4ec", txt: "#880e4f" },
+    "Confirmado": { bg: "#e8f5e9", txt: "#1b5e20" },
+    "Cancelado": { bg: "#ffebee", txt: "#b71c1c" }
+  },
   carrouselFotos: [
-    { src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80", titulo: "Espacio de Escucha y Bienvenida", orden: 1, enCarrousel: true },
-    { src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80", titulo: "Registro Corporal y Respiración Consciente", orden: 2, enCarrousel: true }
+    { src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80", titulo: "Espacio de Escucha y Bienvenida" },
+    { src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80", titulo: "Registro Corporal y Respiración Consciente" }
+  ],
+  videos: [
+    { titulo: "Introducción a la Bioexistencia", descripcion: "Descubrí qué es y cómo empezar a habitarte con presencia.", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
   ]
-};
-
-var heroData = JSON.parse(localStorage.getItem('bio_hero')) || {
-  eyebrowText: "Bioexistencia consciente",
-  h1Text: "Volver a habitarte con presencia.",
-  leadText: "Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia."
 };
 
 var consultantes = JSON.parse(localStorage.getItem('bio_consultantes')) || [
@@ -612,91 +1343,253 @@ var consultantes = JSON.parse(localStorage.getItem('bio_consultantes')) || [
 ];
 
 var turnos = JSON.parse(localStorage.getItem('bio_turnos')) || [
-  { fecha: "2026-08-14", hora: "10:00", consultanteNombre: "María Lopez", estado: "Nuevo" }
+  { fecha: "2026-08-14", hora: "10:00", consultanteNombre: "María Lopez", userEmail: "maria@gmail.com", estado: "Nuevo" }
 ];
 
 var seminarios = JSON.parse(localStorage.getItem('bio_seminarios')) || [
-  { id: 1, titulo: "Sanando la Memoria Corporal", fecha: "2026-05-10", hora: "16:00", costo: "$15.000", descripcion: "Taller intensivo para comprender cómo el cuerpo guarda patrones emocionales." }
+  { 
+    id: 1, 
+    titulo: "Sanando la Memoria Corporal", 
+    fecha: "2026-05-10",
+    hora: "16:00",
+    duracion: "3 horas",
+    modalidad: "Online por Zoom",
+    lugar: "Av. Santa Fe 1234, CABA",
+    costo: "$15.000", 
+    descripcion: "Un taller intensivo de 3 horas para comprender cómo el cuerpo guarda patrones emocionales.", 
+    inscriptos: [{ nombre: "María Lopez", telefono: "1122334455", userEmail: "maria@gmail.com" }],
+    puntuaciones: [{ userEmail: "maria@gmail.com", rating: 5, resena: "Excelente seminario, súper transformador." }]
+  }
+];
+
+var comentarios = JSON.parse(localStorage.getItem('bio_comentarios')) || [
+  { nombre: "Laura M.", texto: "Las consultas me ayudaron a encontrar claridad y paz en un momento crucial.", fecha: "2026-07-20" }
 ];
 
 document.addEventListener("DOMContentLoaded", function(){
   applyHeroDataUI();
-  renderQueHagoCarrouselPublic();
-  renderServiciosPublic();
-  renderCarrouselSetupUI();
+  applySetupDataUI();
+  renderGaleriaPublic();
+  renderVideosPublic();
+  renderSeminariosPublic();
+  renderComentariosPublic();
   poblarDatalistGlobalConsultantes();
+  actualizarUIGmailUser();
+  setupStarRatingEvents();
+
+  var dateInput = document.getElementById('calendar-date');
+  if(dateInput) {
+    dateInput.valueAsDate = new Date();
+    renderSlots();
+  }
 });
 
-function getYoutubeId(url) {
-  if (!url) return "";
-  var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
-  var match = url.match(regExp);
-  return (match && match[2].length === 11) ? match[2] : "";
+/* APLICAR ESTILOS Y TEXTOS DEL HERO AL FRONTEND */
+function applyHeroDataUI() {
+  var heroSec = document.getElementById('inicio');
+  var overlay = document.getElementById('hero-overlay');
+  
+  if (heroData.bgType === 'image' && heroData.bgImage) {
+    heroSec.style.backgroundImage = 'url("' + heroData.bgImage + '")';
+    overlay.style.display = 'block';
+  } else {
+    heroSec.style.backgroundImage = 'none';
+    heroSec.style.backgroundColor = heroData.bgColor || '#251830';
+    overlay.style.display = 'none';
+  }
+
+  // Eyebrow
+  var eyebrowEl = document.getElementById('txt-hero-eyebrow');
+  if(eyebrowEl) {
+    eyebrowEl.textContent = heroData.eyebrowText || "Bioexistencia consciente";
+    eyebrowEl.style.fontFamily = heroData.eyebrowFont || "'Karla', sans-serif";
+    if(heroData.eyebrowSize) eyebrowEl.style.fontSize = heroData.eyebrowSize;
+    if(heroData.eyebrowColor) eyebrowEl.style.color = heroData.eyebrowColor;
+  }
+
+  // H1
+  var h1El = document.getElementById('txt-hero-h1');
+  if(h1El) {
+    h1El.textContent = heroData.h1Text || "Volver a habitarte con presencia.";
+    h1El.style.fontFamily = heroData.h1Font || "'Fraunces', serif";
+    if(heroData.h1Size) h1El.style.fontSize = heroData.h1Size;
+    if(heroData.h1Color) h1El.style.color = heroData.h1Color;
+  }
+
+  // Lead
+  var leadEl = document.getElementById('txt-hero-lead');
+  if(leadEl) {
+    leadEl.textContent = heroData.leadText || "";
+    leadEl.style.fontFamily = heroData.leadFont || "'Karla', sans-serif";
+    if(heroData.leadSize) leadEl.style.fontSize = heroData.leadSize;
+    if(heroData.leadColor) leadEl.style.color = heroData.leadColor;
+  }
+
+  // Cargar formulario del admin con datos guardados
+  document.getElementById('hero-bg-type').value = heroData.bgType || "color";
+  document.getElementById('hero-bg-color').value = heroData.bgColor || "#251830";
+  document.getElementById('hero-bg-url').value = (heroData.bgImage && heroData.bgImage.startsWith("http")) ? heroData.bgImage : "";
+  document.getElementById('hero-bg-base64').value = heroData.bgImage || "";
+
+  document.getElementById('hero-eyebrow-text').value = heroData.eyebrowText || "";
+  document.getElementById('hero-eyebrow-font').value = heroData.eyebrowFont || "'Karla', sans-serif";
+  document.getElementById('hero-eyebrow-size').value = heroData.eyebrowSize || "0.72rem";
+  document.getElementById('hero-eyebrow-color').value = heroData.eyebrowColor || "#DE7BAE";
+
+  document.getElementById('hero-h1-text').value = heroData.h1Text || "";
+  document.getElementById('hero-h1-font').value = heroData.h1Font || "'Fraunces', serif";
+  document.getElementById('hero-h1-size').value = heroData.h1Size || "clamp(2.6rem,6vw,4.6rem)";
+  document.getElementById('hero-h1-color').value = heroData.h1Color || "#F6F0F7";
+
+  document.getElementById('hero-lead-text').value = heroData.leadText || "";
+  document.getElementById('hero-lead-font').value = heroData.leadFont || "'Karla', sans-serif";
+  document.getElementById('hero-lead-size').value = heroData.leadSize || "1.14rem";
+  document.getElementById('hero-lead-color').value = heroData.leadColor || "#E4D3F0";
+
+  toggleHeroBgInputs();
 }
 
-/* 1. SECCIÓN ¿QUÉ HAGO EN UNA CONSULTA? */
-function renderQueHagoCarrouselPublic() {
-  var track = document.getElementById('quehago-carrousel-track');
-  if(!track) return;
-  track.innerHTML = "";
+function toggleHeroBgInputs() {
+  var type = document.getElementById('hero-bg-type').value;
+  if(type === 'color') {
+    document.getElementById('box-hero-bg-color').style.display = 'block';
+    document.getElementById('box-hero-bg-image').style.display = 'none';
+  } else {
+    document.getElementById('box-hero-bg-color').style.display = 'none';
+    document.getElementById('box-hero-bg-image').style.display = 'block';
+  }
+}
 
-  var fotosFiltradas = (setupData.carrouselFotos || [])
-    .filter(function(f){ return f.enCarrousel !== false; })
-    .sort(function(a, b){ return (parseInt(a.orden) || 0) - (parseInt(b.orden) || 0); });
+function previewHeroBgFile(e) {
+  var file = e.target.files[0];
+  if(file) {
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      document.getElementById('hero-bg-base64').value = evt.target.result;
+      document.getElementById('hero-bg-preview').innerHTML = '<img src="' + evt.target.result + '" style="width:100%; height:100%; object-fit:cover;">';
+    };
+    reader.readAsDataURL(file);
+  }
+}
 
-  if(fotosFiltradas.length === 0) {
-    document.getElementById('quehago-carrousel-box').style.display = 'none';
+function saveHeroSetup(e) {
+  e.preventDefault();
+  heroData.bgType = document.getElementById('hero-bg-type').value;
+  heroData.bgColor = document.getElementById('hero-bg-color').value;
+
+  var urlImg = document.getElementById('hero-bg-url').value.trim();
+  var base64Img = document.getElementById('hero-bg-base64').value;
+  heroData.bgImage = urlImg || base64Img || "";
+
+  heroData.eyebrowText = document.getElementById('hero-eyebrow-text').value.trim();
+  heroData.eyebrowFont = document.getElementById('hero-eyebrow-font').value;
+  heroData.eyebrowSize = document.getElementById('hero-eyebrow-size').value.trim();
+  heroData.eyebrowColor = document.getElementById('hero-eyebrow-color').value;
+
+  heroData.h1Text = document.getElementById('hero-h1-text').value.trim();
+  heroData.h1Font = document.getElementById('hero-h1-font').value;
+  heroData.h1Size = document.getElementById('hero-h1-size').value.trim();
+  heroData.h1Color = document.getElementById('hero-h1-color').value;
+
+  heroData.leadText = document.getElementById('hero-lead-text').value.trim();
+  heroData.leadFont = document.getElementById('hero-lead-font').value;
+  heroData.leadSize = document.getElementById('hero-lead-size').value.trim();
+  heroData.leadColor = document.getElementById('hero-lead-color').value;
+
+  localStorage.setItem('bio_hero', JSON.stringify(heroData));
+  applyHeroDataUI();
+  closeModal('modal-panel-admin');
+  showCustomAlert("Parámetros de la Sección Hero guardados exitosamente.");
+}
+
+/* PESTAÑAS DEL PANEL ADMIN */
+function openPanelAdminModal(tabTarget) {
+  openModal('modal-panel-admin');
+  switchPanelTab(tabTarget || 'sec-hero');
+}
+
+function switchPanelTab(secId) {
+  document.querySelectorAll('.panel-section-content').forEach(function(el){ el.style.display = 'none'; });
+  document.querySelectorAll('.panel-tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
+
+  var targetSec = document.getElementById(secId);
+  if(targetSec) targetSec.style.display = 'block';
+
+  if(secId === 'sec-hero') document.getElementById('tab-btn-hero').classList.add('active');
+  if(secId === 'sec-setup') document.getElementById('tab-btn-setup').classList.add('active');
+  if(secId === 'sec-consultantes') {
+    document.getElementById('tab-btn-consultantes').classList.add('active');
+    renderConsultantesTable();
+  }
+  if(secId === 'sec-turnos') {
+    document.getElementById('tab-btn-turnos').classList.add('active');
+    renderConsultantesTable();
+    renderTurnosAgendadosAdmin();
+  }
+  if(secId === 'sec-seminarios') {
+    document.getElementById('tab-btn-seminarios').classList.add('active');
+    renderSeminariosAdminManage();
+  }
+  if(secId === 'sec-estadisticas') {
+    document.getElementById('tab-btn-estadisticas').classList.add('active');
+    calcularEstadisticas();
+  }
+}
+
+/* GALERÍA DE IMÁGENES LADO A LADO */
+function renderGaleriaPublic() {
+  var container = document.getElementById('galeria-grid-container');
+  if (!container) return;
+
+  container.innerHTML = '';
+
+  var fotos = setupData.carrouselFotos || [];
+  if (fotos.length === 0) {
+    container.innerHTML = '<p style="color:var(--tinta-2); text-align:center; grid-column:1/-1;">Agregá imágenes desde el Panel de Administración.</p>';
     return;
   }
-  document.getElementById('quehago-carrousel-box').style.display = 'block';
 
-  fotosFiltradas.forEach(function(f){
-    var slide = document.createElement('div');
-    slide.className = 'carrousel-slide';
-    slide.innerHTML = '<img src="' + f.src + '" alt="' + (f.titulo || 'Consulta') + '">' +
-                       (f.titulo ? '<div class="carrousel-caption">' + f.titulo + '</div>' : '');
-    track.appendChild(slide);
+  fotos.forEach(function(f) {
+    var card = document.createElement('div');
+    card.className = 'galeria-card-item';
+    card.innerHTML = '<div class="galeria-card-img-wrap">' +
+                        '<img src="' + f.src + '" alt="' + (f.titulo || 'Consulta') + '">' +
+                     '</div>' +
+                     (f.titulo ? '<div class="galeria-card-caption">' + f.titulo + '</div>' : '');
+    container.appendChild(card);
   });
-  currentSlide = 0;
-  updateQueHagoCarrouselPosition();
-}
-
-function moveQueHagoSlide(dir) {
-  var track = document.getElementById('quehago-carrousel-track');
-  var total = track.children.length;
-  if(total === 0) return;
-  currentSlide = (currentSlide + dir + total) % total;
-  updateQueHagoCarrouselPosition();
-}
-
-function updateQueHagoCarrouselPosition() {
-  var track = document.getElementById('quehago-carrousel-track');
-  if(track) track.style.transform = 'translateX(-' + (currentSlide * 100) + '%)';
 }
 
 function renderCarrouselSetupUI() {
   var container = document.getElementById('setup-carrousel-container');
-  if(!container) return;
-  container.innerHTML = "";
+  if (!container) return;
+  container.innerHTML = '';
 
-  (setupData.carrouselFotos || []).sort(function(a,b){ return (parseInt(a.orden)||0) - (parseInt(b.orden)||0); }).forEach(function(f, idx){
-    var box = document.createElement('div');
-    box.style.cssText = 'background:var(--lino); padding:0.8rem; border-radius:10px; margin-bottom:0.6rem; border:1px solid #ccc; display:flex; gap:0.8rem; align-items:center; flex-wrap:wrap;';
-    box.innerHTML = '<div style="width:60px; height:45px; border-radius:6px; overflow:hidden; flex-shrink:0;"><img src="' + f.src + '" style="width:100%; height:100%; object-fit:cover;"></div>' +
-                    '<div style="flex:1; min-width:180px;"><input type="text" class="carr-title-input" value="' + (f.titulo || '') + '" placeholder="Título de la foto"></div>' +
-                    '<div style="width:90px;"><label style="font-size:0.7rem; margin:0;">Orden</label><input type="number" class="carr-orden-input" value="' + (f.orden || (idx + 1)) + '"></div>' +
-                    '<div style="display:flex; align-items:center; gap:0.3rem;"><input type="checkbox" class="carr-tilde-input" ' + (f.enCarrousel !== false ? 'checked' : '') + ' style="width:auto;"><label style="font-size:0.75rem; margin:0;">En Carrusel</label></div>' +
-                    '<button type="button" onclick="removeCarrouselItemSetup(' + idx + ')" style="background:none; border:none; cursor:pointer;" title="Eliminar foto">❌</button>';
-    container.appendChild(box);
+  var fotos = setupData.carrouselFotos || [];
+  fotos.forEach(function(f, idx) {
+    var div = document.createElement('div');
+    div.className = 'carrousel-setup-row';
+    div.style.cssText = 'display:flex; gap:0.8rem; align-items:center; background:var(--lino); padding:0.6rem; border-radius:10px; margin-bottom:0.5rem;';
+    div.innerHTML = '<div style="width:60px; height:45px; border-radius:6px; overflow:hidden; flex-shrink:0;"><img src="' + f.src + '" style="width:100%; height:100%; object-fit:cover;"></div>' +
+                    '<input type="text" class="carr-title-input" value="' + (f.titulo || '') + '" placeholder="Título de la imagen (Opcional)" style="flex:1;">' +
+                    '<button type="button" onclick="moveCarrouselItemSetup(' + idx + ', -1)" title="Subir" style="padding:0.2rem 0.5rem;">⬆️</button>' +
+                    '<button type="button" onclick="moveCarrouselItemSetup(' + idx + ', 1)" title="Bajar" style="padding:0.2rem 0.5rem;">⬇️</button>' +
+                    '<button type="button" onclick="removeCarrouselItemSetup(' + idx + ')" style="background:none; border:none; cursor:pointer;">❌</button>';
+    container.appendChild(div);
   });
 }
 
 function addCarrouselImageFromUrl() {
   var urlInput = document.getElementById('setup-carr-url-input');
   var url = urlInput ? urlInput.value.trim() : '';
-  if (!url) return showCustomAlert("Ingresá una URL válida.");
+
+  if (!url) {
+    showCustomAlert("Ingresa la URL de la imagen primero.");
+    return;
+  }
+
   if (!setupData.carrouselFotos) setupData.carrouselFotos = [];
-  setupData.carrouselFotos.push({ src: url, titulo: "", orden: setupData.carrouselFotos.length + 1, enCarrousel: true });
+  setupData.carrouselFotos.push({ src: url, titulo: "" });
   renderCarrouselSetupUI();
   urlInput.value = '';
 }
@@ -704,13 +1597,24 @@ function addCarrouselImageFromUrl() {
 function addCarrouselImageFromFile(e) {
   var file = e.target.files[0];
   if (!file) return;
+
   var reader = new FileReader();
   reader.onload = function(evt) {
     if (!setupData.carrouselFotos) setupData.carrouselFotos = [];
-    setupData.carrouselFotos.push({ src: evt.target.result, titulo: "", orden: setupData.carrouselFotos.length + 1, enCarrousel: true });
+    setupData.carrouselFotos.push({ src: evt.target.result, titulo: "" });
     renderCarrouselSetupUI();
   };
   reader.readAsDataURL(file);
+}
+
+function moveCarrouselItemSetup(idx, dir) {
+  var fotos = setupData.carrouselFotos || [];
+  var targetIdx = idx + dir;
+  if (targetIdx < 0 || targetIdx >= fotos.length) return;
+  var temp = fotos[idx];
+  fotos[idx] = fotos[targetIdx];
+  fotos[targetIdx] = temp;
+  renderCarrouselSetupUI();
 }
 
 function removeCarrouselItemSetup(idx) {
@@ -720,167 +1624,840 @@ function removeCarrouselItemSetup(idx) {
   }
 }
 
-/* 2. SERVICIOS Y SUBSECCIONES PÚBLICAS */
-function renderServiciosPublic() {
-  var txtTitulo = document.getElementById('txt-servicios-titulo');
-  var txtBajada = document.getElementById('txt-servicios-bajada');
-  var cardsContainer = document.getElementById('container-servicios-cards');
-  var subContainer = document.getElementById('container-subsecciones-cards');
+function getYoutubeId(url) {
+  if (!url) return "";
+  var regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  var match = url.match(regExp);
+  return (match && match[2].length === 11) ? match[2] : "";
+}
 
-  if(txtTitulo) txtTitulo.textContent = serviciosData.tituloMain;
-  if(txtBajada) txtBajada.textContent = serviciosData.bajadaMain;
-  if(!cardsContainer || !subContainer) return;
+function inlinePlayVideo(idx, videoId) {
+  var mediaBox = document.getElementById('vmedia-' + idx);
+  if (mediaBox && videoId) {
+    mediaBox.innerHTML = '<iframe src="https://www.youtube.com/embed/' + videoId + '?autoplay=1" style="width:100%; height:100%; border:0;" allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+  }
+}
 
-  cardsContainer.innerHTML = "";
-  subContainer.innerHTML = "";
+function renderVideosPublic() {
+  var container = document.getElementById('grid-videos-container');
+  if(!container) return;
+  container.innerHTML = '';
+  if(!setupData.videos || setupData.videos.length === 0) {
+    container.innerHTML = '<p style="color:var(--tinta-2); text-align:center;">Próximamente se publicarán nuevas charlas en video.</p>';
+    return;
+  }
+  setupData.videos.forEach(function(v, idx){
+    var vId = getYoutubeId(v.url);
+    var thumbUrl = vId ? "https://img.youtube.com/vi/" + vId + "/hqdefault.jpg" : "";
 
-  (serviciosData.cards || []).forEach(function(card, idx){
-    var cardId = card.id || ('card-sec-' + idx);
-    
-    var cardEl = document.createElement('article');
-    cardEl.className = 'card reveal visible';
-    cardEl.innerHTML = '<span class="num">' + card.num + '</span>' +
-                       '<h3>' + card.titulo + '</h3>' +
-                       (card.imagenUrl ? '<div class="card-media-box"><img src="' + card.imagenUrl + '"></div>' : '') +
-                       '<p>' + card.texto + '</p>' +
-                       '<a href="#' + cardId + '" class="link">' + (card.linkTexto || "Conocer más →") + '</a>';
-    cardsContainer.appendChild(cardEl);
-
-    var sub = card.subseccion || {};
-    var vId = getYoutubeId(sub.videoUrlSub || card.videoUrl);
-    
-    var subEl = document.createElement('div');
-    subEl.className = 'subseccion-card-block reveal visible';
-    subEl.id = cardId;
-
-    var mediaSubHtml = "";
-    if (sub.imagenes && sub.imagenes.length > 0) {
-      mediaSubHtml = '<div class="card-media-box" style="border-radius:14px; overflow:hidden;"><img src="' + sub.imagenes[0].src + '"></div>';
-    } else if (vId) {
-      mediaSubHtml = '<div class="card-media-box" style="border-radius:14px; overflow:hidden;"><iframe src="https://www.youtube.com/embed/' + vId + '" allowfullscreen style="width:100%; aspect-ratio:16/9; border:0;"></iframe></div>';
-    }
-
-    subEl.innerHTML = '<span class="eyebrow">' + card.num + '</span>' +
-                       '<h3 style="font-size:2.2rem; margin:0.8rem 0 1rem; color:var(--musgo);">' + (sub.tituloSub || card.titulo) + '</h3>' +
-                       '<div class="subseccion-grid">' +
-                         '<div>' +
-                           '<p style="font-size:1.1rem; color:var(--tinta-2); margin-bottom:1.2rem;">' + (sub.descSub || card.texto) + '</p>' +
-                           (sub.textoExtra ? '<p style="font-size:0.98rem; color:var(--tinta); margin-bottom:1.5rem;">' + sub.textoExtra + '</p>' : '') +
-                           '<a href="#contacto" class="btn btn-luz">Consultar por este espacio</a>' +
-                         '</div>' +
-                         '<div>' + mediaSubHtml + '</div>' +
-                       '</div>';
-    subContainer.appendChild(subEl);
+    var card = document.createElement('article');
+    card.className = 'video-card-compact';
+    card.innerHTML = '<div class="video-media-box" id="vmedia-' + idx + '" onclick="inlinePlayVideo(' + idx + ', \'' + vId + '\')">' +
+                       (thumbUrl ? '<img src="' + thumbUrl + '" class="video-thumb-preview" alt="' + v.titulo + '">' : '') +
+                       '<div class="video-play-icon-btn">▶</div>' +
+                     '</div>' +
+                     '<div class="video-content-box">' +
+                       '<div>' +
+                         '<h3>' + v.titulo + '</h3>' +
+                         '<p>' + v.descripcion + '</p>' +
+                       '</div>' +
+                       '<div class="video-actions-flex">' +
+                         '<button class="btn btn-luz" style="padding:0.4rem 0.9rem; font-size:0.8rem;" onclick="inlinePlayVideo(' + idx + ', \'' + vId + '\')">▶ Reproducir</button>' +
+                         '<a href="' + v.url + '" target="_blank" rel="noopener" class="btn btn-ghost" style="color:var(--bosque); border-color:var(--bosque); padding:0.4rem 0.9rem; font-size:0.8rem;">Ver en YouTube ↗</a>' +
+                       '</div>' +
+                     '</div>';
+    container.appendChild(card);
   });
 }
 
-function renderServiciosSetupUI() {
-  document.getElementById('serv-titulo-main').value = serviciosData.tituloMain || "";
-  document.getElementById('serv-bajada-main').value = serviciosData.bajadaMain || "";
+function renderSeminariosPublic() {
+  var container = document.getElementById('grid-seminarios-container');
+  if(!container) return;
+  container.innerHTML = '';
+  if(seminarios.length === 0) {
+    container.innerHTML = '<p style="color:var(--tinta-2);">No hay seminarios programados por el momento.</p>';
+    return;
+  }
+  seminarios.forEach(function(s){
+    var cantIns = (s.inscriptos || []).length;
+    var costoTexto = s.costo ? s.costo : "Consultar";
+    
+    var avgStarsTxt = "Sin puntuaciones aún";
+    if(s.puntuaciones && s.puntuaciones.length > 0) {
+      var sum = 0;
+      s.puntuaciones.forEach(function(p){ sum += p.rating; });
+      var avg = (sum / s.puntuaciones.length).toFixed(1);
+      avgStarsTxt = "★ " + avg + " / 5 (" + s.puntuaciones.length + " opiniones)";
+    }
 
-  var container = document.getElementById('setup-cards-servicios-container');
+    var resenasHtml = "";
+    var resenasFiltradas = (s.puntuaciones || []).filter(function(p){ return p.resena && p.resena.length > 0; });
+    if(resenasFiltradas.length > 0) {
+      resenasHtml = '<div class="seminario-reviews-box"><strong>Opiniones de asistentes:</strong>';
+      resenasFiltradas.forEach(function(rf){
+        resenasHtml += '<div class="seminario-review-item">" ' + rf.resena + ' " — ⭐ ' + rf.rating + '/5</div>';
+      });
+      resenasHtml += '</div>';
+    }
+
+    var linkMaps = obtenerLinkGoogleMaps(s.lugar);
+
+    var card = document.createElement('article');
+    card.className = 'seminario-card';
+    card.innerHTML = '<div style="width:100%;">' +
+                       '<span class="badge-fecha">📅 ' + (s.fecha || '') + ' - ⏰ ' + (s.hora || '') + ' (' + (s.duracion || '') + ')</span>' +
+                       '<h3>' + s.titulo + '</h3>' +
+                       '<div class="stars-avg">' + avgStarsTxt + '</div>' +
+                       '<p>' + s.descripcion + '</p>' +
+                       '<div class="info-meta">' +
+                         '<span>📍 <strong>Modalidad:</strong> ' + (s.modalidad || '') + '</span>' +
+                         '<span>📍 <strong>Lugar:</strong> ' + (s.lugar || '') + ' <a href="' + linkMaps + '" target="_blank" rel="noopener" style="text-decoration:underline; color:var(--bosque); font-weight:bold;">(Google Maps 🗺️)</a></span>' +
+                         '<span>💰 <strong>Costo:</strong> ' + costoTexto + '</span>' +
+                         '<span>👥 <strong>Inscriptos:</strong> ' + cantIns + '</span>' +
+                       '</div>' +
+                       resenasHtml +
+                     '</div>' +
+                     '<button class="btn btn-luz btn-sm-seminario" onclick="openModalInscripcionSeminario(' + s.id + ')">Inscribirme</button>';
+    container.appendChild(card);
+  });
+}
+
+function obtenerLinkGoogleMaps(lugarTexto) {
+  if (!lugarTexto) return "#";
+  if (lugarTexto.startsWith("http://") || lugarTexto.startsWith("https://")) return lugarTexto;
+  return "https://www.google.com/maps/search/?api=1&query=" + encodeURIComponent(lugarTexto);
+}
+
+function abrirGoogleMapsManualInput() {
+  var val = document.getElementById('sem-lugar-maps').value.trim();
+  if (val) window.open(obtenerLinkGoogleMaps(val), "_blank", "noopener");
+  else showCustomAlert("Ingresa una dirección primero.");
+}
+
+function previewFotoPerfil(e) {
+  var file = e.target.files[0];
+  if(file) {
+    var reader = new FileReader();
+    reader.onload = function(evt) {
+      var img = new Image();
+      img.onload = function() {
+        var canvas = document.createElement('canvas');
+        var maxDim = 400;
+        var width = img.width, height = img.height;
+        if (width > height) {
+          if (width > maxDim) { height *= maxDim / width; width = maxDim; }
+        } else {
+          if (height > maxDim) { width *= maxDim / height; height = maxDim; }
+        }
+        canvas.width = width; canvas.height = height;
+        var ctx = canvas.getContext('2d');
+        ctx.drawImage(img, 0, 0, width, height);
+        var compressedBase64 = canvas.toDataURL('image/jpeg', 0.82);
+        document.getElementById('setup-foto-base64').value = compressedBase64;
+        document.getElementById('setup-foto-preview').innerHTML = '<img src="' + compressedBase64 + '" style="width:100%; height:100%; object-fit:cover;">';
+      };
+      img.src = evt.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function toggleGmailLogin() {
+  if (userGmail) {
+    userGmail = "";
+    localStorage.removeItem('bio_user_gmail');
+    actualizarUIGmailUser();
+    showCustomAlert("Sesión de Gmail cerrada.");
+  } else {
+    openModal('modal-gmail-login');
+  }
+}
+
+function procesarGmailLogin(e) {
+  e.preventDefault();
+  var email = document.getElementById('gmail-email-input').value.trim();
+  if(email) {
+    userGmail = email;
+    localStorage.setItem('bio_user_gmail', userGmail);
+    actualizarUIGmailUser();
+    closeModal('modal-gmail-login');
+    showCustomAlert("Bienvenido/a: " + userGmail);
+  }
+}
+
+function actualizarUIGmailUser() {
+  var btnLogin = document.getElementById('btn-gmail-login');
+  var btnMisCosas = document.getElementById('btn-mis-cosas');
+  if (userGmail) {
+    btnLogin.textContent = "Logout (" + userGmail.split('@')[0] + ")";
+    btnMisCosas.style.display = "inline-block";
+  } else {
+    btnLogin.textContent = "Login Gmail";
+    btnMisCosas.style.display = "none";
+  }
+}
+
+function renderMisCosas() {
+  document.getElementById('mis-cosas-usuario-txt').textContent = "Usuario conectado: " + userGmail;
+  var containerTurnos = document.getElementById('mis-turnos-container');
+  containerTurnos.innerHTML = "";
+  var misTurnos = turnos.filter(function(t){ return t.userEmail === userGmail || t.consultanteNombre.toLowerCase() === userGmail.toLowerCase(); });
+  
+  if (misTurnos.length === 0) {
+    containerTurnos.innerHTML = "<p style='color:#777; font-size:0.9rem;'>No tienes turnos agendados.</p>";
+  } else {
+    misTurnos.forEach(function(t){
+      var idx = turnos.indexOf(t);
+      var div = document.createElement('div');
+      div.style.cssText = "background:var(--lino); padding:0.8rem; border-radius:10px; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center;";
+      div.innerHTML = "<div><strong>Fecha:</strong> " + t.fecha + " - <strong>Hora:</strong> " + t.hora + "<br><small>Estado: " + t.estado + "</small></div>" +
+                      "<button class='btn btn-ghost' style='color:red; border-color:red; padding:0.3rem 0.8rem; font-size:0.8rem;' onclick='cancelarTurnoUsuario(" + idx + ")'>Cancelar</button>";
+      containerTurnos.appendChild(div);
+    });
+  }
+
+  var containerSem = document.getElementById('mis-seminarios-container');
+  containerSem.innerHTML = "";
+  var misSeminarios = seminarios.filter(function(s){
+    return (s.inscriptos || []).some(function(i){ return i.userEmail === userGmail || i.nombre.toLowerCase() === userGmail.toLowerCase(); });
+  });
+
+  if (misSeminarios.length === 0) {
+    containerSem.innerHTML = "<p style='color:#777; font-size:0.9rem;'>No estás inscripto/a en ningún seminario.</p>";
+  } else {
+    misSeminarios.forEach(function(s){
+      var div = document.createElement('div');
+      div.style.cssText = "background:var(--lino); padding:0.8rem; border-radius:10px; margin-bottom:0.5rem; display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:0.5rem;";
+      var hoyStr = new Date().toISOString().slice(0,10);
+      var esPasado = s.fecha < hoyStr;
+      var btnPuntuarHtml = esPasado ? "<button class='btn btn-luz' style='padding:0.3rem 0.8rem; font-size:0.8rem;' onclick='abrirModalPuntuarSeminario(" + s.id + ")'>⭐ Puntuar</button>" : "";
+
+      div.innerHTML = "<div><strong>" + s.titulo + "</strong><br><small>Fecha: " + s.fecha + " " + s.hora + " | Modalidad: " + s.modalidad + "</small></div>" +
+                      "<div>" + btnPuntuarHtml + " <button class='btn btn-ghost' style='color:red; border-color:red; padding:0.3rem 0.8rem; font-size:0.8rem;' onclick='cancelarSeminarioUsuario(" + s.id + ")'>Cancelar Inscripción</button></div>";
+      containerSem.appendChild(div);
+    });
+  }
+}
+
+function cancelarTurnoUsuario(idx) {
+  if (confirm("¿Deseas cancelar esta reserva de turno?")) {
+    turnos.splice(idx, 1);
+    localStorage.setItem('bio_turnos', JSON.stringify(turnos));
+    renderMisCosas();
+    renderSlots();
+    showCustomAlert("Turno cancelado.");
+  }
+}
+
+function cancelarSeminarioUsuario(semId) {
+  if (confirm("¿Deseas cancelar tu inscripción al seminario?")) {
+    var sem = seminarios.find(function(s){ return s.id === semId; });
+    if(sem && sem.inscriptos) {
+      sem.inscriptos = sem.inscriptos.filter(function(i){ return i.userEmail !== userGmail && i.nombre.toLowerCase() !== userGmail.toLowerCase(); });
+      localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+      renderMisCosas();
+      renderSeminariosPublic();
+      showCustomAlert("Inscripción cancelada.");
+    }
+  }
+}
+
+function filtrarTurnosPorConsultanteOnType() {
+  var val = document.getElementById('admin-turno-nombre-input').value.trim();
+  renderTurnosAgendadosAdmin(val);
+}
+
+function renderTurnosAgendadosAdmin(filtroNombre) {
+  var tbody = document.getElementById('tbl-turnos-agendados');
+  if(!tbody) return;
+  tbody.innerHTML = '';
+  var lbl = document.getElementById('lbl-filtro-turnos');
+
+  var listaFiltrada = turnos;
+  if(filtroNombre) {
+    listaFiltrada = turnos.filter(function(t){ return t.consultanteNombre.toLowerCase().includes(filtroNombre.toLowerCase()); });
+    lbl.textContent = "(Filtrados por: " + filtroNombre + ")";
+  } else {
+    lbl.textContent = "(Todos los turnos)";
+  }
+
+  listaFiltrada.forEach(function(t){
+    var realIdx = turnos.indexOf(t);
+    tbody.innerHTML += '<tr class="clickable-row" ondblclick="editTurnoByRowIndex(' + realIdx + ')" title="Doble clic para editar">' +
+                       '<td>' + t.fecha + '</td><td>' + t.hora + '</td><td>' + t.consultanteNombre + '</td><td>' + (t.estado || 'Nuevo') + '</td></tr>';
+  });
+}
+
+function setupStarRatingEvents() {
+  var stars = document.querySelectorAll('#star-rating-box .star');
+  stars.forEach(function(s){
+    s.addEventListener('click', function(){
+      var val = parseInt(this.getAttribute('data-val'));
+      document.getElementById('selected-star-val').value = val;
+      stars.forEach(function(st, idx){
+        if(idx < val) st.classList.add('selected');
+        else st.classList.remove('selected');
+      });
+    });
+  });
+}
+
+function abrirModalPuntuarSeminario(semId) {
+  var sem = seminarios.find(function(s){ return s.id === semId; });
+  if(!sem) return;
+  document.getElementById('puntuar-sem-id').value = sem.id;
+  document.getElementById('puntuar-seminario-titulo').textContent = sem.titulo;
+  document.getElementById('selected-star-val').value = "0";
+  document.getElementById('puntuar-seminario-resena').value = "";
+  document.querySelectorAll('#star-rating-box .star').forEach(function(st){ st.classList.remove('selected'); });
+  
+  var prevPunto = (sem.puntuaciones || []).find(function(p){ return p.userEmail === userGmail; });
+  if(prevPunto) {
+    document.getElementById('selected-star-val').value = prevPunto.rating;
+    document.getElementById('puntuar-seminario-resena').value = prevPunto.resena || "";
+    document.querySelectorAll('#star-rating-box .star').forEach(function(st, idx){
+      if(idx < prevPunto.rating) st.classList.add('selected');
+    });
+  }
+  openModal('modal-puntuar-seminario');
+}
+
+function guardarPuntuacionSeminario() {
+  var semId = parseInt(document.getElementById('puntuar-sem-id').value);
+  var rating = parseInt(document.getElementById('selected-star-val').value);
+  var resena = document.getElementById('puntuar-seminario-resena').value.trim();
+  if(!rating || rating < 1) { return showCustomAlert("Selecciona al menos 1 estrella."); }
+
+  var sem = seminarios.find(function(s){ return s.id === semId; });
+  if(sem) {
+    if(!sem.puntuaciones) sem.puntuaciones = [];
+    var yaPunto = sem.puntuaciones.findIndex(function(p){ return p.userEmail === userGmail; });
+    if(yaPunto >= 0) {
+      sem.puntuaciones[yaPunto].rating = rating;
+      sem.puntuaciones[yaPunto].resena = resena;
+    } else {
+      sem.puntuaciones.push({ userEmail: userGmail, rating: rating, resena: resena });
+    }
+    localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+    showCustomAlert("¡Gracias por puntuar!");
+    closeModal('modal-puntuar-seminario');
+    renderSeminariosPublic();
+    renderMisCosas();
+  }
+}
+
+function applySetupDataUI() {
+  if(setupData.nombreConsultora) { window.actualizarNombresEnPagina(setupData.nombreConsultora); }
+  if(setupData.instagram) {
+    var igL = document.getElementById('quiensoy-ig-link');
+    if(igL) igL.href = setupData.instagram;
+    var igMain = document.getElementById('igLink');
+    if(igMain) igMain.href = setupData.instagram;
+  }
+
+  var retCont = document.getElementById('retrato-container');
+  if(setupData.fotoPerfil) {
+    retCont.innerHTML = '<img src="' + setupData.fotoPerfil + '" alt="Foto de Perfil">';
+  }
+
+  document.getElementById('txt-presencia-titulo').textContent = setupData.presenciaTitulo;
+  document.getElementById('txt-presencia-p1').textContent = setupData.presenciaP1;
+  document.getElementById('txt-serv-consultas').textContent = setupData.servConsultas;
+
+  document.getElementById('setup-nombre-consultora').value = setupData.nombreConsultora || "Valentina Ríos";
+  document.getElementById('setup-instagram').value = setupData.instagram || "https://instagram.com/";
+  document.getElementById('setup-presencia-titulo').value = setupData.presenciaTitulo;
+  document.getElementById('setup-presencia-p1').value = setupData.presenciaP1;
+  document.getElementById('setup-chart-type').value = setupData.tipoGrafico || "bar";
+  document.getElementById('setup-modalidades').value = (setupData.modalidades || []).join(", ");
+  
+  if(setupData.fotoPerfil) {
+    document.getElementById('setup-foto-preview').innerHTML = '<img src="' + setupData.fotoPerfil + '" style="width:100%; height:100%; object-fit:cover;">';
+    document.getElementById('setup-foto-base64').value = setupData.fotoPerfil;
+  }
+
+  renderCarrouselSetupUI();
+  renderEstadosSetupUI();
+
+  [0, 1, 2, 3, 4, 5, 6].forEach(function(d){
+    var chk = document.getElementById('dia-' + d);
+    if(chk) chk.checked = (setupData.diasPermitidos || []).indexOf(d) !== -1;
+  });
+
+  document.getElementById('setup-horarios').value = (setupData.horariosEstandar || []).join(", ");
+  renderVideosSetupUI();
+  poblarSelectsEstadosEHorarios();
+}
+
+function saveSetup(e) {
+  e.preventDefault();
+  try {
+    setupData.nombreConsultora = document.getElementById('setup-nombre-consultora').value.trim();
+    setupData.instagram = document.getElementById('setup-instagram').value.trim();
+    setupData.presenciaTitulo = document.getElementById('setup-presencia-titulo').value;
+    setupData.presenciaP1 = document.getElementById('setup-presencia-p1').value;
+    setupData.tipoGrafico = document.getElementById('setup-chart-type').value;
+
+    var ft = document.getElementById('setup-foto-base64').value;
+    if(ft) setupData.fotoPerfil = ft;
+
+    // Actualizar títulos de fotos de la galería
+    var carrRows = document.querySelectorAll('#setup-carrousel-container .carrousel-setup-row');
+    carrRows.forEach(function(row, idx) {
+      var titleVal = row.querySelector('.carr-title-input').value.trim();
+      if (setupData.carrouselFotos[idx]) {
+        setupData.carrouselFotos[idx].titulo = titleVal;
+      }
+    });
+
+    var modTxt = document.getElementById('setup-modalidades').value;
+    setupData.modalidades = modTxt.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+
+    var nuevosColores = {};
+    document.querySelectorAll('.estado-setup-row').forEach(function(row){
+      var name = row.querySelector('.est-name-input').value.trim();
+      var bg = row.querySelector('.est-bg-input').value;
+      var txt = row.querySelector('.est-txt-input').value;
+      if(name) { nuevosColores[name] = { bg: bg, txt: txt }; }
+    });
+    if(Object.keys(nuevosColores).length > 0) { setupData.coloresEstados = nuevosColores; }
+
+    var diasPerm = [];
+    [0, 1, 2, 3, 4, 5, 6].forEach(function(d){
+      var chk = document.getElementById('dia-' + d);
+      if(chk && chk.checked) diasPerm.push(d);
+    });
+    setupData.diasPermitidos = diasPerm;
+
+    var horTxt = document.getElementById('setup-horarios').value;
+    setupData.horariosEstandar = horTxt.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+
+    var nuevosVideos = [];
+    document.querySelectorAll('.video-setup-row').forEach(function(row){
+      var t = row.querySelector('.vid-title-input').value.trim();
+      var d = row.querySelector('.vid-desc-input').value.trim();
+      var u = row.querySelector('.vid-url-input').value.trim();
+      if(t && u) { nuevosVideos.push({ titulo: t, descripcion: d, url: u }); }
+    });
+    setupData.videos = nuevosVideos;
+
+    localStorage.setItem('bio_setup', JSON.stringify(setupData));
+    applySetupDataUI();
+    renderGaleriaPublic();
+    renderVideosPublic();
+    renderSlots();
+    closeModal('modal-panel-admin');
+    showCustomAlert("Parametrización guardada exitosamente.");
+  } catch (err) {
+    showCustomAlert("Error al guardar los datos.");
+  }
+}
+
+function renderSeminariosAdminManage() {
+  var container = document.getElementById('lista-seminarios-admin-manage');
+  if(!container) return;
+  container.innerHTML = '';
+  seminarios.forEach(function(s){
+    var inscriptosListHtml = (s.inscriptos || []).map(function(i){ return '<li>' + i.nombre + ' (' + i.telefono + ') - ' + (i.userEmail || '') + '</li>'; }).join('');
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--lino); padding:1rem; border-radius:10px; margin-bottom:1rem; border:1px solid #ccc;';
+    div.innerHTML = '<strong>' + s.titulo + '</strong> - Fecha: ' + s.fecha + ' ' + s.hora + ' (' + s.duracion + ')<br>' +
+                    '<small>Modalidad: ' + s.modalidad + ' | Lugar: ' + s.lugar + ' | Costo: ' + s.costo + '</small><br>' +
+                    '<details style="margin-top:0.5rem;"><summary style="cursor:pointer; font-weight:600;">Ver Inscriptos (' + (s.inscriptos || []).length + ')</summary>' +
+                    '<ul style="margin-left:1.2rem; font-size:0.85rem; margin-top:0.3rem;">' + (inscriptosListHtml || '<li>Sin inscriptos</li>') + '</ul></details>' +
+                    '<div style="margin-top:0.8rem;">' +
+                    '<button onclick="editSeminario(' + s.id + ')" style="margin-right:0.5rem;">✏️ Editar</button>' +
+                    '<button onclick="deleteSeminario(' + s.id + ')">❌ Eliminar</button>' +
+                    '</div>';
+    container.appendChild(div);
+  });
+}
+
+function saveSeminarioAdmin(e) {
+  e.preventDefault();
+  var id = document.getElementById('sem-id').value;
+  var titulo = document.getElementById('sem-titulo').value.trim();
+  var fecha = document.getElementById('sem-fecha-date').value;
+  var hora = document.getElementById('sem-hora-time').value;
+  var duracion = document.getElementById('sem-duracion').value.trim();
+  var modalidad = document.getElementById('sem-modalidad-select').value;
+  var lugar = document.getElementById('sem-lugar-maps').value.trim();
+  var costo = document.getElementById('sem-costo').value.trim();
+  var descripcion = document.getElementById('sem-descripcion').value.trim();
+
+  if(id) {
+    var idx = seminarios.findIndex(function(s){ return s.id == id; });
+    seminarios[idx].titulo = titulo;
+    seminarios[idx].fecha = fecha;
+    seminarios[idx].hora = hora;
+    seminarios[idx].duracion = duracion;
+    seminarios[idx].modalidad = modalidad;
+    seminarios[idx].lugar = lugar;
+    seminarios[idx].costo = costo;
+    seminarios[idx].descripcion = descripcion;
+  } else {
+    seminarios.push({ 
+      id: Date.now(), titulo: titulo, fecha: fecha, hora: hora, duracion: duracion, 
+      modalidad: modalidad, lugar: lugar, costo: costo, descripcion: descripcion, 
+      inscriptos: [], puntuaciones: [] 
+    });
+  }
+
+  localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+  resetFormSeminario();
+  renderSeminariosAdminManage();
+  renderSeminariosPublic();
+  showCustomAlert("Seminario guardado.");
+}
+
+function editSeminario(id) {
+  var s = seminarios.find(function(item){ return item.id == id; });
+  document.getElementById('sem-id').value = s.id;
+  document.getElementById('sem-titulo').value = s.titulo;
+  document.getElementById('sem-fecha-date').value = s.fecha || '';
+  document.getElementById('sem-hora-time').value = s.hora || '';
+  document.getElementById('sem-duracion').value = s.duracion || '';
+  document.getElementById('sem-modalidad-select').value = s.modalidad || '';
+  document.getElementById('sem-lugar-maps').value = s.lugar || '';
+  document.getElementById('sem-costo').value = s.costo || '';
+  document.getElementById('sem-descripcion').value = s.descripcion;
+}
+
+function deleteSeminario(id) {
+  if(confirm("¿Eliminar este seminario?")) {
+    seminarios = seminarios.filter(function(s){ return s.id != id; });
+    localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+    renderSeminariosAdminManage();
+    renderSeminariosPublic();
+    showCustomAlert("Seminario eliminado.");
+  }
+}
+
+function resetFormSeminario() {
+  document.getElementById('sem-id').value = '';
+  document.querySelector('#sec-seminarios form').reset();
+}
+
+function openModalInscripcionSeminario(id) {
+  if(!userGmail) {
+    showCustomAlert("Debes iniciar sesión con tu Gmail primero.");
+    openModal('modal-gmail-login');
+    return;
+  }
+  var sem = seminarios.find(function(s){ return s.id === id; });
+  if(!sem) return;
+  document.getElementById('sem-inscripcion-id').value = sem.id;
+  document.getElementById('sem-inscripcion-titulo').textContent = sem.titulo + " (" + sem.fecha + ")";
+  openModal('modal-inscripcion-seminario');
+}
+
+function confirmarInscripcionSeminario(e) {
+  e.preventDefault();
+  var id = parseInt(document.getElementById('sem-inscripcion-id').value);
+  var nombre = document.getElementById('sem-ins-nombre').value.trim();
+  var telefono = document.getElementById('sem-ins-telefono').value.trim();
+
+  var sem = seminarios.find(function(s){ return s.id === id; });
+  if(sem) {
+    if(!sem.inscriptos) sem.inscriptos = [];
+    var yaExiste = sem.inscriptos.some(function(i){ return i.userEmail === userGmail || i.nombre.toLowerCase() === nombre.toLowerCase(); });
+    if(yaExiste) { return showCustomAlert("Ya estás inscripto/a."); }
+
+    sem.inscriptos.push({ nombre: nombre, telefono: telefono, userEmail: userGmail });
+    localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+    showCustomAlert("¡Inscripción exitosa!");
+    closeModal('modal-inscripcion-seminario');
+    renderSeminariosPublic();
+  }
+}
+
+function renderComentariosPublic() {
+  var container = document.getElementById('grid-comentarios-container');
   if(!container) return;
   container.innerHTML = "";
-
-  (serviciosData.cards || []).forEach(function(card, idx){
-    var cardId = card.id || ('card-sec-' + idx);
-    var sub = card.subseccion || {};
-
-    var box = document.createElement('div');
-    box.className = 'serv-card-setup-box card-item-setup-row';
-    box.innerHTML = '<button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:12px; right:12px; background:none; border:none; cursor:pointer;" title="Eliminar tarjeta">❌</button>' +
-                    '<h4>Tarjeta #' + (idx + 1) + ' — ' + card.titulo + '</h4>' +
-                    '<input type="hidden" class="sc-id-input" value="' + cardId + '">' +
-                    '<div style="display:grid; grid-template-columns: 120px 1fr; gap:0.5rem; margin-bottom:0.5rem;">' +
-                      '<div><label>Etiqueta / Num</label><input type="text" class="sc-num-input" value="' + card.num + '" placeholder="01 — Individual"></div>' +
-                      '<div><label>Título Tarjeta</label><input type="text" class="sc-titulo-input" value="' + card.titulo + '" placeholder="Consultas"></div>' +
-                    '</div>' +
-                    '<label>Texto Breve Tarjeta</label>' +
-                    '<textarea class="sc-texto-input" rows="2">' + card.texto + '</textarea>' +
-                    '<div style="display:grid; grid-template-columns: 1fr 1fr; gap:0.5rem; margin-top:0.5rem;">' +
-                      '<div><label>Texto Botón</label><input type="text" class="sc-linktxt-input" value="' + (card.linkTexto || 'Conocer más →') + '"></div>' +
-                      '<div><label>Ancla Destino (#id)</label><input type="text" class="sc-linkurl-input" value="#' + cardId + '" readonly style="opacity:0.7;"></div>' +
-                    '</div>' +
-
-                    '<details class="subseccion-toggle-details">' +
-                      '<summary style="font-weight:600; cursor:pointer; color:var(--bosque);">⚙️ Configurar Sub-sección en el sitio (Fotos, Videos y Textos)</summary>' +
-                      '<div style="margin-top:1rem;">' +
-                        '<label>Título de la Sub-sección</label>' +
-                        '<input type="text" class="sc-sub-titulo" value="' + (sub.tituloSub || card.titulo) + '">' +
-                        '<label>Descripción Ampliada</label>' +
-                        '<textarea class="sc-sub-desc" rows="2">' + (sub.descSub || card.texto) + '</textarea>' +
-                        '<label>Texto Adicional Explicativo</label>' +
-                        '<textarea class="sc-sub-extra" rows="2">' + (sub.textoExtra || '') + '</textarea>' +
-                        '<label>Imagen de Sub-sección (URL)</label>' +
-                        '<input type="text" class="sc-sub-imgurl" value="' + (sub.imagenes && sub.imagenes[0] ? sub.imagenes[0].src : '') + '" placeholder="https://...">' +
-                        '<label>Video de Youtube (URL)</label>' +
-                        '<input type="text" class="sc-sub-videourl" value="' + (sub.videoUrlSub || '') + '" placeholder="https://www.youtube.com/watch?v=...">' +
-                      '</div>' +
-                    '</details>';
-    container.appendChild(box);
+  if(comentarios.length === 0) {
+    container.innerHTML = "<p style='color:var(--tinta-2);'>Sé el primero en dejar un comentario.</p>";
+    return;
+  }
+  comentarios.forEach(function(c){
+    var card = document.createElement('div');
+    card.className = 'comentario-card';
+    card.innerHTML = '<div class="autor">' + c.nombre + '</div><div class="fecha-com">' + c.fecha + '</div><p>"' + c.texto + '"</p>';
+    container.appendChild(card);
   });
 }
 
-function addCardServicioSetup() {
-  if(!serviciosData.cards) serviciosData.cards = [];
-  var newIdx = serviciosData.cards.length + 1;
-  serviciosData.cards.push({
-    id: "card-nuevo-" + Date.now(),
-    num: "0" + newIdx + " — Nuevo",
-    titulo: "Nuevo Espacio",
-    texto: "Descripción breve del nuevo espacio...",
-    linkTexto: "Conocer más →",
-    subseccion: { tituloSub: "Nuevo Espacio en Detalle", descSub: "Información detallada...", imagenes: [], videoUrlSub: "", textoExtra: "" }
-  });
-  renderServiciosSetupUI();
-}
-
-function saveServiciosAdmin(e) {
+function guardarComentario(e) {
   e.preventDefault();
-  serviciosData.tituloMain = document.getElementById('serv-titulo-main').value.trim();
-  serviciosData.bajadaMain = document.getElementById('serv-bajada-main').value.trim();
+  var nombre = document.getElementById('com-nombre').value.trim();
+  var texto = document.getElementById('com-texto').value.trim();
+  var fecha = new Date().toISOString().slice(0,10);
 
-  var nuevasCards = [];
-  document.querySelectorAll('.card-item-setup-row').forEach(function(row){
-    var cardId = row.querySelector('.sc-id-input').value;
-    var num = row.querySelector('.sc-num-input').value.trim();
-    var titulo = row.querySelector('.sc-titulo-input').value.trim();
-    var texto = row.querySelector('.sc-texto-input').value.trim();
-    var linkTexto = row.querySelector('.sc-linktxt-input').value.trim();
-
-    var subTitulo = row.querySelector('.sc-sub-titulo').value.trim();
-    var subDesc = row.querySelector('.sc-sub-desc').value.trim();
-    var subExtra = row.querySelector('.sc-sub-extra').value.trim();
-    var subImg = row.querySelector('.sc-sub-imgurl').value.trim();
-    var subVid = row.querySelector('.sc-sub-videourl').value.trim();
-
-    if(titulo) {
-      nuevasCards.push({
-        id: cardId,
-        num: num,
-        titulo: titulo,
-        texto: texto,
-        linkTexto: linkTexto,
-        linkUrl: "#" + cardId,
-        subseccion: {
-          tituloSub: subTitulo,
-          descSub: subDesc,
-          textoExtra: subExtra,
-          imagenes: subImg ? [{ src: subImg }] : [],
-          videoUrlSub: subVid
-        }
-      });
-    }
-  });
-
-  serviciosData.cards = nuevasCards;
-  localStorage.setItem('bio_servicios', JSON.stringify(serviciosData));
-  renderServiciosPublic();
-  closeModal('modal-panel-admin');
-  showCustomAlert("Servicios y Subsecciones guardadas.");
+  comentarios.unshift({ nombre: nombre, texto: texto, fecha: fecha });
+  localStorage.setItem('bio_comentarios', JSON.stringify(comentarios));
+  document.getElementById('com-nombre').value = "";
+  document.getElementById('com-texto').value = "";
+  renderComentariosPublic();
+  showCustomAlert("¡Gracias por tu comentario!");
 }
 
-/* 3. GESTIÓN DE CONSULTANTES, TURNOS Y SEMINARIOS */
+function calcularEstadisticas() {
+  var fDesde = document.getElementById('st-fecha-desde').value;
+  var fHasta = document.getElementById('st-fecha-hasta').value;
+
+  var turnosFiltrados = turnos.filter(function(t){
+    if(fDesde && t.fecha < fDesde) return false;
+    if(fHasta && t.fecha > fHasta) return false;
+    return true;
+  });
+
+  var seminariosFiltrados = seminarios.filter(function(s){
+    if(fDesde && s.fecha < fDesde) return false;
+    if(fHasta && s.fecha > fHasta) return false;
+    return true;
+  });
+
+  var numConsultantes = consultantes.length;
+  var numTurnosTotales = turnosFiltrados.length;
+  var nuevos = turnosFiltrados.filter(function(t){ return (t.estado || '').toLowerCase() === 'nuevo'; }).length;
+  var confirmados = turnosFiltrados.filter(function(t){ return (t.estado || '').toLowerCase() === 'confirmado'; }).length;
+  var numSeminarios = seminariosFiltrados.length;
+
+  var totalInscriptosSem = 0;
+  seminariosFiltrados.forEach(function(s){ totalInscriptosSem += (s.inscriptos || []).length; });
+
+  document.getElementById('st-consultantes').textContent = numConsultantes;
+  document.getElementById('st-turnos-totales').textContent = numTurnosTotales;
+  document.getElementById('st-turnos-nuevos').textContent = nuevos;
+  document.getElementById('st-turnos-confirmados').textContent = confirmados;
+  document.getElementById('st-seminarios').textContent = numSeminarios;
+  document.getElementById('st-inscriptos-sem').textContent = totalInscriptosSem;
+
+  renderStatsChart(numConsultantes, numTurnosTotales, nuevos, confirmados, numSeminarios, totalInscriptosSem);
+}
+
+function limpiarFiltrosEstadisticas() {
+  document.getElementById('st-fecha-desde').value = "";
+  document.getElementById('st-fecha-hasta').value = "";
+  calcularEstadisticas();
+}
+
+function renderStatsChart(nCons, nTurTot, nTurNue, nTurConf, nSem, nInsSem) {
+  var ctx = document.getElementById('myStatsChart');
+  if(!ctx) return;
+  if(chartInstance) { chartInstance.destroy(); }
+  var chartType = setupData.tipoGrafico || 'bar';
+
+  chartInstance = new Chart(ctx, {
+    type: chartType,
+    data: {
+      labels: ['Consultantes', 'Turnos Totales', 'Nuevos', 'Confirmados', 'Seminarios', 'Inscriptos Sem.'],
+      datasets: [{
+        label: 'Métricas',
+        data: [nCons, nTurTot, nTurNue, nTurConf, nSem, nInsSem],
+        backgroundColor: ['rgba(91, 59, 125, 0.7)', 'rgba(185, 154, 212, 0.7)', 'rgba(222, 123, 174, 0.7)', 'rgba(52, 32, 74, 0.7)', 'rgba(243, 180, 211, 0.7)', 'rgba(108, 90, 126, 0.7)'],
+        borderColor: ['#5B3B7D', '#B99AD4', '#DE7BAE', '#34204A', '#F3B4D3', '#6C5A7E'],
+        borderWidth: 1
+      }]
+    },
+    options: { responsive: true, maintainAspectRatio: false }
+  });
+}
+
+function poblarDatalistGlobalConsultantes() {
+  var dl = document.getElementById('dl-global-consultantes');
+  if(!dl) return;
+  dl.innerHTML = '';
+  consultantes.forEach(function(c){ dl.innerHTML += '<option value="' + c.nombre + '">'; });
+}
+
+function autocompletarTelefonoEnSeminario() {
+  var val = document.getElementById('sem-ins-nombre').value.trim();
+  if(!val) return;
+  var encontrado = consultantes.find(function(c){ return c.nombre.toLowerCase() === val.toLowerCase(); });
+  if(encontrado) { document.getElementById('sem-ins-telefono').value = encontrado.telefono; }
+}
+
+function autocompletarTelefonoEnReserva() {
+  var val = document.getElementById('reserva-nombre').value.trim();
+  if(!val) return;
+  var encontrado = consultantes.find(function(c){ return c.nombre.toLowerCase() === val.toLowerCase(); });
+  if(encontrado) { document.getElementById('reserva-telefono').value = encontrado.telefono; }
+}
+
+function toggleAdminLogin() {
+  if(isAdmin) {
+    isAdmin = false;
+    document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'none'; });
+    document.getElementById('btn-login-toggle').textContent = 'Admin';
+    showCustomAlert("Sesión cerrada.");
+  } else {
+    openModal('modal-login');
+  }
+}
+
+function processAdminLogin() {
+  var u = document.getElementById('login-user').value;
+  if(u === 'admin') {
+    isAdmin = true;
+    document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'inline-block'; });
+    document.getElementById('btn-login-toggle').textContent = 'Logout Admin';
+    closeModal('modal-login');
+    showCustomAlert("Sesión iniciada.");
+  } else {
+    showCustomAlert("Usuario incorrecto. Usar 'admin'");
+  }
+}
+
+function renderEstadosSetupUI() {
+  var container = document.getElementById('setup-estados-container');
+  container.innerHTML = '';
+  var colores = setupData.coloresEstados || {};
+  Object.keys(colores).forEach(function(estKey){
+    var item = colores[estKey];
+    var div = document.createElement('div');
+    div.className = 'estado-setup-row';
+    div.style.cssText = 'display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;';
+    div.innerHTML = '<input type="text" class="est-name-input" value="' + estKey + '" style="width:130px;" placeholder="Nombre">' +
+                    '<input type="color" class="est-bg-input" value="' + item.bg + '"> Fondo ' +
+                    '<input type="color" class="est-txt-input" value="' + item.txt + '"> Texto ' +
+                    '<button type="button" onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer;">❌</button>';
+    container.appendChild(div);
+  });
+}
+
+function addEstadoItemSetup() {
+  var container = document.getElementById('setup-estados-container');
+  var div = document.createElement('div');
+  div.className = 'estado-setup-row';
+  div.style.cssText = 'display:flex; gap:0.5rem; align-items:center; margin-bottom:0.5rem;';
+  div.innerHTML = '<input type="text" class="est-name-input" value="" style="width:130px;" placeholder="Nuevo">' +
+                  '<input type="color" class="est-bg-input" value="#e3f2fd"> Fondo ' +
+                  '<input type="color" class="est-txt-input" value="#0d47a1"> Texto ' +
+                  '<button type="button" onclick="this.parentElement.remove()" style="background:none; border:none; cursor:pointer;">❌</button>';
+  container.appendChild(div);
+}
+
+function renderVideosSetupUI() {
+  var container = document.getElementById('setup-videos-container');
+  container.innerHTML = '';
+  (setupData.videos || []).forEach(function(vid){
+    var div = document.createElement('div');
+    div.style.cssText = 'background:var(--lino); padding:0.8rem; border-radius:8px; margin-bottom:0.5rem; position:relative;';
+    div.className = 'video-setup-row';
+    div.innerHTML = '<input type="text" class="vid-title-input" value="' + vid.titulo + '" placeholder="Título" style="margin-bottom:0.3rem;">' +
+                    '<textarea class="vid-desc-input" rows="2" placeholder="Descripción">' + vid.descripcion + '</textarea>' +
+                    '<input type="text" class="vid-url-input" value="' + vid.url + '" placeholder="URL Youtube" style="margin-top:0.3rem;">' +
+                    '<button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:5px; right:5px; background:none; border:none; cursor:pointer;">❌</button>';
+    container.appendChild(div);
+  });
+}
+
+function addVideoItemSetup() {
+  var container = document.getElementById('setup-videos-container');
+  var div = document.createElement('div');
+  div.style.cssText = 'background:var(--lino); padding:0.8rem; border-radius:8px; margin-bottom:0.5rem; position:relative;';
+  div.className = 'video-setup-row';
+  div.innerHTML = '<input type="text" class="vid-title-input" value="" placeholder="Título" style="margin-bottom:0.3rem;">' +
+                  '<textarea class="vid-desc-input" rows="2" placeholder="Descripción"></textarea>' +
+                  '<input type="text" class="vid-url-input" value="" placeholder="URL Youtube" style="margin-top:0.3rem;">' +
+                  '<button type="button" onclick="this.parentElement.remove()" style="position:absolute; top:5px; right:5px; background:none; border:none; cursor:pointer;">❌</button>';
+  container.appendChild(div);
+}
+
+function poblarSelectsEstadosEHorarios() {
+  var selectEstadoAdmin = document.getElementById('admin-turno-estado');
+  if(selectEstadoAdmin) {
+    selectEstadoAdmin.innerHTML = '';
+    Object.keys(setupData.coloresEstados || {}).forEach(function(st){
+      selectEstadoAdmin.innerHTML += '<option value="' + st + '">' + st + '</option>';
+    });
+  }
+
+  var selectHora = document.getElementById('admin-turno-hora');
+  if(selectHora) {
+    selectHora.innerHTML = '';
+    (setupData.horariosEstandar || []).forEach(function(h){
+      selectHora.innerHTML += '<option value="' + h + '">' + h + '</option>';
+    });
+  }
+
+  var selectMod = document.getElementById('sem-modalidad-select');
+  if(selectMod) {
+    selectMod.innerHTML = '';
+    (setupData.modalidades || []).forEach(function(m){
+      selectMod.innerHTML += '<option value="' + m + '">' + m + '</option>';
+    });
+  }
+}
+
+/* EXPORTAR E IMPORTAR JSON */
+function exportarJsonData() {
+  var exportObj = { hero: heroData, setup: setupData, consultantes: consultantes, turnos: turnos, seminarios: seminarios, comentarios: comentarios, exportDate: new Date().toISOString() };
+  var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
+  var downloadAnchor = document.createElement('a');
+  downloadAnchor.setAttribute("href", dataStr);
+  downloadAnchor.setAttribute("download", "bioexistencia_config_" + (new Date().toISOString().slice(0,10)) + ".json");
+  document.body.appendChild(downloadAnchor);
+  downloadAnchor.click();
+  downloadAnchor.remove();
+  showCustomAlert("Exportación descargada.");
+}
+
+function triggerImportJson() {
+  document.getElementById('import-json-file').click();
+}
+
+function importarJsonData(e) {
+  var file = e.target.files[0];
+  if (!file) return;
+
+  var reader = new FileReader();
+  reader.onload = function(evt) {
+    try {
+      var data = JSON.parse(evt.target.result);
+      if (data.hero) {
+        heroData = data.hero;
+        localStorage.setItem('bio_hero', JSON.stringify(heroData));
+      }
+      if (data.setup) {
+        setupData = data.setup;
+        localStorage.setItem('bio_setup', JSON.stringify(setupData));
+      }
+      if (data.consultantes) {
+        consultantes = data.consultantes;
+        localStorage.setItem('bio_consultantes', JSON.stringify(consultantes));
+      }
+      if (data.turnos) {
+        turnos = data.turnos;
+        localStorage.setItem('bio_turnos', JSON.stringify(turnos));
+      }
+      if (data.seminarios) {
+        seminarios = data.seminarios;
+        localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
+      }
+      if (data.comentarios) {
+        comentarios = data.comentarios;
+        localStorage.setItem('bio_comentarios', JSON.stringify(comentarios));
+      }
+
+      applyHeroDataUI();
+      applySetupDataUI();
+      renderGaleriaPublic();
+      renderVideosPublic();
+      renderSeminariosPublic();
+      renderComentariosPublic();
+      renderConsultantesTable();
+      renderSlots();
+
+      showCustomAlert("Configuración e información importadas con éxito.");
+    } catch (err) {
+      showCustomAlert("El archivo seleccionado no es un JSON válido.");
+    }
+  };
+  reader.readAsText(file);
+}
+
 function renderConsultantesTable() {
   var tbody = document.getElementById('tbl-consultantes');
   if(!tbody) return;
@@ -891,6 +2468,23 @@ function renderConsultantesTable() {
                        '<button onclick="deleteConsultante(' + c.id + ')">❌</button></td></tr>';
   });
   poblarDatalistGlobalConsultantes();
+}
+
+function checkSearchConsultanteOnType() {
+  var val = document.getElementById('consultante-nombre').value.trim();
+  if(!val) return;
+  var encontrado = consultantes.find(function(c){ return c.nombre.toLowerCase() === val.toLowerCase(); });
+  if(encontrado) {
+    document.getElementById('consultante-id').value = encontrado.id;
+    document.getElementById('consultante-telefono').value = encontrado.telefono;
+    document.getElementById('consultante-domicilio').value = encontrado.domicilio || '';
+    document.getElementById('consultante-fnac').value = encontrado.fnac || '';
+  }
+}
+
+function resetFormConsultante() {
+  document.getElementById('consultante-id').value = '';
+  document.querySelector('#sec-consultantes form').reset();
 }
 
 function saveConsultante(e) {
@@ -932,21 +2526,6 @@ function deleteConsultante(id) {
   }
 }
 
-function resetFormConsultante() {
-  document.getElementById('consultante-id').value = '';
-  document.querySelector('#sec-consultantes form').reset();
-}
-
-function renderTurnosAgendadosAdmin() {
-  var tbody = document.getElementById('tbl-turnos-agendados');
-  if(!tbody) return;
-  tbody.innerHTML = '';
-  turnos.forEach(function(t, realIdx){
-    tbody.innerHTML += '<tr class="clickable-row" ondblclick="editTurnoByRowIndex(' + realIdx + ')">' +
-                       '<td>' + t.fecha + '</td><td>' + t.hora + '</td><td>' + t.consultanteNombre + '</td><td>' + (t.estado || 'Nuevo') + '</td></tr>';
-  });
-}
-
 function saveTurnoAdmin(e) {
   e.preventDefault();
   var editIdx = parseInt(document.getElementById('admin-turno-edit-idx').value);
@@ -955,237 +2534,136 @@ function saveTurnoAdmin(e) {
   var hora = document.getElementById('admin-turno-hora').value;
   var estado = document.getElementById('admin-turno-estado').value;
 
+  var consultanteObj = consultantes.find(function(c){ return c.nombre.toLowerCase() === nombre.toLowerCase(); });
+  if(!consultanteObj) {
+    return showCustomAlert("El consultante '" + nombre + "' no está registrado.");
+  }
+
+  var existeSuperposicion = turnos.some(function(t, idx){ return t.fecha === fecha && t.hora === hora && idx !== editIdx; });
+  if(existeSuperposicion) { return showCustomAlert("Ese horario ya está ocupado."); }
+
   if(editIdx >= 0) {
-    turnos[editIdx] = { fecha: fecha, hora: hora, consultanteNombre: nombre, estado: estado };
+    turnos[editIdx] = { fecha: fecha, hora: hora, consultanteNombre: consultanteObj.nombre, userEmail: userGmail, estado: estado };
+    showCustomAlert("Turno actualizado.");
   } else {
-    turnos.push({ fecha: fecha, hora: hora, consultanteNombre: nombre, estado: estado || "Nuevo" });
+    var estadoInicial = estado || Object.keys(setupData.coloresEstados)[0] || "Nuevo";
+    turnos.push({ fecha: fecha, hora: hora, consultanteNombre: consultanteObj.nombre, userEmail: userGmail, estado: estadoInicial });
+    showCustomAlert("Turno asignado.");
   }
 
   localStorage.setItem('bio_turnos', JSON.stringify(turnos));
   cancelarEdicionTurnoAdmin();
   renderTurnosAgendadosAdmin();
-  showCustomAlert("Turno agendado/actualizado.");
+  renderSlots();
 }
 
 function editTurnoByRowIndex(idx) {
   var t = turnos[idx];
   if(!t) return;
+  document.getElementById('modal-turno-titulo').textContent = "Editar Turno";
   document.getElementById('admin-turno-edit-idx').value = idx;
   document.getElementById('admin-turno-nombre-input').value = t.consultanteNombre;
   document.getElementById('admin-turno-fecha').value = t.fecha;
   document.getElementById('admin-turno-hora').value = t.hora;
   document.getElementById('admin-turno-estado').value = t.estado;
+  document.getElementById('btn-save-turno-admin').textContent = "Actualizar Turno";
 }
 
 function cancelarEdicionTurnoAdmin() {
   document.getElementById('admin-turno-edit-idx').value = "-1";
-  document.querySelector('#sec-turnos form').reset();
+  document.getElementById('modal-turno-titulo').textContent = "Asignar / Editar Turno";
+  document.getElementById('btn-save-turno-admin').textContent = "Asignar Turno";
+  var form = document.querySelector('#sec-turnos form');
+  if(form) form.reset();
   renderTurnosAgendadosAdmin();
 }
 
-function renderSeminariosAdminManage() {
-  var container = document.getElementById('lista-seminarios-admin-manage');
-  if(!container) return;
+function renderSlots() {
+  var dateInput = document.getElementById('calendar-date');
+  if(!dateInput) return;
+  var dateVal = dateInput.value;
+  var container = document.getElementById('slots-container');
   container.innerHTML = '';
-  seminarios.forEach(function(s){
-    var div = document.createElement('div');
-    div.style.cssText = 'background:var(--lino); padding:1rem; border-radius:10px; margin-bottom:1rem; border:1px solid #ccc;';
-    div.innerHTML = '<strong>' + s.titulo + '</strong> - Fecha: ' + s.fecha + ' ' + s.hora + '<br>' +
-                    '<div style="margin-top:0.8rem;">' +
-                    '<button onclick="editSeminario(' + s.id + ')" style="margin-right:0.5rem;">✏️ Editar</button>' +
-                    '<button onclick="deleteSeminario(' + s.id + ')">❌ Eliminar</button>' +
-                    '</div>';
-    container.appendChild(div);
+  if(!dateVal) return;
+
+  var dateObj = new Date(dateVal + 'T00:00:00');
+  var dayOfWeek = dateObj.getDay();
+
+  var permitidos = setupData.diasPermitidos || [1,2,3,4,5];
+  if(permitidos.indexOf(dayOfWeek) === -1) {
+    container.innerHTML = '<p style="grid-column: 1 / -1; color: var(--bosque); font-style: italic; text-align: center;">No hay turnos disponibles para este día según la agenda.</p>';
+    return;
+  }
+
+  var horarios = setupData.horariosEstandar || ["09:00", "10:00", "11:00", "15:00", "16:00", "17:00"];
+
+  horarios.forEach(function(hora){
+    var turnoEncontrado = turnos.find(function(t){ return t.fecha === dateVal && t.hora === hora; });
+    var btn = document.createElement('div');
+    btn.className = 'slot-btn' + (turnoEncontrado ? ' booked' : '');
+
+    if(turnoEncontrado) {
+      var est = turnoEncontrado.estado || "Nuevo";
+      var colConfig = (setupData.coloresEstados && setupData.coloresEstados[est]) ? setupData.coloresEstados[est] : { bg: "#fce4ec", txt: "#880e4f" };
+      btn.style.backgroundColor = colConfig.bg;
+      btn.style.color = colConfig.txt;
+      btn.style.borderColor = colConfig.txt;
+
+      btn.innerHTML = '<span class="slot-hora">' + hora + '</span>' +
+                      '<span class="slot-nombre">' + turnoEncontrado.consultanteNombre + '</span>' +
+                      '<span class="slot-estado-badge" style="border: 1px solid ' + colConfig.txt + ';">' + est + '</span>';
+      
+      btn.ondblclick = function() {
+        if(isAdmin) {
+          var idx = turnos.indexOf(turnoEncontrado);
+          openPanelAdminModal('sec-turnos');
+          editTurnoByRowIndex(idx);
+        }
+      };
+    } else {
+      btn.innerHTML = '<span class="slot-hora">' + hora + '</span>' +
+                      '<span class="slot-estado-badge" style="background: var(--salvia-2); color: var(--musgo);">Disponible</span>';
+      btn.onclick = function(){ selectSlotPublic(dateVal, hora); };
+    }
+    container.appendChild(btn);
   });
 }
 
-function saveSeminarioAdmin(e) {
+function selectSlotPublic(fecha, hora) {
+  if(!userGmail) {
+    showCustomAlert("Debes iniciar sesión con tu Gmail primero.");
+    openModal('modal-gmail-login');
+    return;
+  }
+  document.getElementById('reserva-detalles').textContent = "Fecha: " + fecha + " | Hora: " + hora;
+  document.getElementById('reserva-hora').value = hora;
+  openModal('modal-reserva');
+}
+
+function confirmarReservaPublica(e) {
   e.preventDefault();
-  var id = document.getElementById('sem-id').value;
-  var titulo = document.getElementById('sem-titulo').value.trim();
-  var fecha = document.getElementById('sem-fecha-date').value;
-  var hora = document.getElementById('sem-hora-time').value;
-  var costo = document.getElementById('sem-costo').value.trim();
-  var descripcion = document.getElementById('sem-descripcion').value.trim();
+  var fecha = document.getElementById('calendar-date').value;
+  var hora = document.getElementById('reserva-hora').value;
+  var nombre = document.getElementById('reserva-nombre').value.trim();
+  var telefono = document.getElementById('reserva-telefono').value.trim();
 
-  if(id) {
-    var idx = seminarios.findIndex(function(s){ return s.id == id; });
-    seminarios[idx] = { id: parseInt(id), titulo: titulo, fecha: fecha, hora: hora, costo: costo, descripcion: descripcion };
-  } else {
-    seminarios.push({ id: Date.now(), titulo: titulo, fecha: fecha, hora: hora, costo: costo, descripcion: descripcion });
-  }
-
-  localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
-  resetFormSeminario();
-  renderSeminariosAdminManage();
-  showCustomAlert("Seminario guardado.");
+  var estadoInicial = Object.keys(setupData.coloresEstados)[0] || "Nuevo";
+  turnos.push({ fecha: fecha, hora: hora, consultanteNombre: nombre, userEmail: userGmail, estado: estadoInicial });
+  localStorage.setItem('bio_turnos', JSON.stringify(turnos));
+  showCustomAlert("¡Turno reservado!");
+  e.target.reset();
+  closeModal('modal-reserva');
+  renderSlots();
 }
 
-function editSeminario(id) {
-  var s = seminarios.find(function(item){ return item.id == id; });
-  document.getElementById('sem-id').value = s.id;
-  document.getElementById('sem-titulo').value = s.titulo;
-  document.getElementById('sem-fecha-date').value = s.fecha || '';
-  document.getElementById('sem-hora-time').value = s.hora || '';
-  document.getElementById('sem-costo').value = s.costo || '';
-  document.getElementById('sem-descripcion').value = s.descripcion;
+function openModal(id) {
+  if(id === 'modal-mis-cosas') { renderMisCosas(); }
+  document.getElementById(id).style.display = 'flex';
 }
 
-function deleteSeminario(id) {
-  if(confirm("¿Eliminar este seminario?")) {
-    seminarios = seminarios.filter(function(s){ return s.id != id; });
-    localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
-    renderSeminariosAdminManage();
-    showCustomAlert("Seminario eliminado.");
-  }
+function closeModal(id) {
+  document.getElementById(id).style.display = 'none';
 }
-
-function resetFormSeminario() {
-  document.getElementById('sem-id').value = '';
-  document.querySelector('#sec-seminarios form').reset();
-}
-
-function poblarDatalistGlobalConsultantes() {
-  var dl = document.getElementById('dl-global-consultantes');
-  if(!dl) return;
-  dl.innerHTML = '';
-  consultantes.forEach(function(c){ dl.innerHTML += '<option value="' + c.nombre + '">'; });
-}
-
-function checkSearchConsultanteOnType() {
-  var val = document.getElementById('consultante-nombre').value.trim();
-  if(!val) return;
-  var encontrado = consultantes.find(function(c){ return c.nombre.toLowerCase() === val.toLowerCase(); });
-  if(encontrado) {
-    document.getElementById('consultante-id').value = encontrado.id;
-    document.getElementById('consultante-telefono').value = encontrado.telefono;
-    document.getElementById('consultante-domicilio').value = encontrado.domicilio || '';
-    document.getElementById('consultante-fnac').value = encontrado.fnac || '';
-  }
-}
-
-/* 4. ESTADÍSTICAS Y CHART.JS */
-function calcularEstadisticas() {
-  document.getElementById('st-consultantes').textContent = consultantes.length;
-  document.getElementById('st-turnos-totales').textContent = turnos.length;
-  document.getElementById('st-seminarios').textContent = seminarios.length;
-
-  var ctx = document.getElementById('myStatsChart');
-  if(!ctx) return;
-  if(chartInstance) chartInstance.destroy();
-
-  chartInstance = new Chart(ctx, {
-    type: 'bar',
-    data: {
-      labels: ['Consultantes', 'Turnos', 'Seminarios'],
-      datasets: [{
-        label: 'Métricas Totales',
-        data: [consultantes.length, turnos.length, seminarios.length],
-        backgroundColor: ['#DE7BAE', '#5B3B7D', '#34204A']
-      }]
-    },
-    options: { responsive: true, maintainAspectRatio: false }
-  });
-}
-
-/* OTROS CONTROLES PANEL */
-function saveSetup(e) {
-  e.preventDefault();
-  var fotosNuevas = [];
-  document.querySelectorAll('#setup-carrousel-container > div').forEach(function(box){
-    var title = box.querySelector('.carr-title-input').value.trim();
-    var orden = parseInt(box.querySelector('.carr-orden-input').value) || 1;
-    var enCarr = box.querySelector('.carr-tilde-input').checked;
-    var imgEl = box.querySelector('img');
-    var src = imgEl ? imgEl.src : "";
-    if(src) fotosNuevas.push({ src: src, titulo: title, orden: orden, enCarrousel: enCarr });
-  });
-
-  setupData.carrouselFotos = fotosNuevas;
-  localStorage.setItem('bio_setup', JSON.stringify(setupData));
-  renderQueHagoCarrouselPublic();
-  closeModal('modal-panel-admin');
-  showCustomAlert("Setup guardado correctamente.");
-}
-
-function applyHeroDataUI() {
-  var eyebrowEl = document.getElementById('txt-hero-eyebrow');
-  if(eyebrowEl) eyebrowEl.textContent = heroData.eyebrowText || "";
-  var h1El = document.getElementById('txt-hero-h1');
-  if(h1El) h1El.textContent = heroData.h1Text || "";
-  var leadEl = document.getElementById('txt-hero-lead');
-  if(leadEl) leadEl.textContent = heroData.leadText || "";
-
-  document.getElementById('hero-eyebrow-text').value = heroData.eyebrowText || "";
-  document.getElementById('hero-h1-text').value = heroData.h1Text || "";
-  document.getElementById('hero-lead-text').value = heroData.leadText || "";
-}
-
-function saveHeroSetup(e) {
-  e.preventDefault();
-  heroData.eyebrowText = document.getElementById('hero-eyebrow-text').value.trim();
-  heroData.h1Text = document.getElementById('hero-h1-text').value.trim();
-  heroData.leadText = document.getElementById('hero-lead-text').value.trim();
-
-  localStorage.setItem('bio_hero', JSON.stringify(heroData));
-  applyHeroDataUI();
-  closeModal('modal-panel-admin');
-  showCustomAlert("Hero actualizado.");
-}
-
-function openPanelAdminModal(tabTarget) {
-  openModal('modal-panel-admin');
-  switchPanelTab(tabTarget || 'sec-hero');
-}
-
-function switchPanelTab(secId) {
-  document.querySelectorAll('.panel-section-content').forEach(function(el){ el.style.display = 'none'; });
-  document.querySelectorAll('.panel-tab-btn').forEach(function(btn){ btn.classList.remove('active'); });
-
-  var targetSec = document.getElementById(secId);
-  if(targetSec) targetSec.style.display = 'block';
-
-  if(secId === 'sec-hero') document.getElementById('tab-btn-hero').classList.add('active');
-  if(secId === 'sec-servicios') {
-    document.getElementById('tab-btn-servicios').classList.add('active');
-    renderServiciosSetupUI();
-  }
-  if(secId === 'sec-setup') {
-    document.getElementById('tab-btn-setup').classList.add('active');
-    renderCarrouselSetupUI();
-  }
-  if(secId === 'sec-consultantes') {
-    document.getElementById('tab-btn-consultantes').classList.add('active');
-    renderConsultantesTable();
-  }
-  if(secId === 'sec-turnos') {
-    document.getElementById('tab-btn-turnos').classList.add('active');
-    renderTurnosAgendadosAdmin();
-  }
-  if(secId === 'sec-seminarios') {
-    document.getElementById('tab-btn-seminarios').classList.add('active');
-    renderSeminariosAdminManage();
-  }
-  if(secId === 'sec-estadisticas') {
-    document.getElementById('tab-btn-estadisticas').classList.add('active');
-    calcularEstadisticas();
-  }
-}
-
-function toggleAdminLogin() {
-  if(isAdmin) {
-    isAdmin = false;
-    document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'none'; });
-    document.getElementById('btn-login-toggle').textContent = 'Admin';
-  } else {
-    isAdmin = true;
-    document.querySelectorAll('.admin-only').forEach(function(el){ el.style.display = 'inline-block'; });
-    document.getElementById('btn-login-toggle').textContent = 'Logout Admin';
-  }
-}
-
-function openModal(id) { document.getElementById(id).style.display = 'flex'; }
-function closeModal(id) { document.getElementById(id).style.display = 'none'; }
 </script>
 </body>
 </html>
