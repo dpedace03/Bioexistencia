@@ -12,7 +12,12 @@
     whatsapp: "5491100000000",
     ciudad: "Buenos Aires, Argentina",
     email: "hola@bioexistencia.com",
-    instagram: "https://instagram.com/"
+    instagram: "https://instagram.com/",
+    // CONFIGURACIÓN DE GITHUB (Ajustá con los datos de tu repositorio)
+    githubUser: "TU_USUARIO_GITHUB",
+    githubRepo: "TU_REPOSITORIO",
+    githubBranch: "main",
+    githubFilePath: "data.json"
   };
 </script>
 
@@ -808,7 +813,7 @@
 
         <!-- 3. TÍTULO H1 -->
         <div class="hero-param-box">
-          <h4>✍️️ Título Principal (H1)</h4>
+          <h4>✍️ Título Principal (H1)</h4>
           <label>Contenido del Texto</label>
           <input type="text" id="hero-h1-text" value="Volver a habitarte con presencia.">
           
@@ -867,9 +872,19 @@
       </form>
     </div>
 
-    <!-- SECCIÓN 2: SETUP GENERAL -->
+    <!-- SECCIÓN 2: SETUP GENERAL Y CONFIGURACIÓN DE GITHUB -->
     <div id="sec-setup" class="panel-section-content" style="display:none;">
       <form id="form-setup-admin" onsubmit="saveSetup(event)">
+        <!-- CONFIGURACIÓN DE SINCRONIZACIÓN CON GITHUB -->
+        <div class="hero-param-box" style="background: #eef2fa; border-color: #b0c4de;">
+          <h4 style="color: #1a365d;">☁️ Sincronización Automática con GitHub</h4>
+          <label>GitHub Personal Access Token (PAT)</label>
+          <input type="password" id="github-pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx" autocomplete="off">
+          <small style="display:block; margin-top:-0.4rem; margin-bottom:0.8rem; color: #555;">Se guarda únicamente en el navegador. Requerido para publicar cambios directamente al repositorio.</small>
+
+          <button type="button" class="btn btn-luz" style="background: #2b6cb0; color: white;" onclick="syncSaveToGitHub()">☁️ Guardar y Publicar en GitHub JSON</button>
+        </div>
+
         <label>Nombre de la Consultora</label>
         <input type="text" id="setup-nombre-consultora" placeholder="Ej: Valentina Ríos" required>
 
@@ -935,10 +950,9 @@
 
         <!-- ACCIONES CON EXPORTAR E IMPORTAR JSON -->
         <div class="modal-actions" style="margin-top: 1.5rem;">
-          <button type="submit" class="btn btn-luz">Guardar Cambios Setup</button>
-          <button type="button" class="btn btn-luz" style="background: var(--bosque); color: white;" onclick="exportarJsonData()">Exportar Configuración JSON</button>
-          
-          <button type="button" class="btn btn-luz" style="background: var(--musgo); color: white;" onclick="triggerImportJson()">Importar Configuración JSON</button>
+          <button type="submit" class="btn btn-luz">Guardar Localmente</button>
+          <button type="button" class="btn btn-luz" style="background: var(--bosque); color: white;" onclick="exportarJsonData()">Exportar Archivo JSON</button>
+          <button type="button" class="btn btn-luz" style="background: var(--musgo); color: white;" onclick="triggerImportJson()">Importar Archivo JSON</button>
           <input type="file" id="import-json-file" accept=".json" style="display:none;" onchange="importarJsonData(event)">
         </div>
       </form>
@@ -1256,87 +1270,37 @@ function closeCustomAlert() {
   }
 })();
 
-/* PERSISTENCIA EN LOCALSTORAGE */
+/* VARIABLES GLOBALES Y VALORES POR DEFECTO */
 var isAdmin = false;
 var userGmail = localStorage.getItem('bio_user_gmail') || "";
 var chartInstance = null;
 
-/* CONFIGURACIÓN Y PARAMETRIZACIÓN DEL HERO CON VALORES POR DEFECTO */
-var heroData = JSON.parse(localStorage.getItem('bio_hero')) || {
-  bgType: "color",
-  bgColor: "#251830",
-  bgImage: "",
-  
-  eyebrowText: "Bioexistencia consciente",
-  eyebrowFont: "'Karla', sans-serif",
-  eyebrowSize: "0.72rem",
-  eyebrowColor: "#DE7BAE",
-  
-  h1Text: "Volver a habitarte con presencia.",
-  h1Font: "'Fraunces', serif",
-  h1Size: "clamp(2.6rem,6vw,4.6rem)",
-  h1Color: "#F6F0F7",
-  
-  leadText: "Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con consciencia, en el cuerpo, en el vínculo y en la vida.",
-  leadFont: "'Karla', sans-serif",
-  leadSize: "1.14rem",
-  leadColor: "#E4D3F0"
+var heroData = {
+  bgType: "color", bgColor: "#251830", bgImage: "",
+  eyebrowText: "Bioexistencia consciente", eyebrowFont: "'Karla', sans-serif", eyebrowSize: "0.72rem", eyebrowColor: "#DE7BAE",
+  h1Text: "Volver a habitarte con presencia.", h1Font: "'Fraunces', serif", h1Size: "clamp(2.6rem,6vw,4.6rem)", h1Color: "#F6F0F7",
+  leadText: "Acompaño procesos para que dejes de sobrevivir en automático y empieces a existir con誕生 con consciencia, en el cuerpo, en el vínculo y en la vida.", leadFont: "'Karla', sans-serif", leadSize: "1.14rem", leadColor: "#E4D3F0"
 };
 
-var setupData = JSON.parse(localStorage.getItem('bio_setup')) || {
-  nombreConsultora: "Valentina Ríos",
-  instagram: "https://instagram.com/",
-  fotoPerfil: "",
-  presenciaTitulo: "Consultora en bioexistencia consciente.",
-  presenciaP1: "Hace más de diez años acompaño a personas que sienten que la vida se les pasa en piloto automático.",
-  servConsultas: "Encuentros uno a uno, presenciales u online, para acompañar tu proceso personal.",
-  tipoGrafico: "bar",
-  modalidades: ["Online por Zoom", "Presencial CABA", "Híbrido"],
-  diasPermitidos: [1, 2, 3, 4, 5],
+var setupData = {
+  nombreConsultora: "Valentina Ríos", instagram: "https://instagram.com/", fotoPerfil: "",
+  presenciaTitulo: "Consultora en bioexistencia consciente.", presenciaP1: "Hace más de diez años acompaño a personas...",
+  servConsultas: "Encuentros uno a uno, presenciales u online...", tipoGrafico: "bar",
+  modalidades: ["Online por Zoom", "Presencial CABA", "Híbrido"], diasPermitidos: [1, 2, 3, 4, 5],
   horariosEstandar: ["09:00", "10:00", "11:00", "15:00", "16:00", "17:00"],
-  coloresEstados: {
-    "Nuevo": { bg: "#fce4ec", txt: "#880e4f" },
-    "Confirmado": { bg: "#e8f5e9", txt: "#1b5e20" },
-    "Cancelado": { bg: "#ffebee", txt: "#b71c1c" }
-  },
-  carrouselFotos: [
-    { src: "https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?auto=format&fit=crop&w=1200&q=80", titulo: "Espacio de Escucha y Bienvenida" },
-    { src: "https://images.unsplash.com/photo-1506126613408-eca07ce68773?auto=format&fit=crop&w=1200&q=80", titulo: "Registro Corporal y Respiración Consciente" }
-  ],
-  videos: [
-    { titulo: "Introducción a la Bioexistencia", descripcion: "Descubrí qué es y cómo empezar a habitarte con presencia.", url: "https://www.youtube.com/watch?v=dQw4w9WgXcQ" }
-  ]
+  coloresEstados: { "Nuevo": { bg: "#fce4ec", txt: "#880e4f" }, "Confirmado": { bg: "#e8f5e9", txt: "#1b5e20" }, "Cancelado": { bg: "#ffebee", txt: "#b71c1c" } },
+  carrouselFotos: [], videos: []
 };
 
-var consultantes = JSON.parse(localStorage.getItem('bio_consultantes')) || [
-  { id: 1, nombre: "María Lopez", telefono: "1122334455", domicilio: "Av. Corrientes 1234, CABA", fnac: "1988-05-12" }
-];
+var consultantes = [];
+var turnos = [];
+var seminarios = [];
+var comentarios = [];
 
-var turnos = JSON.parse(localStorage.getItem('bio_turnos')) || [
-  { fecha: "2026-08-14", hora: "10:00", consultanteNombre: "María Lopez", userEmail: "maria@gmail.com", estado: "Nuevo" }
-];
+/* CARGAR DESDE GITHUB DE FORMA AUTOMÁTICA AL ABRIR LA PÁGINA */
+document.addEventListener("DOMContentLoaded", async function(){
+  await loadDataFromGitHub();
 
-var seminarios = JSON.parse(localStorage.getItem('bio_seminarios')) || [
-  { 
-    id: 1, 
-    titulo: "Sanando la Memoria Corporal", 
-    fecha: "2026-05-10",
-    hora: "16:00",
-    duracion: "3 horas",
-    modalidad: "Online por Zoom",
-    lugar: "Av. Santa Fe 1234, CABA",
-    costo: "$15.000", 
-    descripcion: "Un taller intensivo de 3 horas para comprender cómo el cuerpo guarda patrones emocionales.", 
-    inscriptos: [{ nombre: "María Lopez", telefono: "1122334455", userEmail: "maria@gmail.com" }],
-    puntuaciones: [{ userEmail: "maria@gmail.com", rating: 5, resena: "Excelente seminario, súper transformador." }]
-  }
-];
-
-var comentarios = JSON.parse(localStorage.getItem('bio_comentarios')) || [
-  { nombre: "Laura M.", texto: "Las consultas me ayudaron a encontrar claridad y paz en un momento crucial.", fecha: "2026-07-20" }
-];
-
-document.addEventListener("DOMContentLoaded", function(){
   applyHeroDataUI();
   applySetupDataUI();
   renderGaleriaPublic();
@@ -1347,12 +1311,125 @@ document.addEventListener("DOMContentLoaded", function(){
   actualizarUIGmailUser();
   setupStarRatingEvents();
 
+  // Cargar PAT guardado
+  var savedPat = localStorage.getItem('bio_github_pat') || "";
+  var patInput = document.getElementById('github-pat-input');
+  if (patInput && savedPat) patInput.value = savedPat;
+
   var dateInput = document.getElementById('calendar-date');
   if(dateInput) {
     dateInput.valueAsDate = new Date();
     renderSlots();
   }
 });
+
+/* LECTURA DEL JSON DESDE GITHUB */
+async function loadDataFromGitHub() {
+  var cfg = window.SITE_CONFIG || {};
+  if(!cfg.githubUser || !cfg.githubRepo) return;
+
+  var rawUrl = `https://raw.githubusercontent.com/${cfg.githubUser}/${cfg.githubRepo}/${cfg.githubBranch || 'main'}/${cfg.githubFilePath || 'data.json'}?t=${Date.now()}`;
+
+  try {
+    var res = await fetch(rawUrl);
+    if(res.ok) {
+      var data = await res.json();
+      if(data.hero) heroData = data.hero;
+      if(data.setup) setupData = data.setup;
+      if(data.consultantes) consultantes = data.consultantes;
+      if(data.turnos) turnos = data.turnos;
+      if(data.seminarios) seminarios = data.seminarios;
+      if(data.comentarios) comentarios = data.comentarios;
+      console.log("Configuración cargada correctamente desde GitHub.");
+    } else {
+      console.warn("No se pudo cargar data.json desde GitHub. Usando valores por defecto o LocalStorage.");
+      loadFromLocalStorageFallback();
+    }
+  } catch (e) {
+    console.error("Error al conectar con GitHub:", e);
+    loadFromLocalStorageFallback();
+  }
+}
+
+function loadFromLocalStorageFallback() {
+  if (localStorage.getItem('bio_hero')) heroData = JSON.parse(localStorage.getItem('bio_hero'));
+  if (localStorage.getItem('bio_setup')) setupData = JSON.parse(localStorage.getItem('bio_setup'));
+  if (localStorage.getItem('bio_consultantes')) consultantes = JSON.parse(localStorage.getItem('bio_consultantes'));
+  if (localStorage.getItem('bio_turnos')) turnos = JSON.parse(localStorage.getItem('bio_turnos'));
+  if (localStorage.getItem('bio_seminarios')) seminarios = JSON.parse(localStorage.getItem('bio_seminarios'));
+  if (localStorage.getItem('bio_comentarios')) comentarios = JSON.parse(localStorage.getItem('bio_comentarios'));
+}
+
+/* GUARDAR / PUBLICAR DIRECTO EN GITHUB (API REST) */
+async function syncSaveToGitHub() {
+  var cfg = window.SITE_CONFIG || {};
+  var pat = document.getElementById('github-pat-input').value.trim();
+
+  if(!pat) {
+    showCustomAlert("Ingresa un Personal Access Token (PAT) de GitHub para poder guardar en el repositorio.");
+    return;
+  }
+
+  localStorage.setItem('bio_github_pat', pat);
+
+  // 1. Crear el paquete de datos unificado
+  var fullData = {
+    hero: heroData,
+    setup: setupData,
+    consultantes: consultantes,
+    turnos: turnos,
+    seminarios: seminarios,
+    comentarios: comentarios,
+    updatedAt: new Date().toISOString()
+  };
+
+  var apiUrl = `https://api.github.com/repos/${cfg.githubUser}/${cfg.githubRepo}/contents/${cfg.githubFilePath || 'data.json'}`;
+
+  try {
+    // 2. Obtener SHA del archivo existente en GitHub para poder actualizarlo
+    var getRes = await fetch(apiUrl, {
+      headers: {
+        "Authorization": "Bearer " + pat,
+        "Accept": "application/vnd.github.v3+json"
+      }
+    });
+
+    var sha = "";
+    if (getRes.ok) {
+      var fileJson = await getRes.json();
+      sha = fileJson.sha;
+    }
+
+    // 3. Convertir JSON a Base64 (Soporte UTF-8)
+    var jsonString = JSON.stringify(fullData, null, 2);
+    var contentBase64 = btoa(unescape(encodeURIComponent(jsonString)));
+
+    // 4. PUT a GitHub API
+    var putRes = await fetch(apiUrl, {
+      method: "PUT",
+      headers: {
+        "Authorization": "Bearer " + pat,
+        "Accept": "application/vnd.github.v3+json",
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        message: "Actualización automática desde Panel Admin",
+        content: contentBase64,
+        sha: sha ? sha : undefined,
+        branch: cfg.githubBranch || "main"
+      })
+    });
+
+    if (putRes.ok) {
+      showCustomAlert("¡Guardado exitosamente en GitHub! Los cambios están en línea.");
+    } else {
+      var errData = await putRes.json();
+      showCustomAlert("Error al guardar en GitHub: " + (errData.message || "Verificá tu Token y permisos."));
+    }
+  } catch(e) {
+    showCustomAlert("Error de conexión al intentar publicar en GitHub.");
+  }
+}
 
 /* APLICAR ESTILOS Y TEXTOS DEL HERO AL FRONTEND */
 function applyHeroDataUI() {
@@ -1368,7 +1445,6 @@ function applyHeroDataUI() {
     overlay.style.display = 'none';
   }
 
-  // Eyebrow
   var eyebrowEl = document.getElementById('txt-hero-eyebrow');
   if(eyebrowEl) {
     eyebrowEl.textContent = heroData.eyebrowText || "Bioexistencia consciente";
@@ -1377,7 +1453,6 @@ function applyHeroDataUI() {
     if(heroData.eyebrowColor) eyebrowEl.style.color = heroData.eyebrowColor;
   }
 
-  // H1
   var h1El = document.getElementById('txt-hero-h1');
   if(h1El) {
     h1El.textContent = heroData.h1Text || "Volver a habitarte con presencia.";
@@ -1386,7 +1461,6 @@ function applyHeroDataUI() {
     if(heroData.h1Color) h1El.style.color = heroData.h1Color;
   }
 
-  // Lead
   var leadEl = document.getElementById('txt-hero-lead');
   if(leadEl) {
     leadEl.textContent = heroData.leadText || "";
@@ -1395,7 +1469,6 @@ function applyHeroDataUI() {
     if(heroData.leadColor) leadEl.style.color = heroData.leadColor;
   }
 
-  // Cargar formulario del admin con datos guardados
   document.getElementById('hero-bg-type').value = heroData.bgType || "color";
   document.getElementById('hero-bg-color').value = heroData.bgColor || "#251830";
   document.getElementById('hero-bg-url').value = (heroData.bgImage && heroData.bgImage.startsWith("http")) ? heroData.bgImage : "";
@@ -1469,7 +1542,7 @@ function saveHeroSetup(e) {
   localStorage.setItem('bio_hero', JSON.stringify(heroData));
   applyHeroDataUI();
   closeModal('modal-panel-admin');
-  showCustomAlert("Parámetros de la Sección Hero guardados exitosamente.");
+  showCustomAlert("Parámetros guardados localmente. Recordá presionar 'Guardar y Publicar en GitHub JSON' en la pestaña Setup.");
 }
 
 /* PESTAÑAS DEL PANEL ADMIN */
@@ -1971,7 +2044,6 @@ function saveSetup(e) {
     var ft = document.getElementById('setup-foto-base64').value;
     if(ft) setupData.fotoPerfil = ft;
 
-    // Actualizar títulos de fotos de la galería
     var carrRows = document.querySelectorAll('#setup-carrousel-container .carrousel-setup-row');
     carrRows.forEach(function(row, idx) {
       var titleVal = row.querySelector('.carr-title-input').value.trim();
@@ -2017,7 +2089,7 @@ function saveSetup(e) {
     renderVideosPublic();
     renderSlots();
     closeModal('modal-panel-admin');
-    showCustomAlert("Parametrización guardada exitosamente.");
+    showCustomAlert("Guardado localmente. Para publicar los cambios en GitHub presiona el botón '☁️ Guardar y Publicar en GitHub JSON'.");
   } catch (err) {
     showCustomAlert("Error al guardar los datos.");
   }
@@ -2361,17 +2433,17 @@ function poblarSelectsEstadosEHorarios() {
   }
 }
 
-/* EXPORTAR E IMPORTAR JSON */
+/* EXPORTAR E IMPORTAR JSON LOCALMENTE */
 function exportarJsonData() {
   var exportObj = { hero: heroData, setup: setupData, consultantes: consultantes, turnos: turnos, seminarios: seminarios, comentarios: comentarios, exportDate: new Date().toISOString() };
   var dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(exportObj, null, 2));
   var downloadAnchor = document.createElement('a');
   downloadAnchor.setAttribute("href", dataStr);
-  downloadAnchor.setAttribute("download", "bioexistencia_config_" + (new Date().toISOString().slice(0,10)) + ".json");
+  downloadAnchor.setAttribute("download", "data.json");
   document.body.appendChild(downloadAnchor);
   downloadAnchor.click();
   downloadAnchor.remove();
-  showCustomAlert("Exportación descargada.");
+  showCustomAlert("Archivo data.json descargado.");
 }
 
 function triggerImportJson() {
@@ -2386,30 +2458,12 @@ function importarJsonData(e) {
   reader.onload = function(evt) {
     try {
       var data = JSON.parse(evt.target.result);
-      if (data.hero) {
-        heroData = data.hero;
-        localStorage.setItem('bio_hero', JSON.stringify(heroData));
-      }
-      if (data.setup) {
-        setupData = data.setup;
-        localStorage.setItem('bio_setup', JSON.stringify(setupData));
-      }
-      if (data.consultantes) {
-        consultantes = data.consultantes;
-        localStorage.setItem('bio_consultantes', JSON.stringify(consultantes));
-      }
-      if (data.turnos) {
-        turnos = data.turnos;
-        localStorage.setItem('bio_turnos', JSON.stringify(turnos));
-      }
-      if (data.seminarios) {
-        seminarios = data.seminarios;
-        localStorage.setItem('bio_seminarios', JSON.stringify(seminarios));
-      }
-      if (data.comentarios) {
-        comentarios = data.comentarios;
-        localStorage.setItem('bio_comentarios', JSON.stringify(comentarios));
-      }
+      if (data.hero) heroData = data.hero;
+      if (data.setup) setupData = data.setup;
+      if (data.consultantes) consultantes = data.consultantes;
+      if (data.turnos) turnos = data.turnos;
+      if (data.seminarios) seminarios = data.seminarios;
+      if (data.comentarios) comentarios = data.comentarios;
 
       applyHeroDataUI();
       applySetupDataUI();
@@ -2420,7 +2474,7 @@ function importarJsonData(e) {
       renderConsultantesTable();
       renderSlots();
 
-      showCustomAlert("Configuración e información importadas con éxito.");
+      showCustomAlert("Información cargada correctamente en el navegador.");
     } catch (err) {
       showCustomAlert("El archivo seleccionado no es un JSON válido.");
     }
